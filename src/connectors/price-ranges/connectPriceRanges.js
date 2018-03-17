@@ -1,22 +1,19 @@
-import { checkRendering } from '../../lib/utils.js';
-import generateRanges from './generate-ranges.js';
+'use strict';
 
-const usage = `Usage:
-var customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customPriceRanges({
-    attributeName,
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html
-`;
+exports.default = connectPriceRanges;
+
+var _utils = require('../../lib/utils.js');
+
+var _generateRanges2 = require('./generate-ranges.js');
+
+var _generateRanges3 = _interopRequireDefault(_generateRanges2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPriceRanges({\n    attributeName,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html\n';
 
 /**
  * @typedef {Object} PriceRangesItem
@@ -98,54 +95,52 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectPriceRanges(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectPriceRanges(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { attributeName } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName;
+
 
     if (!attributeName) {
       throw new Error(usage);
     }
 
     return {
-      getConfiguration() {
+      getConfiguration: function getConfiguration() {
         return { facets: [attributeName] };
       },
-
-      _generateRanges(results) {
-        const stats = results.getFacetStats(attributeName);
-        return generateRanges(stats);
+      _generateRanges: function _generateRanges(results) {
+        var stats = results.getFacetStats(attributeName);
+        return (0, _generateRanges3.default)(stats);
       },
-
-      _extractRefinedRange(helper) {
-        const refinements = helper.getRefinements(attributeName);
-        let from;
-        let to;
+      _extractRefinedRange: function _extractRefinedRange(helper) {
+        var refinements = helper.getRefinements(attributeName);
+        var from = void 0;
+        var to = void 0;
 
         if (refinements.length === 0) {
           return [];
         }
 
-        refinements.forEach(v => {
+        refinements.forEach(function (v) {
           if (v.operator.indexOf('>') !== -1) {
             from = Math.floor(v.value[0]);
           } else if (v.operator.indexOf('<') !== -1) {
             to = Math.ceil(v.value[0]);
           }
         });
-        return [{ from, to, isRefined: true }];
+        return [{ from: from, to: to, isRefined: true }];
       },
+      _refine: function _refine(helper, _ref) {
+        var from = _ref.from,
+            to = _ref.to;
 
-      _refine(helper, { from, to }) {
-        const facetValues = this._extractRefinedRange(helper);
+        var facetValues = this._extractRefinedRange(helper);
 
         helper.clearRefinements(attributeName);
-        if (
-          facetValues.length === 0 ||
-          facetValues[0].from !== from ||
-          facetValues[0].to !== to
-        ) {
+        if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
           if (typeof from !== 'undefined') {
             helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
           }
@@ -156,25 +151,31 @@ export default function connectPriceRanges(renderFn, unmountFn) {
 
         helper.search();
       },
+      init: function init(_ref2) {
+        var _this = this;
 
-      init({ helper, instantSearchInstance }) {
-        this.refine = opts => {
-          this._refine(helper, opts);
+        var helper = _ref2.helper,
+            instantSearchInstance = _ref2.instantSearchInstance;
+
+        this.refine = function (opts) {
+          _this._refine(helper, opts);
         };
 
-        renderFn(
-          {
-            instantSearchInstance,
-            items: [],
-            refine: this.refine,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          instantSearchInstance: instantSearchInstance,
+          items: [],
+          refine: this.refine,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref3) {
+        var results = _ref3.results,
+            helper = _ref3.helper,
+            state = _ref3.state,
+            createURL = _ref3.createURL,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      render({ results, helper, state, createURL, instantSearchInstance }) {
-        let facetValues;
+        var facetValues = void 0;
 
         if (results && results.hits && results.hits.length > 0) {
           facetValues = this._extractRefinedRange(helper);
@@ -186,48 +187,36 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           facetValues = [];
         }
 
-        facetValues.map(facetValue => {
-          let newState = state.clearRefinements(attributeName);
+        facetValues.map(function (facetValue) {
+          var newState = state.clearRefinements(attributeName);
           if (!facetValue.isRefined) {
             if (facetValue.from !== undefined) {
-              newState = newState.addNumericRefinement(
-                attributeName,
-                '>=',
-                Math.floor(facetValue.from)
-              );
+              newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
             }
             if (facetValue.to !== undefined) {
-              newState = newState.addNumericRefinement(
-                attributeName,
-                '<=',
-                Math.ceil(facetValue.to)
-              );
+              newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
             }
           }
           facetValue.url = createURL(newState);
           return facetValue;
         });
 
-        renderFn(
-          {
-            items: facetValues,
-            refine: this.refine,
-            widgetParams,
-            instantSearchInstance,
-          },
-          false
-        );
+        renderFn({
+          items: facetValues,
+          refine: this.refine,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, false);
       },
+      dispose: function dispose(_ref4) {
+        var state = _ref4.state;
 
-      dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeFacetRefinement(attributeName)
-          .removeFacet(attributeName);
+        var nextState = state.removeFacetRefinement(attributeName).removeFacet(attributeName);
 
         return nextState;
-      },
+      }
     };
   };
 }

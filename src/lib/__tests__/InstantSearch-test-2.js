@@ -1,29 +1,37 @@
-// import algoliaSearchHelper from 'algoliasearch-helper';
-import InstantSearch from '../InstantSearch';
+'use strict';
 
-jest.useFakeTimers();
+var _InstantSearch = require('../InstantSearch');
 
-const appId = 'appId';
-const apiKey = 'apiKey';
-const indexName = 'lifecycle';
+var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
 
-describe('InstantSearch life cycle', () => {
-  it('calls the provided searchFunction when used', () => {
-    const searchFunctionSpy = jest.fn(h => {
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+jest.useFakeTimers(); // import algoliaSearchHelper from 'algoliasearch-helper';
+
+
+var appId = 'appId';
+var apiKey = 'apiKey';
+var indexName = 'lifecycle';
+
+describe('InstantSearch life cycle', function () {
+  it('calls the provided searchFunction when used', function () {
+    var searchFunctionSpy = jest.fn(function (h) {
       h.setQuery('test').search();
     });
 
-    const fakeClient = {
+    var fakeClient = {
       search: jest.fn(),
-      addAlgoliaAgent: () => {},
+      addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    const search = new InstantSearch({
-      appId,
-      apiKey,
-      indexName,
+    var search = new _InstantSearch2.default({
+      appId: appId,
+      apiKey: apiKey,
+      indexName: indexName,
       searchFunction: searchFunctionSpy,
-      createAlgoliaClient: () => fakeClient,
+      createAlgoliaClient: function createAlgoliaClient() {
+        return fakeClient;
+      }
     });
 
     expect(searchFunctionSpy).not.toHaveBeenCalled();
@@ -36,9 +44,9 @@ describe('InstantSearch life cycle', () => {
     expect(fakeClient.search).toHaveBeenCalledTimes(1);
   });
 
-  const fakeResults = () => ({
-    results: [
-      {
+  var fakeResults = function fakeResults() {
+    return {
+      results: [{
         hits: [{}, {}],
         nbHits: 2,
         page: 0,
@@ -48,37 +56,39 @@ describe('InstantSearch life cycle', () => {
         exhaustiveNbHits: true,
         query: '',
         params: '',
-        index: 'quick_links',
-      },
-    ],
-  });
+        index: 'quick_links'
+      }]
+    };
+  };
 
-  it('triggers the stalled search rendering once if the search does not resolve in time', () => {
-    const searchResultsResolvers = [];
-    const searchResultsPromises = [];
-    const fakeClient = {
-      search: jest.fn((qs, cb) => {
-        const p = new Promise(resolve =>
-          searchResultsResolvers.push(resolve)
-        ).then(() => {
+  it('triggers the stalled search rendering once if the search does not resolve in time', function () {
+    var searchResultsResolvers = [];
+    var searchResultsPromises = [];
+    var fakeClient = {
+      search: jest.fn(function (qs, cb) {
+        var p = new Promise(function (resolve) {
+          return searchResultsResolvers.push(resolve);
+        }).then(function () {
           cb(null, fakeResults());
         });
         searchResultsPromises.push(p);
       }),
-      addAlgoliaAgent: () => {},
+      addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    const search = new InstantSearch({
-      appId,
-      apiKey,
-      indexName,
-      createAlgoliaClient: () => fakeClient,
+    var search = new _InstantSearch2.default({
+      appId: appId,
+      apiKey: apiKey,
+      indexName: indexName,
+      createAlgoliaClient: function createAlgoliaClient() {
+        return fakeClient;
+      }
     });
 
-    const widget = {
+    var widget = {
       getConfiguration: jest.fn(),
       init: jest.fn(),
-      render: jest.fn(),
+      render: jest.fn()
     };
 
     search.addWidget(widget);
@@ -98,17 +108,15 @@ describe('InstantSearch life cycle', () => {
     // first results come back
     searchResultsResolvers[0]();
 
-    return searchResultsPromises[0].then(() => {
+    return searchResultsPromises[0].then(function () {
       // render has now been called
       expect(widget.render).toHaveBeenCalledTimes(1);
 
-      expect(widget.render).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          searchMetadata: {
-            isSearchStalled: false,
-          },
-        })
-      );
+      expect(widget.render).toHaveBeenLastCalledWith(expect.objectContaining({
+        searchMetadata: {
+          isSearchStalled: false
+        }
+      }));
 
       // New search
       search.helper.search();
@@ -118,24 +126,20 @@ describe('InstantSearch life cycle', () => {
       jest.runAllTimers();
 
       expect(widget.render).toHaveBeenCalledTimes(2);
-      expect(widget.render).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          searchMetadata: {
-            isSearchStalled: true,
-          },
-        })
-      );
+      expect(widget.render).toHaveBeenLastCalledWith(expect.objectContaining({
+        searchMetadata: {
+          isSearchStalled: true
+        }
+      }));
 
       searchResultsResolvers[1]();
-      return searchResultsPromises[1].then(() => {
+      return searchResultsPromises[1].then(function () {
         expect(widget.render).toHaveBeenCalledTimes(3);
-        expect(widget.render).toHaveBeenLastCalledWith(
-          expect.objectContaining({
-            searchMetadata: {
-              isSearchStalled: false,
-            },
-          })
-        );
+        expect(widget.render).toHaveBeenLastCalledWith(expect.objectContaining({
+          searchMetadata: {
+            isSearchStalled: false
+          }
+        }));
 
         // getConfiguration and init are not called a second time
         expect(widget.getConfiguration).toHaveBeenCalledTimes(1);
@@ -144,28 +148,30 @@ describe('InstantSearch life cycle', () => {
     });
   });
 
-  it('does not break when adding a widget dynamically just after start', () => {
-    const searchFunctionSpy = jest.fn(h => {
+  it('does not break when adding a widget dynamically just after start', function () {
+    var searchFunctionSpy = jest.fn(function (h) {
       h.setQuery('test').search();
     });
 
-    const fakeClient = {
+    var fakeClient = {
       search: jest.fn(),
-      addAlgoliaAgent: () => {},
+      addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    const search = new InstantSearch({
-      appId,
-      apiKey,
-      indexName,
+    var search = new _InstantSearch2.default({
+      appId: appId,
+      apiKey: apiKey,
+      indexName: indexName,
       searchFunction: searchFunctionSpy,
-      createAlgoliaClient: () => fakeClient,
+      createAlgoliaClient: function createAlgoliaClient() {
+        return fakeClient;
+      }
     });
 
     search.start();
 
     search.addWidget({
-      render: () => {},
+      render: function render() {}
     });
 
     jest.runAllTimers();

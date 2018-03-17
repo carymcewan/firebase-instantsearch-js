@@ -1,24 +1,31 @@
-/* eslint-disable import/default */
+'use strict';
 
-import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const stories = storiesOf('Refresh');
+var _devNovel = require('dev-novel');
 
-export default () => {
-  stories.add(
-    'default',
-    wrapWithHits(container => {
-      const button = document.createElement('button');
-      button.addEventListener('click', () => window.search.refresh());
-      button.innerHTML = 'Refresh InstantSearch';
-      const searchBoxContainer = document.createElement('div');
-      window.search.addWidget(
-        instantsearch.widgets.searchBox({ container: searchBoxContainer })
-      );
-      container.appendChild(button);
-      container.appendChild(searchBoxContainer);
-    })
-  );
+var _index = require('../../../../index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _wrapWithHits = require('../../utils/wrap-with-hits.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var stories = (0, _devNovel.storiesOf)('Refresh'); /* eslint-disable import/default */
+
+exports.default = function () {
+  stories.add('default', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    var button = document.createElement('button');
+    button.addEventListener('click', function () {
+      return window.search.refresh();
+    });
+    button.innerHTML = 'Refresh InstantSearch';
+    var searchBoxContainer = document.createElement('div');
+    window.search.addWidget(_index2.default.widgets.searchBox({ container: searchBoxContainer }));
+    container.appendChild(button);
+    container.appendChild(searchBoxContainer);
+  }));
 };

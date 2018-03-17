@@ -1,24 +1,21 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {
-  // params = {
-  //   hits,
-  //   results,
-  //   showMore,
-  //   isLastPage,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customInfiniteHits({
-    escapeHits: true,
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
-`;
+exports.default = connectInfiniteHits;
+
+var _escapeHighlight = require('../../lib/escape-highlight.js');
+
+var _escapeHighlight2 = _interopRequireDefault(_escapeHighlight);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    escapeHits: true,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html\n';
 
 /**
  * @typedef {Object} InfiniteHitsRenderingOptions
@@ -74,67 +71,67 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectInfiniteHits(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectInfiniteHits(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    let hitsCache = [];
-    const getShowMore = helper => () => helper.nextPage().search();
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var hitsCache = [];
+    var getShowMore = function getShowMore(helper) {
+      return function () {
+        return helper.nextPage().search();
+      };
+    };
 
     return {
-      getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+      getConfiguration: function getConfiguration() {
+        return widgetParams.escapeHits ? _escapeHighlight.tagConfig : undefined;
       },
+      init: function init(_ref) {
+        var instantSearchInstance = _ref.instantSearchInstance,
+            helper = _ref.helper;
 
-      init({ instantSearchInstance, helper }) {
         this.showMore = getShowMore(helper);
 
-        renderFn(
-          {
-            hits: hitsCache,
-            results: undefined,
-            showMore: this.showMore,
-            isLastPage: true,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          hits: hitsCache,
+          results: undefined,
+          showMore: this.showMore,
+          isLastPage: true,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref2) {
+        var results = _ref2.results,
+            state = _ref2.state,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-      render({ results, state, instantSearchInstance }) {
         if (state.page === 0) {
           hitsCache = [];
         }
 
-        if (
-          widgetParams.escapeHits &&
-          results.hits &&
-          results.hits.length > 0
-        ) {
-          results.hits = escapeHits(results.hits);
+        if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
+          results.hits = (0, _escapeHighlight2.default)(results.hits);
         }
 
-        hitsCache = [...hitsCache, ...results.hits];
+        hitsCache = [].concat(_toConsumableArray(hitsCache), _toConsumableArray(results.hits));
 
-        const isLastPage = results.nbPages <= results.page + 1;
+        var isLastPage = results.nbPages <= results.page + 1;
 
-        renderFn(
-          {
-            hits: hitsCache,
-            results,
-            showMore: this.showMore,
-            isLastPage,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          hits: hitsCache,
+          results: results,
+          showMore: this.showMore,
+          isLastPage: isLastPage,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
       },
-
-      dispose() {
+      dispose: function dispose() {
         unmountFn();
-      },
+      }
     };
   };
 }

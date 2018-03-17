@@ -1,20 +1,13 @@
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customStats = connectStats(function render(params, isFirstRendering) {
-  // params = {
-  //   instantSearchInstance,
-  //   hitsPerPage,
-  //   nbHits,
-  //   nbPages,
-  //   page,
-  //   processingTimeMS,
-  //   query,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(customStats());
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html`;
+exports.default = connectStats;
+
+var _utils = require('../../lib/utils.js');
+
+var usage = 'Usage:\nvar customStats = connectStats(function render(params, isFirstRendering) {\n  // params = {\n  //   instantSearchInstance,\n  //   hitsPerPage,\n  //   nbHits,\n  //   nbPages,\n  //   page,\n  //   processingTimeMS,\n  //   query,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(customStats());\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html';
 
 /**
  * @typedef {Object} StatsRenderingOptions
@@ -54,44 +47,45 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectStats(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectStats(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    init({ helper, instantSearchInstance }) {
-      renderFn(
-        {
-          instantSearchInstance,
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    return {
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            instantSearchInstance = _ref.instantSearchInstance;
+
+        renderFn({
+          instantSearchInstance: instantSearchInstance,
           hitsPerPage: helper.state.hitsPerPage,
           nbHits: 0,
           nbPages: 0,
           page: helper.state.page,
           processingTimeMS: -1,
           query: helper.state.query,
-          widgetParams,
-        },
-        true
-      );
-    },
+          widgetParams: widgetParams
+        }, true);
+      },
+      render: function render(_ref2) {
+        var results = _ref2.results,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-    render({ results, instantSearchInstance }) {
-      renderFn(
-        {
-          instantSearchInstance,
+        renderFn({
+          instantSearchInstance: instantSearchInstance,
           hitsPerPage: results.hitsPerPage,
           nbHits: results.nbHits,
           nbPages: results.nbPages,
           page: results.page,
           processingTimeMS: results.processingTimeMS,
           query: results.query,
-          widgetParams,
-        },
-        false
-      );
-    },
-
-    dispose() {
-      unmountFn();
-    },
-  });
+          widgetParams: widgetParams
+        }, false);
+      },
+      dispose: function dispose() {
+        unmountFn();
+      }
+    };
+  };
 }

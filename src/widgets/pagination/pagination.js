@@ -1,84 +1,90 @@
-import defaults from 'lodash/defaults';
+'use strict';
 
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = pagination;
 
-import Pagination from '../../components/Pagination/Pagination.js';
-import connectPagination from '../../connectors/pagination/connectPagination.js';
+var _defaults = require('lodash/defaults');
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _defaults2 = _interopRequireDefault(_defaults);
 
-const defaultLabels = {
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Pagination = require('../../components/Pagination/Pagination.js');
+
+var _Pagination2 = _interopRequireDefault(_Pagination);
+
+var _connectPagination = require('../../connectors/pagination/connectPagination.js');
+
+var _connectPagination2 = _interopRequireDefault(_connectPagination);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
-  last: '»',
+  last: '»'
 };
 
-const bem = bemHelper('ais-pagination');
+var bem = (0, _utils.bemHelper)('ais-pagination');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  labels,
-  showFirstLast,
-  autoHideContainer,
-  scrollToNode,
-}) => (
-  {
-    createURL,
-    currentRefinement,
-    nbHits,
-    nbPages,
-    pages,
-    isFirstPage,
-    isLastPage,
-    refine,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) return;
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      labels = _ref.labels,
+      showFirstLast = _ref.showFirstLast,
+      autoHideContainer = _ref.autoHideContainer,
+      scrollToNode = _ref.scrollToNode;
+  return function (_ref2, isFirstRendering) {
+    var createURL = _ref2.createURL,
+        currentRefinement = _ref2.currentRefinement,
+        nbHits = _ref2.nbHits,
+        nbPages = _ref2.nbPages,
+        pages = _ref2.pages,
+        isFirstPage = _ref2.isFirstPage,
+        isLastPage = _ref2.isLastPage,
+        refine = _ref2.refine;
 
-  const setCurrentPage = pageNumber => {
-    refine(pageNumber);
+    if (isFirstRendering) return;
 
-    if (scrollToNode !== false) {
-      scrollToNode.scrollIntoView();
-    }
+    var setCurrentPage = function setCurrentPage(pageNumber) {
+      refine(pageNumber);
+
+      if (scrollToNode !== false) {
+        scrollToNode.scrollIntoView();
+      }
+    };
+
+    var shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Pagination2.default, {
+      createURL: createURL,
+      cssClasses: cssClasses,
+      currentPage: currentRefinement,
+      labels: labels,
+      nbHits: nbHits,
+      nbPages: nbPages,
+      pages: pages,
+      isFirstPage: isFirstPage,
+      isLastPage: isLastPage,
+      setCurrentPage: setCurrentPage,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      showFirstLast: showFirstLast
+    }), containerNode);
   };
-
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
-
-  render(
-    <Pagination
-      createURL={createURL}
-      cssClasses={cssClasses}
-      currentPage={currentRefinement}
-      labels={labels}
-      nbHits={nbHits}
-      nbPages={nbPages}
-      pages={pages}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-      setCurrentPage={setCurrentPage}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showFirstLast={showFirstLast}
-    />,
-    containerNode
-  );
 };
 
-const usage = `Usage:
-pagination({
-  container,
-  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
-  [ labels.{previous,next,first,last} ],
-  [ maxPages ],
-  [ padding=3 ],
-  [ showFirstLast=true ],
-  [ autoHideContainer=true ],
-  [ scrollTo='body' ]
-})`;
+var usage = 'Usage:\npagination({\n  container,\n  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],\n  [ labels.{previous,next,first,last} ],\n  [ maxPages ],\n  [ padding=3 ],\n  [ showFirstLast=true ],\n  [ autoHideContainer=true ],\n  [ scrollTo=\'body\' ]\n})';
 
 /**
  * @typedef {Object} PaginationCSSClasses
@@ -141,55 +147,62 @@ pagination({
  *   })
  * );
  */
-export default function pagination({
-  container,
-  labels: userLabels = defaultLabels,
-  cssClasses: userCssClasses = {},
-  maxPages,
-  padding = 3,
-  showFirstLast = true,
-  autoHideContainer = true,
-  scrollTo: userScrollTo = 'body',
-} = {}) {
+function pagination() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      _ref3$labels = _ref3.labels,
+      userLabels = _ref3$labels === undefined ? defaultLabels : _ref3$labels,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      maxPages = _ref3.maxPages,
+      _ref3$padding = _ref3.padding,
+      padding = _ref3$padding === undefined ? 3 : _ref3$padding,
+      _ref3$showFirstLast = _ref3.showFirstLast,
+      showFirstLast = _ref3$showFirstLast === undefined ? true : _ref3$showFirstLast,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$scrollTo = _ref3.scrollTo,
+      userScrollTo = _ref3$scrollTo === undefined ? 'body' : _ref3$scrollTo;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const scrollTo = userScrollTo === true ? 'body' : userScrollTo;
-  const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
+  var scrollTo = userScrollTo === true ? 'body' : userScrollTo;
+  var scrollToNode = scrollTo !== false ? (0, _utils.getContainerNode)(scrollTo) : false;
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    page: cx(bem('item', 'page'), userCssClasses.page),
-    previous: cx(bem('item', 'previous'), userCssClasses.previous),
-    next: cx(bem('item', 'next'), userCssClasses.next),
-    first: cx(bem('item', 'first'), userCssClasses.first),
-    last: cx(bem('item', 'last'), userCssClasses.last),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    page: (0, _classnames2.default)(bem('item', 'page'), userCssClasses.page),
+    previous: (0, _classnames2.default)(bem('item', 'previous'), userCssClasses.previous),
+    next: (0, _classnames2.default)(bem('item', 'next'), userCssClasses.next),
+    first: (0, _classnames2.default)(bem('item', 'first'), userCssClasses.first),
+    last: (0, _classnames2.default)(bem('item', 'last'), userCssClasses.last),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    disabled: (0, _classnames2.default)(bem('item', 'disabled'), userCssClasses.disabled)
   };
 
-  const labels = defaults(userLabels, defaultLabels);
+  var labels = (0, _defaults2.default)(userLabels, defaultLabels);
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    labels,
-    showFirstLast,
-    padding,
-    autoHideContainer,
-    scrollToNode,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    labels: labels,
+    showFirstLast: showFirstLast,
+    padding: padding,
+    autoHideContainer: autoHideContainer,
+    scrollToNode: scrollToNode
   });
 
   try {
-    const makeWidget = connectPagination(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ maxPages });
+    var makeWidget = (0, _connectPagination2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ maxPages: maxPages });
   } catch (e) {
     throw new Error(usage);
   }

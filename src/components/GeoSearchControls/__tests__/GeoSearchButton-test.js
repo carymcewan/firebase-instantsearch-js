@@ -1,53 +1,61 @@
-import React from 'preact-compat';
-import { shallow } from 'enzyme';
-import GeoSearchButton from '../GeoSearchButton';
+'use strict';
 
-describe('GeoSearchButton', () => {
-  const defaultProps = {
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _enzyme = require('enzyme');
+
+var _GeoSearchButton = require('../GeoSearchButton');
+
+var _GeoSearchButton2 = _interopRequireDefault(_GeoSearchButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('GeoSearchButton', function () {
+  var defaultProps = {
     className: 'button',
-    onClick: () => {},
+    onClick: function onClick() {}
   };
 
-  it('expect to render', () => {
-    const props = {
-      ...defaultProps,
-    };
+  it('expect to render', function () {
+    var props = _extends({}, defaultProps);
 
-    const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchButton2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('expect to render disabled', () => {
-    const props = {
-      ...defaultProps,
-      disabled: true,
-    };
+  it('expect to render disabled', function () {
+    var props = _extends({}, defaultProps, {
+      disabled: true
+    });
 
-    const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchButton2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('expect to call onClick when button is clicked', () => {
-    const props = {
-      ...defaultProps,
-      onClick: jest.fn(),
-    };
+  it('expect to call onClick when button is clicked', function () {
+    var props = _extends({}, defaultProps, {
+      onClick: jest.fn()
+    });
 
-    const wrapper = shallow(
-      <GeoSearchButton {...props}>
-        Clear the current map refinement
-      </GeoSearchButton>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchButton2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(props.onClick).not.toHaveBeenCalled();
 

@@ -1,44 +1,62 @@
-// this file will start a browsersync server that will serve /docs
-// it will automatically inject any css
-// it will also use webpack and watch/build/hot reload
+'use strict';
 
-import webpack from 'webpack';
-import browserSync from 'browser-sync';
-import webpackConfig from './webpack.config.start.babel';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import compression from 'compression';
-import config from './config.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default function() {
-  const compiler = webpack(webpackConfig);
-  const bs = browserSync.create();
+exports.default = function () {
+  var compiler = (0, _webpack2.default)(_webpackConfigStart2.default);
+  var bs = _browserSync2.default.create();
   bs.init({
-    server: config.docsDist,
+    server: _config2.default.docsDist,
     open: false,
-    files: `${config.docsDist}/**/*`,
+    files: _config2.default.docsDist + '/**/*',
     watchOptions: {
-      ignored: [
-        /\.js$/, // any change to a JavaScript file must be ignored, webpack handles it
-        /\.css\.map$/, // no need to reload the whole page for CSS source maps
-      ],
+      ignored: [/\.js$/, // any change to a JavaScript file must be ignored, webpack handles it
+      /\.css\.map$/],
       awaitWriteFinish: {
-        stabilityThreshold: 150, // wait 150ms for the filesize to be stable (= write finished)
-      },
+        stabilityThreshold: 150 // wait 150ms for the filesize to be stable (= write finished)
+      }
     },
     notify: {
       styles: {
         bottom: 0,
-        top: 'auto',
-      },
+        top: 'auto'
+      }
     },
-    middleware: [
-      compression(),
-      webpackDevMiddleware(compiler, {
-        logLevel: 'warn',
-        publicPath: webpackConfig.output.publicPath,
-      }),
-      webpackHotMiddleware(compiler),
-    ],
+    middleware: [(0, _compression2.default)(), (0, _webpackDevMiddleware2.default)(compiler, {
+      logLevel: 'warn',
+      publicPath: _webpackConfigStart2.default.output.publicPath
+    }), (0, _webpackHotMiddleware2.default)(compiler)]
   });
-}
+};
+
+var _webpack = require('webpack');
+
+var _webpack2 = _interopRequireDefault(_webpack);
+
+var _browserSync = require('browser-sync');
+
+var _browserSync2 = _interopRequireDefault(_browserSync);
+
+var _webpackConfigStart = require('./webpack.config.start.babel');
+
+var _webpackConfigStart2 = _interopRequireDefault(_webpackConfigStart);
+
+var _webpackDevMiddleware = require('webpack-dev-middleware');
+
+var _webpackDevMiddleware2 = _interopRequireDefault(_webpackDevMiddleware);
+
+var _webpackHotMiddleware = require('webpack-hot-middleware');
+
+var _webpackHotMiddleware2 = _interopRequireDefault(_webpackHotMiddleware);
+
+var _compression = require('compression');
+
+var _compression2 = _interopRequireDefault(_compression);
+
+var _config = require('./config.js');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

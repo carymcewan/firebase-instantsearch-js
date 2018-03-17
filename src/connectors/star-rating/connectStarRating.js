@@ -1,24 +1,13 @@
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customStarRating = connectStarRating(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   hasNoResults,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customStarRatingI({
-    attributeName,
-    [ max=5 ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html
-`;
+exports.default = connectStarRating;
+
+var _utils = require('../../lib/utils.js');
+
+var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   hasNoResults,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customStarRatingI({\n    attributeName,\n    [ max=5 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html\n';
 
 /**
  * @typedef {Object} StarRatingItems
@@ -104,119 +93,124 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectStarRating(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectStarRating(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { attributeName, max = 5 } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        _widgetParams$max = widgetParams.max,
+        max = _widgetParams$max === undefined ? 5 : _widgetParams$max;
+
 
     if (!attributeName) {
       throw new Error(usage);
     }
 
     return {
-      getConfiguration() {
+      getConfiguration: function getConfiguration() {
         return { disjunctiveFacets: [attributeName] };
       },
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            createURL = _ref.createURL,
+            instantSearchInstance = _ref.instantSearchInstance;
 
-      init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-        this._createURL = state => facetValue =>
-          createURL(state.toggleRefinement(attributeName, facetValue));
+        this._createURL = function (state) {
+          return function (facetValue) {
+            return createURL(state.toggleRefinement(attributeName, facetValue));
+          };
+        };
 
-        renderFn(
-          {
-            instantSearchInstance,
-            items: [],
-            hasNoResults: true,
-            refine: this._toggleRefinement,
-            createURL: this._createURL(helper.state),
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          instantSearchInstance: instantSearchInstance,
+          items: [],
+          hasNoResults: true,
+          refine: this._toggleRefinement,
+          createURL: this._createURL(helper.state),
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref2) {
+        var helper = _ref2.helper,
+            results = _ref2.results,
+            state = _ref2.state,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-      render({ helper, results, state, instantSearchInstance }) {
-        const facetValues = [];
-        const allValues = {};
-        for (let v = max; v >= 0; --v) {
+        var facetValues = [];
+        var allValues = {};
+        for (var v = max; v >= 0; --v) {
           allValues[v] = 0;
         }
-        results.getFacetValues(attributeName).forEach(facet => {
-          const val = Math.round(facet.name);
+        results.getFacetValues(attributeName).forEach(function (facet) {
+          var val = Math.round(facet.name);
           if (!val || val > max) {
             return;
           }
-          for (let v = val; v >= 1; --v) {
-            allValues[v] += facet.count;
+          for (var _v = val; _v >= 1; --_v) {
+            allValues[_v] += facet.count;
           }
         });
-        const refinedStar = this._getRefinedStar(helper);
-        for (let star = max - 1; star >= 1; --star) {
-          const count = allValues[star];
+        var refinedStar = this._getRefinedStar(helper);
+        for (var star = max - 1; star >= 1; --star) {
+          var count = allValues[star];
           if (refinedStar && star !== refinedStar && count === 0) {
             // skip count==0 when at least 1 refinement is enabled
             // eslint-disable-next-line no-continue
             continue;
           }
-          const stars = [];
-          for (let i = 1; i <= max; ++i) {
+          var stars = [];
+          for (var i = 1; i <= max; ++i) {
             stars.push(i <= star);
           }
           facetValues.push({
-            stars,
+            stars: stars,
             name: String(star),
             value: String(star),
-            count,
-            isRefined: refinedStar === star,
+            count: count,
+            isRefined: refinedStar === star
           });
         }
 
-        renderFn(
-          {
-            instantSearchInstance,
-            items: facetValues,
-            hasNoResults: results.nbHits === 0,
-            refine: this._toggleRefinement,
-            createURL: this._createURL(state),
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          instantSearchInstance: instantSearchInstance,
+          items: facetValues,
+          hasNoResults: results.nbHits === 0,
+          refine: this._toggleRefinement,
+          createURL: this._createURL(state),
+          widgetParams: widgetParams
+        }, false);
       },
+      dispose: function dispose(_ref3) {
+        var state = _ref3.state;
 
-      dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeDisjunctiveFacetRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+        var nextState = state.removeDisjunctiveFacetRefinement(attributeName).removeDisjunctiveFacet(attributeName);
 
         return nextState;
       },
-
-      _toggleRefinement(helper, facetValue) {
-        const isRefined = this._getRefinedStar(helper) === Number(facetValue);
+      _toggleRefinement: function _toggleRefinement(helper, facetValue) {
+        var isRefined = this._getRefinedStar(helper) === Number(facetValue);
         helper.clearRefinements(attributeName);
         if (!isRefined) {
-          for (let val = Number(facetValue); val <= max; ++val) {
+          for (var val = Number(facetValue); val <= max; ++val) {
             helper.addDisjunctiveFacetRefinement(attributeName, val);
           }
         }
         helper.search();
       },
-
-      _getRefinedStar(helper) {
-        let refinedStar = undefined;
-        const refinements = helper.getRefinements(attributeName);
-        refinements.forEach(r => {
+      _getRefinedStar: function _getRefinedStar(helper) {
+        var refinedStar = undefined;
+        var refinements = helper.getRefinements(attributeName);
+        refinements.forEach(function (r) {
           if (!refinedStar || Number(r.value) < refinedStar) {
             refinedStar = Number(r.value);
           }
         });
         return refinedStar;
-      },
+      }
     };
   };
 }

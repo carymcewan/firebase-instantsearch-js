@@ -1,22 +1,19 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customHits = connectHits(function render(params, isFirstRendering) {
-  // params = {
-  //   hits,
-  //   results,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customHits({
-    [ escapeHits = false ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html
-`;
+exports.default = connectHits;
+
+var _escapeHighlight = require('../../lib/escape-highlight.js');
+
+var _escapeHighlight2 = _interopRequireDefault(_escapeHighlight);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html\n';
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -56,44 +53,43 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectHits(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectHits(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    getConfiguration() {
-      return widgetParams.escapeHits ? tagConfig : undefined;
-    },
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    return {
+      getConfiguration: function getConfiguration() {
+        return widgetParams.escapeHits ? _escapeHighlight.tagConfig : undefined;
+      },
+      init: function init(_ref) {
+        var instantSearchInstance = _ref.instantSearchInstance;
 
-    init({ instantSearchInstance }) {
-      renderFn(
-        {
+        renderFn({
           hits: [],
           results: undefined,
-          instantSearchInstance,
-          widgetParams,
-        },
-        true
-      );
-    },
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
+      },
+      render: function render(_ref2) {
+        var results = _ref2.results,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-    render({ results, instantSearchInstance }) {
-      if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
-        results.hits = escapeHits(results.hits);
-      }
+        if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
+          results.hits = (0, _escapeHighlight2.default)(results.hits);
+        }
 
-      renderFn(
-        {
+        renderFn({
           hits: results.hits,
-          results,
-          instantSearchInstance,
-          widgetParams,
-        },
-        false
-      );
-    },
-
-    dispose() {
-      unmountFn();
-    },
-  });
+          results: results,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
+      },
+      dispose: function dispose() {
+        unmountFn();
+      }
+    };
+  };
 }

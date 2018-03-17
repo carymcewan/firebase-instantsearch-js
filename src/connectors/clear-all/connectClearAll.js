@@ -1,38 +1,24 @@
-import {
-  checkRendering,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
-} from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customClearAll = connectClearAll(function render(params, isFirstRendering) {
-  // params = {
-  //   refine,
-  //   hasRefinements,
-  //   createURL,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customClearAll({
-    [ excludeAttributes = [] ],
-    [ clearsQuery = false ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html
-`;
+exports.default = connectClearAll;
 
-const refine = ({
-  helper,
-  clearAttributes,
-  hasRefinements,
-  clearsQuery,
-}) => () => {
-  if (hasRefinements) {
-    clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
-  }
+var _utils = require('../../lib/utils.js');
+
+var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   hasRefinements,\n  //   createURL,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customClearAll({\n    [ excludeAttributes = [] ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html\n';
+
+var refine = function refine(_ref) {
+  var helper = _ref.helper,
+      clearAttributes = _ref.clearAttributes,
+      hasRefinements = _ref.hasRefinements,
+      clearsQuery = _ref.clearsQuery;
+  return function () {
+    if (hasRefinements) {
+      (0, _utils.clearRefinementsAndSearch)(helper, clearAttributes, clearsQuery);
+    }
+  };
 };
 
 /**
@@ -91,85 +77,93 @@ const refine = ({
  *   })
  * );
  */
-export default function connectClearAll(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectClearAll(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { excludeAttributes = [], clearsQuery = false } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _widgetParams$exclude = widgetParams.excludeAttributes,
+        excludeAttributes = _widgetParams$exclude === undefined ? [] : _widgetParams$exclude,
+        _widgetParams$clearsQ = widgetParams.clearsQuery,
+        clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ;
+
 
     return {
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
-      _refine() {},
-      _cachedRefine() {
+      _refine: function _refine() {},
+      _cachedRefine: function _cachedRefine() {
         this._refine();
       },
+      init: function init(_ref2) {
+        var helper = _ref2.helper,
+            instantSearchInstance = _ref2.instantSearchInstance,
+            createURL = _ref2.createURL;
 
-      init({ helper, instantSearchInstance, createURL }) {
         this._cachedRefine = this._cachedRefine.bind(this);
 
-        const clearAttributes = getRefinements({}, helper.state)
-          .map(one => one.attributeName)
-          .filter(one => excludeAttributes.indexOf(one) === -1);
-
-        const hasRefinements = clearsQuery
-          ? clearAttributes.length !== 0 || helper.state.query !== ''
-          : clearAttributes.length !== 0;
-        const preparedCreateURL = () =>
-          createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
-
-        this._refine = refine({
-          helper,
-          clearAttributes,
-          hasRefinements,
-          clearsQuery,
+        var clearAttributes = (0, _utils.getRefinements)({}, helper.state).map(function (one) {
+          return one.attributeName;
+        }).filter(function (one) {
+          return excludeAttributes.indexOf(one) === -1;
         });
 
-        renderFn(
-          {
-            refine: this._cachedRefine,
-            hasRefinements,
-            createURL: preparedCreateURL,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
-      },
-
-      render({ results, state, createURL, helper, instantSearchInstance }) {
-        const clearAttributes = getRefinements(results, state)
-          .map(one => one.attributeName)
-          .filter(one => excludeAttributes.indexOf(one) === -1);
-
-        const hasRefinements = clearsQuery
-          ? clearAttributes.length !== 0 || helper.state.query !== ''
-          : clearAttributes.length !== 0;
-        const preparedCreateURL = () =>
-          createURL(clearRefinementsFromState(state, [], clearsQuery));
+        var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
+        var preparedCreateURL = function preparedCreateURL() {
+          return createURL((0, _utils.clearRefinementsFromState)(helper.state, [], clearsQuery));
+        };
 
         this._refine = refine({
-          helper,
-          clearAttributes,
-          hasRefinements,
-          clearsQuery,
+          helper: helper,
+          clearAttributes: clearAttributes,
+          hasRefinements: hasRefinements,
+          clearsQuery: clearsQuery
         });
 
-        renderFn(
-          {
-            refine: this._cachedRefine,
-            hasRefinements,
-            createURL: preparedCreateURL,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          refine: this._cachedRefine,
+          hasRefinements: hasRefinements,
+          createURL: preparedCreateURL,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref3) {
+        var results = _ref3.results,
+            state = _ref3.state,
+            createURL = _ref3.createURL,
+            helper = _ref3.helper,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      dispose() {
+        var clearAttributes = (0, _utils.getRefinements)(results, state).map(function (one) {
+          return one.attributeName;
+        }).filter(function (one) {
+          return excludeAttributes.indexOf(one) === -1;
+        });
+
+        var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
+        var preparedCreateURL = function preparedCreateURL() {
+          return createURL((0, _utils.clearRefinementsFromState)(state, [], clearsQuery));
+        };
+
+        this._refine = refine({
+          helper: helper,
+          clearAttributes: clearAttributes,
+          hasRefinements: hasRefinements,
+          clearsQuery: clearsQuery
+        });
+
+        renderFn({
+          refine: this._cachedRefine,
+          hasRefinements: hasRefinements,
+          createURL: preparedCreateURL,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
+      },
+      dispose: function dispose() {
         unmountFn();
-      },
+      }
     };
   };
 }

@@ -1,105 +1,112 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
-import filter from 'lodash/filter';
+'use strict';
 
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
-import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-  prefixKeys,
-} from '../../lib/utils.js';
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-const bem = bemHelper('ais-refinement-list');
+exports.default = refinementList;
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  transformData,
-  templates,
-  renderState,
-  collapsible,
-  autoHideContainer,
-  showMoreConfig,
-  searchForFacetValues,
-}) => (
-  {
-    refine,
-    items,
-    createURL,
-    searchForItems,
-    isFromSearch,
-    instantSearchInstance,
-    canRefine,
-    toggleShowMore,
-    isShowingMore,
-    hasExhaustiveItems,
-    canToggleShowMore,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _preactCompat = require('preact-compat');
 
-  // Pass count of currently selected items to the header template
-  const headerFooterData = {
-    header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _filter = require('lodash/filter');
+
+var _filter2 = _interopRequireDefault(_filter);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _connectRefinementList = require('../../connectors/refinement-list/connectRefinementList.js');
+
+var _connectRefinementList2 = _interopRequireDefault(_connectRefinementList);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _defaultTemplatesSearchForFacetValue = require('./defaultTemplates.searchForFacetValue.js');
+
+var _defaultTemplatesSearchForFacetValue2 = _interopRequireDefault(_defaultTemplatesSearchForFacetValue);
+
+var _getShowMoreConfig = require('../../lib/show-more/getShowMoreConfig.js');
+
+var _getShowMoreConfig2 = _interopRequireDefault(_getShowMoreConfig);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-refinement-list');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      transformData = _ref.transformData,
+      templates = _ref.templates,
+      renderState = _ref.renderState,
+      collapsible = _ref.collapsible,
+      autoHideContainer = _ref.autoHideContainer,
+      showMoreConfig = _ref.showMoreConfig,
+      searchForFacetValues = _ref.searchForFacetValues;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        items = _ref2.items,
+        createURL = _ref2.createURL,
+        searchForItems = _ref2.searchForItems,
+        isFromSearch = _ref2.isFromSearch,
+        instantSearchInstance = _ref2.instantSearchInstance,
+        canRefine = _ref2.canRefine,
+        toggleShowMore = _ref2.toggleShowMore,
+        isShowingMore = _ref2.isShowingMore,
+        hasExhaustiveItems = _ref2.hasExhaustiveItems,
+        canToggleShowMore = _ref2.canToggleShowMore;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    // Pass count of currently selected items to the header template
+    var headerFooterData = {
+      header: { refinedFacetsCount: (0, _filter2.default)(items, { isRefined: true }).length }
+    };
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
+      collapsible: collapsible,
+      createURL: createURL,
+      cssClasses: cssClasses,
+      facetValues: items,
+      headerFooterData: headerFooterData,
+      shouldAutoHideContainer: autoHideContainer && canRefine === false,
+      templateProps: renderState.templateProps,
+      toggleRefinement: refine,
+      searchFacetValues: searchForFacetValues ? searchForItems : undefined,
+      searchPlaceholder: searchForFacetValues.placeholder || 'Search for other...',
+      isFromSearch: isFromSearch,
+      showMore: showMoreConfig !== null,
+      toggleShowMore: toggleShowMore,
+      isShowingMore: isShowingMore,
+      hasExhaustiveItems: hasExhaustiveItems,
+      searchIsAlwaysActive: searchForFacetValues.isAlwaysActive || false,
+      canToggleShowMore: canToggleShowMore
+    }), containerNode);
   };
-
-  render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={items}
-      headerFooterData={headerFooterData}
-      shouldAutoHideContainer={autoHideContainer && canRefine === false}
-      templateProps={renderState.templateProps}
-      toggleRefinement={refine}
-      searchFacetValues={searchForFacetValues ? searchForItems : undefined}
-      searchPlaceholder={
-        searchForFacetValues.placeholder || 'Search for other...'
-      }
-      isFromSearch={isFromSearch}
-      showMore={showMoreConfig !== null}
-      toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      hasExhaustiveItems={hasExhaustiveItems}
-      searchIsAlwaysActive={searchForFacetValues.isAlwaysActive || false}
-      canToggleShowMore={canToggleShowMore}
-    />,
-    containerNode
-  );
 };
 
-const usage = `Usage:
-refinementList({
-  container,
-  attributeName,
-  [ operator='or' ],
-  [ sortBy=['isRefined', 'count:desc', 'name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ],
-  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],
-})`;
+var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ operator=\'or\' ],\n  [ sortBy=[\'isRefined\', \'count:desc\', \'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],\n})';
 
 /**
  * @typedef {Object} SearchForFacetTemplates
@@ -225,82 +232,82 @@ refinementList({
  *   })
  * );
  */
-export default function refinementList({
-  container,
-  attributeName,
-  operator = 'or',
-  sortBy = ['isRefined', 'count:desc', 'name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-  showMore = false,
-  searchForFacetValues = false,
-} = {}) {
+function refinementList() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      _ref3$operator = _ref3.operator,
+      operator = _ref3$operator === undefined ? 'or' : _ref3$operator,
+      _ref3$sortBy = _ref3.sortBy,
+      sortBy = _ref3$sortBy === undefined ? ['isRefined', 'count:desc', 'name:asc'] : _ref3$sortBy,
+      _ref3$limit = _ref3.limit,
+      limit = _ref3$limit === undefined ? 10 : _ref3$limit,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      transformData = _ref3.transformData,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$showMore = _ref3.showMore,
+      showMore = _ref3$showMore === undefined ? false : _ref3$showMore,
+      _ref3$searchForFacetV = _ref3.searchForFacetValues,
+      searchForFacetValues = _ref3$searchForFacetV === undefined ? false : _ref3$searchForFacetV;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const showMoreConfig = getShowMoreConfig(showMore);
+  var showMoreConfig = (0, _getShowMoreConfig2.default)(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
-  const escapeFacetValues = searchForFacetValues
-    ? Boolean(searchForFacetValues.escapeFacetValues)
-    : false;
-  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
-  const containerNode = getContainerNode(container);
-  const showMoreTemplates = showMoreConfig
-    ? prefixKeys('show-more-', showMoreConfig.templates)
-    : {};
-  const searchForValuesTemplates = searchForFacetValues
-    ? searchForFacetValues.templates || sffvDefaultTemplates
-    : {};
-  const allTemplates = {
-    ...templates,
-    ...showMoreTemplates,
-    ...searchForValuesTemplates,
+  var escapeFacetValues = searchForFacetValues ? Boolean(searchForFacetValues.escapeFacetValues) : false;
+  var showMoreLimit = showMoreConfig && showMoreConfig.limit || limit;
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var showMoreTemplates = showMoreConfig ? (0, _utils.prefixKeys)('show-more-', showMoreConfig.templates) : {};
+  var searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates || _defaultTemplatesSearchForFacetValue2.default : {};
+  var allTemplates = _extends({}, templates, showMoreTemplates, searchForValuesTemplates);
+
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    checkbox: (0, _classnames2.default)(bem('checkbox'), userCssClasses.checkbox),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    label: cx(bem('label'), userCssClasses.label),
-    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count),
-  };
-
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    transformData,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    transformData: transformData,
     templates: allTemplates,
     renderState: {},
-    collapsible,
-    autoHideContainer,
-    showMoreConfig,
-    searchForFacetValues,
+    collapsible: collapsible,
+    autoHideContainer: autoHideContainer,
+    showMoreConfig: showMoreConfig,
+    searchForFacetValues: searchForFacetValues
   });
 
   try {
-    const makeWidget = connectRefinementList(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
+    var makeWidget = (0, _connectRefinementList2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
     return makeWidget({
-      attributeName,
-      operator,
-      limit,
-      showMoreLimit,
-      sortBy,
-      escapeFacetValues,
+      attributeName: attributeName,
+      operator: operator,
+      limit: limit,
+      showMoreLimit: showMoreLimit,
+      sortBy: sortBy,
+      escapeFacetValues: escapeFacetValues
     });
   } catch (e) {
     throw new Error(e);

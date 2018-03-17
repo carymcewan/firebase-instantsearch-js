@@ -1,21 +1,25 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _devNovel = require('dev-novel');
+
+var _wrapWithHits = require('../../utils/wrap-with-hits.js');
+
 /* eslint-disable import/default */
 
-import { storiesOf } from 'dev-novel';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+var stories = (0, _devNovel.storiesOf)('Instantsearch');
 
-const stories = storiesOf('Instantsearch');
-
-export default () => {
-  stories.add(
-    'With searchfunction that prevent search',
-    wrapWithHits(() => {}, {
-      searchFunction: helper => {
-        const query = helper.state.query;
-        if (query === '') {
-          return;
-        }
-        helper.search();
-      },
-    })
-  );
+exports.default = function () {
+  stories.add('With searchfunction that prevent search', (0, _wrapWithHits.wrapWithHits)(function () {}, {
+    searchFunction: function searchFunction(helper) {
+      var query = helper.state.query;
+      if (query === '') {
+        return;
+      }
+      helper.search();
+    }
+  }));
 };

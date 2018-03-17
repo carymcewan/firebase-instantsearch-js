@@ -1,25 +1,47 @@
-import expect from 'expect';
-import sinon from 'sinon';
-import currentToggle from '../toggle.js';
-import defaultTemplates from '../defaultTemplates.js';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
+'use strict';
 
-describe('currentToggle()', () => {
-  describe('good usage', () => {
-    let ReactDOM;
-    let containerNode;
-    let widget;
-    let attributeName;
-    let label;
-    let userValues;
-    let collapsible;
-    let cssClasses;
-    let instantSearchInstance;
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-    beforeEach(() => {
-      ReactDOM = { render: sinon.spy() };
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-      currentToggle.__Rewire__('render', ReactDOM.render);
+var _expect = require('expect');
+
+var _expect2 = _interopRequireDefault(_expect);
+
+var _sinon = require('sinon');
+
+var _sinon2 = _interopRequireDefault(_sinon);
+
+var _toggle = require('../toggle.js');
+
+var _toggle2 = _interopRequireDefault(_toggle);
+
+var _defaultTemplates = require('../defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _RefinementList = require('../../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('currentToggle()', function () {
+  describe('good usage', function () {
+    var ReactDOM = void 0;
+    var containerNode = void 0;
+    var widget = void 0;
+    var attributeName = void 0;
+    var label = void 0;
+    var userValues = void 0;
+    var collapsible = void 0;
+    var cssClasses = void 0;
+    var instantSearchInstance = void 0;
+
+    beforeEach(function () {
+      ReactDOM = { render: _sinon2.default.spy() };
+
+      _toggle2.default.__Rewire__('render', ReactDOM.render);
 
       containerNode = document.createElement('div');
       label = 'Hello, ';
@@ -34,349 +56,301 @@ describe('currentToggle()', () => {
         item: 'ais-toggle--item',
         label: 'ais-toggle--label',
         list: 'ais-toggle--list',
-        root: 'ais-toggle',
+        root: 'ais-toggle'
       };
       collapsible = false;
       userValues = { on: true, off: undefined };
-      widget = currentToggle({
+      widget = (0, _toggle2.default)({
         container: containerNode,
-        attributeName,
-        label,
+        attributeName: attributeName,
+        label: label
       });
       instantSearchInstance = { templatesConfig: undefined };
     });
 
-    it('configures disjunctiveFacets', () => {
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['world!'],
+    it('configures disjunctiveFacets', function () {
+      (0, _expect2.default)(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['world!']
       });
     });
 
-    describe('render', () => {
-      let templateProps;
-      let results;
-      let helper;
-      let state;
-      let props;
-      let createURL;
+    describe('render', function () {
+      var templateProps = void 0;
+      var results = void 0;
+      var helper = void 0;
+      var state = void 0;
+      var props = void 0;
+      var createURL = void 0;
 
-      beforeEach(() => {
+      beforeEach(function () {
         templateProps = {
           templatesConfig: undefined,
-          templates: defaultTemplates,
+          templates: _defaultTemplates2.default,
           useCustomCompileOptions: {
             header: false,
             item: false,
-            footer: false,
+            footer: false
           },
-          transformData: undefined,
+          transformData: undefined
         };
         helper = {
           state: {
-            isDisjunctiveFacetRefined: sinon.stub().returns(false),
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(false)
           },
-          removeDisjunctiveFacetRefinement: sinon.spy(),
-          addDisjunctiveFacetRefinement: sinon.spy(),
-          search: sinon.spy(),
+          removeDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          addDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          search: _sinon2.default.spy()
         };
         state = {
-          removeDisjunctiveFacetRefinement: sinon.spy(),
-          addDisjunctiveFacetRefinement: sinon.spy(),
-          isDisjunctiveFacetRefined: sinon.stub().returns(false),
+          removeDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          addDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          isDisjunctiveFacetRefined: _sinon2.default.stub().returns(false)
         };
         props = {
-          cssClasses,
+          cssClasses: cssClasses,
           collapsible: false,
-          templateProps,
-          createURL() {},
-          toggleRefinement() {},
+          templateProps: templateProps,
+          createURL: function createURL() {},
+          toggleRefinement: function toggleRefinement() {}
         };
-        createURL = () => '#';
-        widget.init({ state, helper, createURL, instantSearchInstance });
+        createURL = function createURL() {
+          return '#';
+        };
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
       });
 
-      it('calls twice ReactDOM.render', () => {
+      it('calls twice ReactDOM.render', function () {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([{ name: 'true', count: 2 }, { name: 'false', count: 1 }]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: 'true', count: 2 }, { name: 'false', count: 1 }])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          userValues,
+          attributeName: attributeName,
+          label: label,
+          userValues: userValues
         });
         widget.getConfiguration();
-        widget.init({ helper, state, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
-        expect(ReactDOM.render.calledTwice).toBe(
-          true,
-          'ReactDOM.render called twice'
-        );
-        expect(ReactDOM.render.firstCall.args[1]).toEqual(containerNode);
-        expect(ReactDOM.render.secondCall.args[1]).toEqual(containerNode);
+        widget.init({ helper: helper, state: state, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        widget.render({ results: results, helper: helper, state: state });
+        (0, _expect2.default)(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[1]).toEqual(containerNode);
+        (0, _expect2.default)(ReactDOM.render.secondCall.args[1]).toEqual(containerNode);
       });
 
-      it('understands cssClasses', () => {
+      it('understands cssClasses', function () {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([
-              { name: 'true', count: 2, isRefined: false },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: 'true', count: 2, isRefined: false }, { name: 'false', count: 1, isRefined: false }])
         };
         props.cssClasses.root = 'ais-toggle test';
-        props = {
-          facetValues: [
-            {
-              count: 2,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
-              onFacetValue: { count: 2, name: 'Hello, ', isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
+        props = _extends({
+          facetValues: [{
+            count: 2,
+            isRefined: false,
+            name: label,
+            offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
+            onFacetValue: { count: 2, name: 'Hello, ', isRefined: false }
+          }],
+          shouldAutoHideContainer: false
+        }, props);
         cssClasses = props.cssClasses;
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
+          attributeName: attributeName,
+          label: label,
           cssClasses: { root: 'test' },
-          userValues,
-          RefinementList,
-          collapsible,
+          userValues: userValues,
+          RefinementList: _RefinementList2.default,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
 
-      it('with facet values', () => {
+      it('with facet values', function () {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([
-              { name: 'true', count: 2, isRefined: false },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: 'true', count: 2, isRefined: false }, { name: 'false', count: 1, isRefined: false }])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          userValues,
-          RefinementList,
-          collapsible,
+          attributeName: attributeName,
+          label: label,
+          userValues: userValues,
+          RefinementList: _RefinementList2.default,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        widget.render({ results: results, helper: helper, state: state });
 
-        props = {
-          facetValues: [
-            {
-              count: 2,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
-              onFacetValue: { count: 2, name: 'Hello, ', isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
+        props = _extends({
+          facetValues: [{
+            count: 2,
+            isRefined: false,
+            name: label,
+            offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
+            onFacetValue: { count: 2, name: 'Hello, ', isRefined: false }
+          }],
+          shouldAutoHideContainer: false
+        }, props);
 
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
-      it('supports negative numeric off or on values', () => {
+      it('supports negative numeric off or on values', function () {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([
-              { name: '-2', count: 2, isRefined: true },
-              { name: '5', count: 1, isRefined: false },
-            ]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: '-2', count: 2, isRefined: true }, { name: '5', count: 1, isRefined: false }])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
+          attributeName: attributeName,
+          label: label,
           values: {
             off: -2,
-            on: 5,
+            on: 5
           },
-          collapsible,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        widget.render({ results: results, helper: helper, state: state });
 
-        props = {
-          facetValues: [
-            {
-              count: 1,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 2, name: label, isRefined: true },
-              onFacetValue: { count: 1, name: label, isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
+        props = _extends({
+          facetValues: [{
+            count: 1,
+            isRefined: false,
+            name: label,
+            offFacetValue: { count: 2, name: label, isRefined: true },
+            onFacetValue: { count: 1, name: label, isRefined: false }
+          }],
+          shouldAutoHideContainer: false
+        }, props);
 
         // The first call is not the one expected, because of the new init rendering..
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
 
         widget.toggleRefinement({ isRefined: true });
-        expect(
-          helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)
-        ).toBe(true);
-        expect(
-          helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')
-        ).toBe(true);
+        (0, _expect2.default)(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)).toBe(true);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')).toBe(true);
       });
 
-      it('without facet values', () => {
+      it('without facet values', function () {
         results = {
           hits: [],
           nbHits: 0,
-          getFacetValues: sinon.stub().returns([]),
+          getFacetValues: _sinon2.default.stub().returns([])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          userValues,
-          RefinementList,
-          collapsible,
+          attributeName: attributeName,
+          label: label,
+          userValues: userValues,
+          RefinementList: _RefinementList2.default,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        widget.render({ results: results, helper: helper, state: state });
 
-        props = {
-          facetValues: [
-            {
-              name: label,
-              isRefined: false,
-              count: null,
-              onFacetValue: { name: label, isRefined: false, count: null },
-              offFacetValue: { name: label, isRefined: false, count: 0 },
-            },
-          ],
-          shouldAutoHideContainer: true,
-          ...props,
-        };
+        props = _extends({
+          facetValues: [{
+            name: label,
+            isRefined: false,
+            count: null,
+            onFacetValue: { name: label, isRefined: false, count: null },
+            offFacetValue: { name: label, isRefined: false, count: 0 }
+          }],
+          shouldAutoHideContainer: true
+        }, props);
 
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
-      it('when refined', () => {
+      it('when refined', function () {
         helper = {
           state: {
-            isDisjunctiveFacetRefined: sinon.stub().returns(true),
-          },
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(true)
+          }
         };
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([
-              { name: 'true', count: 2, isRefined: true },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: 'true', count: 2, isRefined: true }, { name: 'false', count: 1, isRefined: false }])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          userValues,
-          RefinementList,
-          collapsible,
+          attributeName: attributeName,
+          label: label,
+          userValues: userValues,
+          RefinementList: _RefinementList2.default,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        widget.render({ results: results, helper: helper, state: state });
 
-        props = {
-          facetValues: [
-            {
-              count: 3,
-              isRefined: true,
-              name: label,
-              onFacetValue: { name: label, isRefined: true, count: 2 },
-              offFacetValue: { name: label, isRefined: false, count: 3 },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
+        props = _extends({
+          facetValues: [{
+            count: 3,
+            isRefined: true,
+            name: label,
+            onFacetValue: { name: label, isRefined: true, count: 2 },
+            offFacetValue: { name: label, isRefined: false, count: 3 }
+          }],
+          shouldAutoHideContainer: false
+        }, props);
 
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
-      it('using props.refine', () => {
+      it('using props.refine', function () {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: sinon
-            .stub()
-            .returns([{ name: 'true', count: 2 }, { name: 'false', count: 1 }]),
+          getFacetValues: _sinon2.default.stub().returns([{ name: 'true', count: 2 }, { name: 'false', count: 1 }])
         };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          cssClasses,
-          userValues,
-          RefinementList,
-          collapsible,
+          attributeName: attributeName,
+          label: label,
+          cssClasses: cssClasses,
+          userValues: userValues,
+          RefinementList: _RefinementList2.default,
+          collapsible: collapsible
         });
         widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        const { toggleRefinement } = ReactDOM.render.firstCall.args[0].props;
-        expect(typeof toggleRefinement).toEqual('function');
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+        widget.render({ results: results, helper: helper, state: state });
+        var toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+
+        (0, _expect2.default)(typeof toggleRefinement === 'undefined' ? 'undefined' : _typeof(toggleRefinement)).toEqual('function');
         toggleRefinement();
-        expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
-        expect(
-          helper.addDisjunctiveFacetRefinement.calledWithExactly(
-            attributeName,
-            true
-          )
-        ).toBe(true);
-        helper.hasRefinements = sinon.stub().returns(true);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWithExactly(attributeName, true)).toBe(true);
+        helper.hasRefinements = _sinon2.default.stub().returns(true);
       });
     });
 
-    describe('refine', () => {
-      let helper;
+    describe('refine', function () {
+      var helper = void 0;
 
       function toggleOn() {
         widget.toggleRefinement({ isRefined: false });
@@ -385,213 +359,199 @@ describe('currentToggle()', () => {
         widget.toggleRefinement({ isRefined: true });
       }
 
-      beforeEach(() => {
+      beforeEach(function () {
         helper = {
-          removeDisjunctiveFacetRefinement: sinon.spy(),
-          addDisjunctiveFacetRefinement: sinon.spy(),
-          search: sinon.spy(),
+          removeDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          addDisjunctiveFacetRefinement: _sinon2.default.spy(),
+          search: _sinon2.default.spy()
         };
       });
 
-      describe('default values', () => {
-        it('toggle on should add filter to true', () => {
+      describe('default values', function () {
+        it('toggle on should add filter to true', function () {
           // Given
-          widget = currentToggle({
+          widget = (0, _toggle2.default)({
             container: containerNode,
-            attributeName,
-            label,
-            userValues,
+            attributeName: attributeName,
+            label: label,
+            userValues: userValues
           });
           widget.getConfiguration();
-          const state = {
-            isDisjunctiveFacetRefined: sinon.stub().returns(false),
+          var state = {
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(false)
           };
-          const createURL = () => '#';
-          widget.init({ state, helper, createURL, instantSearchInstance });
+          var createURL = function createURL() {
+            return '#';
+          };
+          widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
           // When
           toggleOn();
 
           // Then
-          expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(attributeName, true)
-          ).toBe(true);
-          expect(helper.removeDisjunctiveFacetRefinement.called).toBe(false);
+          (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, true)).toBe(true);
+          (0, _expect2.default)(helper.removeDisjunctiveFacetRefinement.called).toBe(false);
         });
-        it('toggle off should remove all filters', () => {
+        it('toggle off should remove all filters', function () {
           // Given
-          widget = currentToggle({
+          widget = (0, _toggle2.default)({
             container: containerNode,
-            attributeName,
-            label,
-            userValues,
+            attributeName: attributeName,
+            label: label,
+            userValues: userValues
           });
           widget.getConfiguration();
-          const state = {
-            isDisjunctiveFacetRefined: sinon.stub().returns(true),
+          var state = {
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(true)
           };
-          const createURL = () => '#';
-          widget.init({ state, helper, createURL, instantSearchInstance });
+          var createURL = function createURL() {
+            return '#';
+          };
+          widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
           // When
           toggleOff();
 
           // Then
-          expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              true
-            )
-          ).toBe(true);
-          expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
+          (0, _expect2.default)(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, true)).toBe(true);
+          (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.called).toBe(false);
         });
       });
-      describe('specific values', () => {
-        it('toggle on should change the refined value', () => {
+      describe('specific values', function () {
+        it('toggle on should change the refined value', function () {
           // Given
           userValues = { on: 'on', off: 'off' };
-          widget = currentToggle({
+          widget = (0, _toggle2.default)({
             container: containerNode,
-            attributeName,
-            label,
-            values: userValues,
+            attributeName: attributeName,
+            label: label,
+            values: userValues
           });
           widget.getConfiguration();
-          const state = {
-            isDisjunctiveFacetRefined: sinon.stub().returns(false),
+          var state = {
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(false)
           };
-          const createURL = () => '#';
-          widget.init({ state, helper, createURL, instantSearchInstance });
+          var createURL = function createURL() {
+            return '#';
+          };
+          widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
           // When
           toggleOn();
 
           // Then
-          expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'off'
-            )
-          ).toBe(true);
-          expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'on')
-          ).toBe(true);
+          (0, _expect2.default)(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
+          (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
         });
 
-        it('toggle off should change the refined value', () => {
+        it('toggle off should change the refined value', function () {
           // Given
           userValues = { on: 'on', off: 'off' };
-          widget = currentToggle({
+          widget = (0, _toggle2.default)({
             container: containerNode,
-            attributeName,
-            label,
-            values: userValues,
+            attributeName: attributeName,
+            label: label,
+            values: userValues
           });
           widget.getConfiguration();
-          const state = {
-            isDisjunctiveFacetRefined: sinon.stub().returns(true),
+          var state = {
+            isDisjunctiveFacetRefined: _sinon2.default.stub().returns(true)
           };
-          const createURL = () => '#';
-          widget.init({ state, helper, createURL, instantSearchInstance });
+          var createURL = function createURL() {
+            return '#';
+          };
+          widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
           // When
           toggleOff();
 
           // Then
-          expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'on'
-            )
-          ).toBe(true);
-          expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'off'
-            )
-          ).toBe(true);
+          (0, _expect2.default)(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
+          (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
         });
       });
     });
 
-    describe('custom off value', () => {
-      const createURL = () => '#';
-      it('should add a refinement for custom off value on init', () => {
+    describe('custom off value', function () {
+      var createURL = function createURL() {
+        return '#';
+      };
+      it('should add a refinement for custom off value on init', function () {
         // Given
         userValues = { on: 'on', off: 'off' };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          values: userValues,
+          attributeName: attributeName,
+          label: label,
+          values: userValues
         });
         widget.getConfiguration();
-        const state = {
-          isDisjunctiveFacetRefined: sinon.stub().returns(false),
+        var state = {
+          isDisjunctiveFacetRefined: _sinon2.default.stub().returns(false)
         };
-        const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy(),
+        var helper = {
+          addDisjunctiveFacetRefinement: _sinon2.default.spy()
         };
 
         // When
-        widget.init({ state, helper, createURL, instantSearchInstance });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
         // Then
-        expect(
-          helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')
-        ).toBe(true);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
       });
 
-      it('should not add a refinement for custom off value on init if already checked', () => {
+      it('should not add a refinement for custom off value on init if already checked', function () {
         // Given
         userValues = { on: 'on', off: 'off' };
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          values: userValues,
+          attributeName: attributeName,
+          label: label,
+          values: userValues
         });
         widget.getConfiguration();
-        const state = {
-          isDisjunctiveFacetRefined: sinon.stub().returns(true),
+        var state = {
+          isDisjunctiveFacetRefined: _sinon2.default.stub().returns(true)
         };
-        const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy(),
+        var helper = {
+          addDisjunctiveFacetRefinement: _sinon2.default.spy()
         };
 
         // When
-        widget.init({ state, helper, createURL, instantSearchInstance });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
         // Then
-        expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.called).toBe(false);
       });
 
-      it('should not add a refinement for no custom off value on init', () => {
+      it('should not add a refinement for no custom off value on init', function () {
         // Given
-        widget = currentToggle({
+        widget = (0, _toggle2.default)({
           container: containerNode,
-          attributeName,
-          label,
-          values: userValues,
+          attributeName: attributeName,
+          label: label,
+          values: userValues
         });
         widget.getConfiguration();
-        const state = {
-          isDisjunctiveFacetRefined: () => false,
+        var state = {
+          isDisjunctiveFacetRefined: function isDisjunctiveFacetRefined() {
+            return false;
+          }
         };
-        const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy(),
+        var helper = {
+          addDisjunctiveFacetRefinement: _sinon2.default.spy()
         };
 
         // When
-        widget.init({ state, helper, createURL, instantSearchInstance });
+        widget.init({ state: state, helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
 
         // Then
-        expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
+        (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.called).toBe(false);
       });
     });
 
-    afterEach(() => {
-      currentToggle.__ResetDependency__('render');
+    afterEach(function () {
+      _toggle2.default.__ResetDependency__('render');
     });
   });
 });

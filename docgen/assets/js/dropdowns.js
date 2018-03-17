@@ -1,18 +1,23 @@
-function dropdowns() {
-  const openDropdown = document.querySelectorAll('[data-toggle-dropdown]');
-  const otherDropdown = document.querySelectorAll('.simple-dropdown');
+'use strict';
 
-  for (let i = 0; i < openDropdown.length; i++) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function dropdowns() {
+  var openDropdown = document.querySelectorAll('[data-toggle-dropdown]');
+  var otherDropdown = document.querySelectorAll('.simple-dropdown');
+
+  for (var i = 0; i < openDropdown.length; i++) {
     toggleDropdown(openDropdown[i]);
   }
 
   function toggleDropdown(element) {
-    const dropdown = element.getAttribute('data-toggle-dropdown');
-    const theDropdown = document.getElementById(dropdown);
-    element.addEventListener('click', () => {
+    var dropdown = element.getAttribute('data-toggle-dropdown');
+    var theDropdown = document.getElementById(dropdown);
+    element.addEventListener('click', function () {
       if (!theDropdown.classList.contains('opened')) {
-        for (let i = 0; i < otherDropdown.length; i++) {
-          otherDropdown[i].classList.remove('opened');
+        for (var _i = 0; _i < otherDropdown.length; _i++) {
+          otherDropdown[_i].classList.remove('opened');
         }
 
         theDropdown.classList.add('opened');
@@ -28,7 +33,7 @@ function dropdowns() {
     // When there is a click event
     // Check if the clicked element is the
     // dropdown toggler, if not, close the dropdown
-    document.body.addEventListener('click', e => {
+    document.body.addEventListener('click', function (e) {
       if (e.target !== element) {
         theDropdown.classList.remove('opened');
       }
@@ -36,4 +41,4 @@ function dropdowns() {
   }
 }
 
-export default dropdowns;
+exports.default = dropdowns;

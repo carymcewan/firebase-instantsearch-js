@@ -1,31 +1,46 @@
-import expect from 'expect';
-import { searchBox, prepareScreenshot } from './utils.js';
+'use strict';
 
-describe('searchBox', () => {
-  describe('when there is no query', () => {
-    beforeEach(() => searchBox.clear());
+var _expect = require('expect');
 
-    it('input is empty', () => expect(searchBox.get()).toBe(''));
+var _expect2 = _interopRequireDefault(_expect);
 
-    it('triggers an empty search', () => {
-      expect(browser.getText('#hits')).not.toContain('MP3');
-      prepareScreenshot();
+var _utils = require('./utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('searchBox', function () {
+  describe('when there is no query', function () {
+    beforeEach(function () {
+      return _utils.searchBox.clear();
+    });
+
+    it('input is empty', function () {
+      return (0, _expect2.default)(_utils.searchBox.get()).toBe('');
+    });
+
+    it('triggers an empty search', function () {
+      (0, _expect2.default)(browser.getText('#hits')).not.toContain('MP3');
+      (0, _utils.prepareScreenshot)();
       browser.checkDocument({
-        hide: ['.ais-stats--body'], // Flaky X ms information.
+        hide: ['.ais-stats--body'] // Flaky X ms information.
       });
     });
   });
 
-  describe('when there is a query', () => {
-    beforeEach(() => searchBox.set('mp3'));
+  describe('when there is a query', function () {
+    beforeEach(function () {
+      return _utils.searchBox.set('mp3');
+    });
 
-    it('fills the input', () => expect(searchBox.get()).toBe('mp3'));
+    it('fills the input', function () {
+      return (0, _expect2.default)(_utils.searchBox.get()).toBe('mp3');
+    });
 
-    it('triggers a new search', () => {
-      expect(browser.getText('#hits')).toContain('MP3');
-      prepareScreenshot();
+    it('triggers a new search', function () {
+      (0, _expect2.default)(browser.getText('#hits')).toContain('MP3');
+      (0, _utils.prepareScreenshot)();
       browser.checkDocument({
-        hide: ['.ais-stats--body'], // Flaky X ms information.
+        hide: ['.ais-stats--body'] // Flaky X ms information.
       });
     });
   });

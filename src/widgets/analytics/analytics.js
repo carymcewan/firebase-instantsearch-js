@@ -1,10 +1,9 @@
-const usage = `Usage:
-analytics({
-  pushFunction,
-  [ delay=3000 ],
-  [ triggerOnUIInteraction=false ],
-  [ pushInitialSearch=true ]
-})`;
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var usage = 'Usage:\nanalytics({\n  pushFunction,\n  [ delay=3000 ],\n  [ triggerOnUIInteraction=false ],\n  [ pushInitialSearch=true ]\n})';
 
 /**
  * @typedef {Object} AnalyticsWidgetOptions
@@ -60,62 +59,63 @@ analytics({
  *   })
  * );
  */
-function analytics({
-  pushFunction,
-  delay = 3000,
-  triggerOnUIInteraction = false,
-  pushInitialSearch = true,
-  pushPagination = false,
-} = {}) {
+function analytics() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      pushFunction = _ref.pushFunction,
+      _ref$delay = _ref.delay,
+      delay = _ref$delay === undefined ? 3000 : _ref$delay,
+      _ref$triggerOnUIInter = _ref.triggerOnUIInteraction,
+      triggerOnUIInteraction = _ref$triggerOnUIInter === undefined ? false : _ref$triggerOnUIInter,
+      _ref$pushInitialSearc = _ref.pushInitialSearch,
+      pushInitialSearch = _ref$pushInitialSearc === undefined ? true : _ref$pushInitialSearc,
+      _ref$pushPagination = _ref.pushPagination,
+      pushPagination = _ref$pushPagination === undefined ? false : _ref$pushPagination;
+
   if (!pushFunction) {
     throw new Error(usage);
   }
 
-  let cachedState = null;
+  var cachedState = null;
 
-  const serializeRefinements = function(obj) {
-    const str = [];
-    for (const p in obj) {
+  var serializeRefinements = function serializeRefinements(obj) {
+    var str = [];
+    for (var p in obj) {
       if (obj.hasOwnProperty(p)) {
-        const values = obj[p].join('+');
-        str.push(
-          `${encodeURIComponent(p)}=${encodeURIComponent(
-            p
-          )}_${encodeURIComponent(values)}`
-        );
+        var values = obj[p].join('+');
+        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(p) + '_' + encodeURIComponent(values));
       }
     }
 
     return str.join('&');
   };
 
-  const serializeNumericRefinements = function(numericRefinements) {
-    const numericStr = [];
+  var serializeNumericRefinements = function serializeNumericRefinements(numericRefinements) {
+    var numericStr = [];
 
-    for (const attr in numericRefinements) {
+    for (var attr in numericRefinements) {
       if (numericRefinements.hasOwnProperty(attr)) {
-        const filter = numericRefinements[attr];
+        var filter = numericRefinements[attr];
 
         if (filter.hasOwnProperty('>=') && filter.hasOwnProperty('<=')) {
           if (filter['>='][0] === filter['<='][0]) {
-            numericStr.push(`${attr}=${attr}_${filter['>=']}`);
+            numericStr.push(attr + '=' + attr + '_' + filter['>=']);
           } else {
-            numericStr.push(`${attr}=${attr}_${filter['>=']}to${filter['<=']}`);
+            numericStr.push(attr + '=' + attr + '_' + filter['>='] + 'to' + filter['<=']);
           }
         } else if (filter.hasOwnProperty('>=')) {
-          numericStr.push(`${attr}=${attr}_from${filter['>=']}`);
+          numericStr.push(attr + '=' + attr + '_from' + filter['>=']);
         } else if (filter.hasOwnProperty('<=')) {
-          numericStr.push(`${attr}=${attr}_to${filter['<=']}`);
+          numericStr.push(attr + '=' + attr + '_to' + filter['<=']);
         } else if (filter.hasOwnProperty('=')) {
-          const equals = [];
-          for (const equal in filter['=']) {
+          var equals = [];
+          for (var equal in filter['=']) {
             // eslint-disable-next-line max-depth
             if (filter['='].hasOwnProperty(equal)) {
               equals.push(filter['='][equal]);
             }
           }
 
-          numericStr.push(`${attr}=${attr}_${equals.join('-')}`);
+          numericStr.push(attr + '=' + attr + '_' + equals.join('-'));
         }
       }
     }
@@ -123,26 +123,17 @@ function analytics({
     return numericStr.join('&');
   };
 
-  let lastSentData = '';
-  const sendAnalytics = function(state) {
+  var lastSentData = '';
+  var sendAnalytics = function sendAnalytics(state) {
     if (state === null) {
       return;
     }
 
-    let formattedParams = [];
+    var formattedParams = [];
 
-    const serializedRefinements = serializeRefinements(
-      Object.assign(
-        {},
-        state.state.disjunctiveFacetsRefinements,
-        state.state.facetsRefinements,
-        state.state.hierarchicalFacetsRefinements
-      )
-    );
+    var serializedRefinements = serializeRefinements(Object.assign({}, state.state.disjunctiveFacetsRefinements, state.state.facetsRefinements, state.state.hierarchicalFacetsRefinements));
 
-    const serializedNumericRefinements = serializeNumericRefinements(
-      state.state.numericRefinements
-    );
+    var serializedNumericRefinements = serializeNumericRefinements(state.state.numericRefinements);
 
     if (serializedRefinements !== '') {
       formattedParams.push(serializedRefinements);
@@ -154,9 +145,9 @@ function analytics({
 
     formattedParams = formattedParams.join('&');
 
-    let dataToSend = `Query: ${state.state.query}, ${formattedParams}`;
+    var dataToSend = 'Query: ' + state.state.query + ', ' + formattedParams;
     if (pushPagination === true) {
-      dataToSend += `, Page: ${state.state.page}`;
+      dataToSend += ', Page: ' + state.state.page;
     }
 
     if (lastSentData !== dataToSend) {
@@ -166,41 +157,46 @@ function analytics({
     }
   };
 
-  let pushTimeout;
+  var pushTimeout = void 0;
 
-  let isInitialSearch = true;
+  var isInitialSearch = true;
   if (pushInitialSearch === true) {
     isInitialSearch = false;
   }
 
   return {
-    init() {
+    init: function init() {
       if (triggerOnUIInteraction === true) {
-        document.addEventListener('click', () => {
+        document.addEventListener('click', function () {
           sendAnalytics(cachedState);
         });
 
-        window.addEventListener('beforeunload', () => {
+        window.addEventListener('beforeunload', function () {
           sendAnalytics(cachedState);
         });
       }
     },
-    render({ results, state }) {
+    render: function render(_ref2) {
+      var results = _ref2.results,
+          state = _ref2.state;
+
       if (isInitialSearch === true) {
         isInitialSearch = false;
 
         return;
       }
 
-      cachedState = { results, state };
+      cachedState = { results: results, state: state };
 
       if (pushTimeout) {
         clearTimeout(pushTimeout);
       }
 
-      pushTimeout = setTimeout(() => sendAnalytics(cachedState), delay);
-    },
+      pushTimeout = setTimeout(function () {
+        return sendAnalytics(cachedState);
+      }, delay);
+    }
   };
 }
 
-export default analytics;
+exports.default = analytics;

@@ -1,222 +1,210 @@
-import sinon from 'sinon';
-import expect from 'expect';
+'use strict';
 
-import jsHelper from 'algoliasearch-helper';
+var _sinon = require('sinon');
 
-import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
-import starRating from '../star-rating.js';
+var _sinon2 = _interopRequireDefault(_sinon);
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-const SearchResults = jsHelper.SearchResults;
+var _expect = require('expect');
 
-describe('starRating()', () => {
-  let ReactDOM;
-  let container;
-  let widget;
-  let helper;
-  let state;
-  let createURL;
+var _expect2 = _interopRequireDefault(_expect);
 
-  let results;
+var _algoliasearchHelper = require('algoliasearch-helper');
 
-  beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
-    starRating.__Rewire__('render', ReactDOM.render);
+var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
+
+var _defaultLabels = require('../../../widgets/star-rating/defaultLabels.js');
+
+var _defaultLabels2 = _interopRequireDefault(_defaultLabels);
+
+var _starRating = require('../star-rating.js');
+
+var _starRating2 = _interopRequireDefault(_starRating);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var fakeClient = { addAlgoliaAgent: function addAlgoliaAgent() {} };
+var SearchResults = _algoliasearchHelper2.default.SearchResults;
+
+describe('starRating()', function () {
+  var ReactDOM = void 0;
+  var container = void 0;
+  var widget = void 0;
+  var helper = void 0;
+  var state = void 0;
+  var createURL = void 0;
+
+  var results = void 0;
+
+  beforeEach(function () {
+    ReactDOM = { render: _sinon2.default.spy() };
+    _starRating2.default.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    widget = starRating({
-      container,
+    widget = (0, _starRating2.default)({
+      container: container,
       attributeName: 'anAttrName',
-      cssClasses: { body: ['body', 'cx'] },
+      cssClasses: { body: ['body', 'cx'] }
     });
     helper = {
-      clearRefinements: sinon.spy(),
-      addDisjunctiveFacetRefinement: sinon.spy(),
-      getRefinements: sinon.stub().returns([]),
-      search: sinon.spy(),
-      setState: sinon.spy(),
+      clearRefinements: _sinon2.default.spy(),
+      addDisjunctiveFacetRefinement: _sinon2.default.spy(),
+      getRefinements: _sinon2.default.stub().returns([]),
+      search: _sinon2.default.spy(),
+      setState: _sinon2.default.spy()
     };
     state = {
-      toggleRefinement: sinon.spy(),
+      toggleRefinement: _sinon2.default.spy()
     };
     results = {
-      getFacetValues: sinon.stub().returns([]),
-      hits: [],
+      getFacetValues: _sinon2.default.stub().returns([]),
+      hits: []
     };
-    createURL = () => '#';
+    createURL = function createURL() {
+      return '#';
+    };
     widget.init({
-      helper,
-      instantSearchInstance: { templatesConfig: undefined },
+      helper: helper,
+      instantSearchInstance: { templatesConfig: undefined }
     });
   });
 
-  it('configures the underlying disjunctive facet', () => {
-    expect(widget.getConfiguration()).toEqual({
-      disjunctiveFacets: ['anAttrName'],
+  it('configures the underlying disjunctive facet', function () {
+    (0, _expect2.default)(widget.getConfiguration()).toEqual({
+      disjunctiveFacets: ['anAttrName']
     });
   });
 
-  it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
-    widget.render({ state, helper, results, createURL });
-    widget.render({ state, helper, results, createURL });
+  it('calls twice ReactDOM.render(<RefinementList props />, container)', function () {
+    widget.render({ state: state, helper: helper, results: results, createURL: createURL });
+    widget.render({ state: state, helper: helper, results: results, createURL: createURL });
 
-    expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    (0, _expect2.default)(ReactDOM.render.callCount).toBe(2);
+    (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    (0, _expect2.default)(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+    (0, _expect2.default)(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  it('hide the count==0 when there is a refinement', () => {
-    helper.getRefinements = sinon.stub().returns([{ value: '1' }]);
-    results.getFacetValues = sinon.stub().returns([{ name: '1', count: 42 }]);
-    widget.render({ state, helper, results, createURL });
-    expect(ReactDOM.render.callCount).toBe(1);
-    expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
-      {
-        count: 42,
-        isRefined: true,
-        name: '1',
-        value: '1',
-        stars: [true, false, false, false, false],
-        labels: defaultLabels,
-      },
-    ]);
+  it('hide the count==0 when there is a refinement', function () {
+    helper.getRefinements = _sinon2.default.stub().returns([{ value: '1' }]);
+    results.getFacetValues = _sinon2.default.stub().returns([{ name: '1', count: 42 }]);
+    widget.render({ state: state, helper: helper, results: results, createURL: createURL });
+    (0, _expect2.default)(ReactDOM.render.callCount).toBe(1);
+    (0, _expect2.default)(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([{
+      count: 42,
+      isRefined: true,
+      name: '1',
+      value: '1',
+      stars: [true, false, false, false, false],
+      labels: _defaultLabels2.default
+    }]);
   });
 
-  it("doesn't call the refinement functions if not refined", () => {
-    helper.getRefinements = sinon.stub().returns([]);
-    widget.render({ state, helper, results, createURL });
-    expect(helper.clearRefinements.called).toBe(
-      false,
-      'clearRefinements never called'
-    );
-    expect(helper.addDisjunctiveFacetRefinement.called).toBe(
-      false,
-      'addDisjunctiveFacetRefinement never called'
-    );
-    expect(helper.search.called).toBe(false, 'search never called');
+  it("doesn't call the refinement functions if not refined", function () {
+    helper.getRefinements = _sinon2.default.stub().returns([]);
+    widget.render({ state: state, helper: helper, results: results, createURL: createURL });
+    (0, _expect2.default)(helper.clearRefinements.called).toBe(false, 'clearRefinements never called');
+    (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.called).toBe(false, 'addDisjunctiveFacetRefinement never called');
+    (0, _expect2.default)(helper.search.called).toBe(false, 'search never called');
   });
 
-  it('refines the search', () => {
-    helper.getRefinements = sinon.stub().returns([]);
+  it('refines the search', function () {
+    helper.getRefinements = _sinon2.default.stub().returns([]);
     widget._toggleRefinement('3');
-    expect(helper.clearRefinements.calledOnce).toBe(
-      true,
-      'clearRefinements called once'
-    );
-    expect(helper.addDisjunctiveFacetRefinement.calledThrice).toBe(
-      true,
-      'addDisjunctiveFacetRefinement called thrice'
-    );
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+    (0, _expect2.default)(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
+    (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledThrice).toBe(true, 'addDisjunctiveFacetRefinement called thrice');
+    (0, _expect2.default)(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it('toggles the refinements', () => {
-    helper.getRefinements = sinon.stub().returns([{ value: '2' }]);
+  it('toggles the refinements', function () {
+    helper.getRefinements = _sinon2.default.stub().returns([{ value: '2' }]);
     widget._toggleRefinement('2');
-    expect(helper.clearRefinements.calledOnce).toBe(
-      true,
-      'clearRefinements called once'
-    );
-    expect(helper.addDisjunctiveFacetRefinement.called).toBe(
-      false,
-      'addDisjunctiveFacetRefinement never called'
-    );
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+    (0, _expect2.default)(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
+    (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.called).toBe(false, 'addDisjunctiveFacetRefinement never called');
+    (0, _expect2.default)(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it('toggles the refinements with another facet', () => {
-    helper.getRefinements = sinon.stub().returns([{ value: '2' }]);
+  it('toggles the refinements with another facet', function () {
+    helper.getRefinements = _sinon2.default.stub().returns([{ value: '2' }]);
     widget._toggleRefinement('4');
-    expect(helper.clearRefinements.calledOnce).toBe(
-      true,
-      'clearRefinements called once'
-    );
-    expect(helper.addDisjunctiveFacetRefinement.calledTwice).toBe(
-      true,
-      'addDisjunctiveFacetRefinement called twice'
-    );
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+    (0, _expect2.default)(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
+    (0, _expect2.default)(helper.addDisjunctiveFacetRefinement.calledTwice).toBe(true, 'addDisjunctiveFacetRefinement called twice');
+    (0, _expect2.default)(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it('should return the right facet counts and results', () => {
-    const attributeName = 'anAttrName';
+  it('should return the right facet counts and results', function () {
+    var attributeName = 'anAttrName';
 
-    const _widget = starRating({
-      container,
-      attributeName,
-      cssClasses: { body: ['body', 'cx'] },
+    var _widget = (0, _starRating2.default)({
+      container: container,
+      attributeName: attributeName,
+      cssClasses: { body: ['body', 'cx'] }
     });
-    const _helper = jsHelper(fakeClient, '', _widget.getConfiguration({}));
-    _helper.search = sinon.stub();
+    var _helper = (0, _algoliasearchHelper2.default)(fakeClient, '', _widget.getConfiguration({}));
+    _helper.search = _sinon2.default.stub();
 
     _widget.init({
       helper: _helper,
       state: _helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-      instantSearchInstance: {
-        templatesConfig: {},
+      createURL: function createURL() {
+        return '#';
       },
+      onHistoryChange: function onHistoryChange() {},
+      instantSearchInstance: {
+        templatesConfig: {}
+      }
     });
 
     _widget.render({
-      results: new SearchResults(_helper.state, [
-        {
-          facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
-          },
-        },
-        {},
-      ]),
+      results: new SearchResults(_helper.state, [{
+        facets: _defineProperty({}, attributeName, { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 })
+      }, {}]),
       state: _helper.state,
       helper: _helper,
-      createURL: () => '#',
-      instantSearchInstance: {
-        templatesConfig: {},
+      createURL: function createURL() {
+        return '#';
       },
+      instantSearchInstance: {
+        templatesConfig: {}
+      }
     });
 
-    expect(ReactDOM.render.lastCall.args[0].props.facetValues).toEqual([
-      {
-        count: 1000,
-        isRefined: false,
-        labels: { andUp: '& Up' },
-        name: '4',
-        value: '4',
-        stars: [true, true, true, true, false],
-      },
-      {
-        count: 1050,
-        isRefined: false,
-        labels: { andUp: '& Up' },
-        name: '3',
-        value: '3',
-        stars: [true, true, true, false, false],
-      },
-      {
-        count: 1070,
-        isRefined: false,
-        labels: { andUp: '& Up' },
-        name: '2',
-        value: '2',
-        stars: [true, true, false, false, false],
-      },
-      {
-        count: 1080,
-        isRefined: false,
-        labels: { andUp: '& Up' },
-        name: '1',
-        value: '1',
-        stars: [true, false, false, false, false],
-      },
-    ]);
+    (0, _expect2.default)(ReactDOM.render.lastCall.args[0].props.facetValues).toEqual([{
+      count: 1000,
+      isRefined: false,
+      labels: { andUp: '& Up' },
+      name: '4',
+      value: '4',
+      stars: [true, true, true, true, false]
+    }, {
+      count: 1050,
+      isRefined: false,
+      labels: { andUp: '& Up' },
+      name: '3',
+      value: '3',
+      stars: [true, true, true, false, false]
+    }, {
+      count: 1070,
+      isRefined: false,
+      labels: { andUp: '& Up' },
+      name: '2',
+      value: '2',
+      stars: [true, true, false, false, false]
+    }, {
+      count: 1080,
+      isRefined: false,
+      labels: { andUp: '& Up' },
+      name: '1',
+      value: '1',
+      stars: [true, false, false, false, false]
+    }]);
   });
 
-  afterEach(() => {
-    starRating.__ResetDependency__('render');
-    starRating.__ResetDependency__('autoHideContainerHOC');
-    starRating.__ResetDependency__('headerFooterHOC');
+  afterEach(function () {
+    _starRating2.default.__ResetDependency__('render');
+    _starRating2.default.__ResetDependency__('autoHideContainerHOC');
+    _starRating2.default.__ResetDependency__('headerFooterHOC');
   });
 });

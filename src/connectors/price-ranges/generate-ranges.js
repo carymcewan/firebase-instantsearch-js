@@ -1,5 +1,10 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function round(v, precision) {
-  let res = Math.round(v / precision) * precision;
+  var res = Math.round(v / precision) * precision;
   if (res < 1) {
     res = 1;
   }
@@ -12,7 +17,7 @@ function generateRanges(stats) {
     return [];
   }
 
-  let precision;
+  var precision = void 0;
   if (stats.avg < 100) {
     precision = 1;
   } else if (stats.avg < 1000) {
@@ -20,21 +25,21 @@ function generateRanges(stats) {
   } else {
     precision = 100;
   }
-  const avg = round(Math.round(stats.avg), precision);
-  const min = Math.ceil(stats.min);
-  let max = round(Math.floor(stats.max), precision);
+  var avg = round(Math.round(stats.avg), precision);
+  var min = Math.ceil(stats.min);
+  var max = round(Math.floor(stats.max), precision);
   while (max > stats.max) {
     max -= precision;
   }
 
-  let next;
-  let from;
-  const facetValues = [];
+  var next = void 0;
+  var from = void 0;
+  var facetValues = [];
   if (min !== max) {
     next = min;
 
     facetValues.push({
-      to: next,
+      to: next
     });
 
     while (next < avg) {
@@ -44,8 +49,8 @@ function generateRanges(stats) {
         next = from + 1;
       }
       facetValues.push({
-        from,
-        to: next,
+        from: from,
+        to: next
       });
     }
     while (next < max) {
@@ -55,8 +60,8 @@ function generateRanges(stats) {
         next = from + 1;
       }
       facetValues.push({
-        from,
-        to: next,
+        from: from,
+        to: next
       });
     }
 
@@ -64,7 +69,7 @@ function generateRanges(stats) {
       if (next !== avg) {
         facetValues.push({
           from: next,
-          to: avg,
+          to: avg
         });
         next = avg;
       }
@@ -80,4 +85,4 @@ function generateRanges(stats) {
   return facetValues;
 }
 
-export default generateRanges;
+exports.default = generateRanges;

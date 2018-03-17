@@ -1,28 +1,24 @@
-import some from 'lodash/some';
+'use strict';
 
-import { checkRendering } from '../../lib/utils.js';
-
-const usage = `Usage:
-var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   refine,
-  //   hasNoResults,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customHitsPerPage({
-    items: [
-      {value: 5, label: '5 results per page', default: true},
-      {value: 10, label: '10 results per page'},
-      {value: 42, label: '42 results per page'},
-    ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html
-`;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = connectHitsPerPage;
+
+var _some = require('lodash/some');
+
+var _some2 = _interopRequireDefault(_some);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHitsPerPage({\n    items: [\n      {value: 5, label: \'5 results per page\', default: true},\n      {value: 10, label: \'10 results per page\'},\n      {value: 42, label: \'42 results per page\'},\n    ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html\n';
 
 /**
  * @typedef {Object} HitsPerPageRenderingOptionsItem
@@ -106,97 +102,90 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectHitsPerPage(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectHitsPerPage(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { items: userItems } = widgetParams;
-    let items = userItems;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var userItems = widgetParams.items;
+
+    var items = userItems;
 
     if (!items) {
       throw new Error(usage);
     }
 
-    const defaultValues = items.filter(item => item.default);
+    var defaultValues = items.filter(function (item) {
+      return item.default;
+    });
     if (defaultValues.length > 1) {
-      throw new Error(
-        `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
-The first one will be picked, you should probably set only one default value`
-      );
+      throw new Error('[Error][hitsPerPageSelector] more than one default value is specified in `items[]`\nThe first one will be picked, you should probably set only one default value');
     }
 
     return {
-      getConfiguration() {
-        return defaultValues.length > 0
-          ? { hitsPerPage: defaultValues[0].value }
-          : {};
+      getConfiguration: function getConfiguration() {
+        return defaultValues.length > 0 ? { hitsPerPage: defaultValues[0].value } : {};
       },
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            state = _ref.state,
+            instantSearchInstance = _ref.instantSearchInstance;
 
-      init({ helper, state, instantSearchInstance }) {
-        const isCurrentInOptions = some(
-          items,
-          item => Number(state.hitsPerPage) === Number(item.value)
-        );
+        var isCurrentInOptions = (0, _some2.default)(items, function (item) {
+          return Number(state.hitsPerPage) === Number(item.value);
+        });
 
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
             if (window.console) {
-              window.console.warn(
-                `[Warning][hitsPerPageSelector] hitsPerPage not defined.
-  You should probably set the value \`hitsPerPage\`
-  using the searchParameters attribute of the instantsearch constructor.`
-              );
+              window.console.warn('[Warning][hitsPerPageSelector] hitsPerPage not defined.\n  You should probably set the value `hitsPerPage`\n  using the searchParameters attribute of the instantsearch constructor.');
             }
           } else if (window.console) {
-            window.console.warn(
-              `[Warning][hitsPerPageSelector] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
-            );
+            window.console.warn('[Warning][hitsPerPageSelector] No item in `items`\n  with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
           }
 
-          items = [{ value: undefined, label: '' }, ...items];
+          items = [{ value: undefined, label: '' }].concat(_toConsumableArray(items));
         }
 
-        this.setHitsPerPage = value =>
-          helper.setQueryParameter('hitsPerPage', value).search();
+        this.setHitsPerPage = function (value) {
+          return helper.setQueryParameter('hitsPerPage', value).search();
+        };
 
-        renderFn(
-          {
-            items: this._transformItems(state),
-            refine: this.setHitsPerPage,
-            hasNoResults: true,
-            widgetParams,
-            instantSearchInstance,
-          },
-          true
-        );
+        renderFn({
+          items: this._transformItems(state),
+          refine: this.setHitsPerPage,
+          hasNoResults: true,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, true);
       },
+      render: function render(_ref2) {
+        var state = _ref2.state,
+            results = _ref2.results,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-      render({ state, results, instantSearchInstance }) {
-        const hasNoResults = results.nbHits === 0;
+        var hasNoResults = results.nbHits === 0;
 
-        renderFn(
-          {
-            items: this._transformItems(state),
-            refine: this.setHitsPerPage,
-            hasNoResults,
-            widgetParams,
-            instantSearchInstance,
-          },
-          false
-        );
+        renderFn({
+          items: this._transformItems(state),
+          refine: this.setHitsPerPage,
+          hasNoResults: hasNoResults,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, false);
       },
+      _transformItems: function _transformItems(_ref3) {
+        var hitsPerPage = _ref3.hitsPerPage;
 
-      _transformItems({ hitsPerPage }) {
-        return items.map(item => ({
-          ...item,
-          isRefined: Number(item.value) === Number(hitsPerPage),
-        }));
+        return items.map(function (item) {
+          return _extends({}, item, {
+            isRefined: Number(item.value) === Number(hitsPerPage)
+          });
+        });
       },
-
-      dispose() {
+      dispose: function dispose() {
         unmountFn();
-      },
+      }
     };
   };
 }

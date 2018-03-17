@@ -1,28 +1,20 @@
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customMenu = connectMenu(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   canRefine,
-  //   widgetParams,
-  //   isShowingMore,
-  //   toggleShowMore
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customMenu({
-    attributeName,
-    [ limit ],
-    [ showMoreLimit ]
-    [ sortBy = ['name:asc'] ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html
-`;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = connectMenu;
+
+var _utils = require('../../lib/utils.js');
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   widgetParams,\n  //   isShowingMore,\n  //   toggleShowMore\n  // }\n});\nsearch.addWidget(\n  customMenu({\n    attributeName,\n    [ limit ],\n    [ showMoreLimit ]\n    [ sortBy = [\'name:asc\'] ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html\n';
 
 /**
  * @typedef {Object} MenuItem
@@ -104,18 +96,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectMenu(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {
-      attributeName,
-      limit = 10,
-      sortBy = ['name:asc'],
-      showMoreLimit,
-    } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        _widgetParams$limit = widgetParams.limit,
+        limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
+        _widgetParams$sortBy = widgetParams.sortBy,
+        sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy,
+        showMoreLimit = widgetParams.showMoreLimit;
 
-    if (!attributeName || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
+
+    if (!attributeName || !isNaN(showMoreLimit) && showMoreLimit < limit) {
       throw new Error(usage);
     }
 
@@ -124,116 +118,110 @@ export default function connectMenu(renderFn, unmountFn) {
 
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
+      toggleShowMore: function toggleShowMore() {},
+      cachedToggleShowMore: function cachedToggleShowMore() {
         this.toggleShowMore();
       },
+      createToggleShowMore: function createToggleShowMore(_ref) {
+        var _this = this;
 
-      createToggleShowMore({ results, instantSearchInstance }) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render({ results, instantSearchInstance });
+        var results = _ref.results,
+            instantSearchInstance = _ref.instantSearchInstance;
+
+        return function () {
+          _this.isShowingMore = !_this.isShowingMore;
+          _this.render({ results: results, instantSearchInstance: instantSearchInstance });
         };
       },
-
-      getLimit() {
+      getLimit: function getLimit() {
         return this.isShowingMore ? showMoreLimit : limit;
       },
+      refine: function refine(helper) {
+        return function (facetValue) {
+          var _helper$getHierarchic = helper.getHierarchicalFacetBreadcrumb(attributeName),
+              _helper$getHierarchic2 = _slicedToArray(_helper$getHierarchic, 1),
+              refinedItem = _helper$getHierarchic2[0];
 
-      refine(helper) {
-        return facetValue => {
-          const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
-            attributeName
-          );
-          helper
-            .toggleRefinement(
-              attributeName,
-              facetValue ? facetValue : refinedItem
-            )
-            .search();
+          helper.toggleRefinement(attributeName, facetValue ? facetValue : refinedItem).search();
         };
       },
-
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attributeName,
-              attributes: [attributeName],
-            },
-          ],
+      getConfiguration: function getConfiguration(configuration) {
+        var widgetConfiguration = {
+          hierarchicalFacets: [{
+            name: attributeName,
+            attributes: [attributeName]
+          }]
         };
 
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMoreLimit || limit
-        );
+        var currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+        widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, showMoreLimit || limit);
 
         return widgetConfiguration;
       },
+      init: function init(_ref2) {
+        var helper = _ref2.helper,
+            createURL = _ref2.createURL,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-      init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attributeName, facetValue));
+        this._createURL = function (facetValue) {
+          return createURL(helper.state.toggleRefinement(attributeName, facetValue));
+        };
 
         this._refine = this.refine(helper);
 
-        renderFn(
-          {
-            items: [],
-            createURL: this._createURL,
-            refine: this._refine,
-            instantSearchInstance,
-            canRefine: false,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore: false,
-          },
-          true
-        );
+        renderFn({
+          items: [],
+          createURL: this._createURL,
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          canRefine: false,
+          widgetParams: widgetParams,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore: false
+        }, true);
       },
+      render: function render(_ref3) {
+        var results = _ref3.results,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      render({ results, instantSearchInstance }) {
-        const facetItems =
-          results.getFacetValues(attributeName, { sortBy }).data || [];
-        const items = facetItems
-          .slice(0, this.getLimit())
-          .map(({ name: label, path: value, ...item }) => ({
-            ...item,
-            label,
-            value,
-          }));
+        var facetItems = results.getFacetValues(attributeName, { sortBy: sortBy }).data || [];
+        var items = facetItems.slice(0, this.getLimit()).map(function (_ref4) {
+          var label = _ref4.name,
+              value = _ref4.path,
+              item = _objectWithoutProperties(_ref4, ['name', 'path']);
 
-        this.toggleShowMore = this.createToggleShowMore({
-          results,
-          instantSearchInstance,
+          return _extends({}, item, {
+            label: label,
+            value: value
+          });
         });
 
-        renderFn(
-          {
-            items,
-            createURL: this._createURL,
-            refine: this._refine,
-            instantSearchInstance,
-            canRefine: items.length > 0,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore:
-              this.isShowingMore || facetItems.length > this.getLimit(),
-          },
-          false
-        );
-      },
+        this.toggleShowMore = this.createToggleShowMore({
+          results: results,
+          instantSearchInstance: instantSearchInstance
+        });
 
-      dispose({ state }) {
+        renderFn({
+          items: items,
+          createURL: this._createURL,
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          canRefine: items.length > 0,
+          widgetParams: widgetParams,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore: this.isShowingMore || facetItems.length > this.getLimit()
+        }, false);
+      },
+      dispose: function dispose(_ref5) {
+        var state = _ref5.state;
+
         unmountFn();
 
-        let nextState = state;
+        var nextState = state;
 
         if (state.isHierarchicalFacetRefined(attributeName)) {
           nextState = state.removeHierarchicalFacetRefinement(attributeName);
@@ -241,15 +229,12 @@ export default function connectMenu(renderFn, unmountFn) {
 
         nextState = nextState.removeHierarchicalFacet(attributeName);
 
-        if (
-          nextState.maxValuesPerFacet === limit ||
-          (showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit)
-        ) {
+        if (nextState.maxValuesPerFacet === limit || showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit) {
           nextState.setQueryParameters('maxValuesPerFacet', undefined);
         }
 
         return nextState;
-      },
+      }
     };
   };
 }

@@ -1,139 +1,84 @@
-/* eslint-disable import/default */
+'use strict';
 
-import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const stories = storiesOf('Breadcrumb');
-export default () => {
-  stories
-    .add(
-      'default',
-      wrapWithHits(container => {
-        container.innerHTML = `
-        <div id="hierarchicalMenu"></div>
-        <div id="breadcrumb"></div>
-      `;
+var _devNovel = require('dev-novel');
 
-        window.search.addWidget(
-          instantsearch.widgets.breadcrumb({
-            container: '#breadcrumb',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-          })
-        );
+var _index = require('../../../../index');
 
-        // Custom Widget to toggle refinement
-        window.search.addWidget({
-          init({ helper }) {
-            helper.toggleRefinement(
-              'hierarchicalCategories.lvl0',
-              'Cameras & Camcorders > Digital Cameras'
-            );
-          },
-        });
-      })
-    )
-    .add(
-      'with custom home label',
-      wrapWithHits(container => {
-        container.innerHTML = `
-        <div id="hierarchicalMenu"></div>
-        <div id="breadcrumb"></div>
-      `;
+var _index2 = _interopRequireDefault(_index);
 
-        window.search.addWidget(
-          instantsearch.widgets.breadcrumb({
-            container: '#breadcrumb',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            templates: { home: 'Home Page' },
-          })
-        );
+var _wrapWithHits = require('../../utils/wrap-with-hits.js');
 
-        // Custom Widget to toggle refinement
-        window.search.addWidget({
-          init({ helper }) {
-            helper.toggleRefinement(
-              'hierarchicalCategories.lvl0',
-              'Cameras & Camcorders > Digital Cameras'
-            );
-          },
-        });
-      })
-    )
-    .add(
-      'with default selected item',
-      wrapWithHits(container => {
-        container.innerHTML = `
-        <div id="breadcrumb"></div>
-        <div id="hierarchicalMenu"></div>
-      `;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-        window.search.addWidget(
-          instantsearch.widgets.breadcrumb({
-            container: '#breadcrumb',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            rootPath: 'Cameras & Camcorders > Digital Cameras',
-          })
-        );
+var stories = (0, _devNovel.storiesOf)('Breadcrumb'); /* eslint-disable import/default */
 
-        window.search.addWidget(
-          instantsearch.widgets.hierarchicalMenu({
-            showParentLevel: false,
-            container: '#hierarchicalMenu',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            rootPath: 'Cameras & Camcorders',
-          })
-        );
-      })
-    )
-    .add(
-      'with hierarchical menu',
-      wrapWithHits(container => {
-        container.innerHTML = `
-        <div id="breadcrumb"></div>
-        <div id="hierarchicalMenu"></div>
-      `;
+exports.default = function () {
+  stories.add('default', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    container.innerHTML = '\n        <div id="hierarchicalMenu"></div>\n        <div id="breadcrumb"></div>\n      ';
 
-        window.search.addWidget(
-          instantsearch.widgets.breadcrumb({
-            container: '#breadcrumb',
-            separator: ' / ',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-          })
-        );
+    window.search.addWidget(_index2.default.widgets.breadcrumb({
+      container: '#breadcrumb',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2']
+    }));
 
-        window.search.addWidget(
-          instantsearch.widgets.hierarchicalMenu({
-            showParentLevel: false,
-            container: '#hierarchicalMenu',
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            rootPath: 'Cameras & Camcorders',
-          })
-        );
-      })
-    );
+    // Custom Widget to toggle refinement
+    window.search.addWidget({
+      init: function init(_ref) {
+        var helper = _ref.helper;
+
+        helper.toggleRefinement('hierarchicalCategories.lvl0', 'Cameras & Camcorders > Digital Cameras');
+      }
+    });
+  })).add('with custom home label', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    container.innerHTML = '\n        <div id="hierarchicalMenu"></div>\n        <div id="breadcrumb"></div>\n      ';
+
+    window.search.addWidget(_index2.default.widgets.breadcrumb({
+      container: '#breadcrumb',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+      templates: { home: 'Home Page' }
+    }));
+
+    // Custom Widget to toggle refinement
+    window.search.addWidget({
+      init: function init(_ref2) {
+        var helper = _ref2.helper;
+
+        helper.toggleRefinement('hierarchicalCategories.lvl0', 'Cameras & Camcorders > Digital Cameras');
+      }
+    });
+  })).add('with default selected item', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    container.innerHTML = '\n        <div id="breadcrumb"></div>\n        <div id="hierarchicalMenu"></div>\n      ';
+
+    window.search.addWidget(_index2.default.widgets.breadcrumb({
+      container: '#breadcrumb',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+      rootPath: 'Cameras & Camcorders > Digital Cameras'
+    }));
+
+    window.search.addWidget(_index2.default.widgets.hierarchicalMenu({
+      showParentLevel: false,
+      container: '#hierarchicalMenu',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+      rootPath: 'Cameras & Camcorders'
+    }));
+  })).add('with hierarchical menu', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    container.innerHTML = '\n        <div id="breadcrumb"></div>\n        <div id="hierarchicalMenu"></div>\n      ';
+
+    window.search.addWidget(_index2.default.widgets.breadcrumb({
+      container: '#breadcrumb',
+      separator: ' / ',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2']
+    }));
+
+    window.search.addWidget(_index2.default.widgets.hierarchicalMenu({
+      showParentLevel: false,
+      container: '#hierarchicalMenu',
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+      rootPath: 'Cameras & Camcorders'
+    }));
+  }));
 };

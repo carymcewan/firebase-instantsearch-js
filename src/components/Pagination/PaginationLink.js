@@ -1,61 +1,110 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
+'use strict';
 
-import isEqual from 'lodash/isEqual';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-class PaginationLink extends Component {
-  componentWillMount() {
-    this.handleClick = this.handleClick.bind(this);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _isEqual = require('lodash/isEqual');
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PaginationLink = function (_Component) {
+  _inherits(PaginationLink, _Component);
+
+  function PaginationLink() {
+    _classCallCheck(this, PaginationLink);
+
+    return _possibleConstructorReturn(this, (PaginationLink.__proto__ || Object.getPrototypeOf(PaginationLink)).apply(this, arguments));
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
-  }
-
-  handleClick(e) {
-    this.props.handleClick(this.props.pageNumber, e);
-  }
-
-  render() {
-    const { cssClasses, label, ariaLabel, url, isDisabled } = this.props;
-
-    let tagName = 'span';
-    let attributes = {
-      className: cssClasses.link,
-      dangerouslySetInnerHTML: {
-        __html: label,
-      },
-    };
-
-    // "Enable" the element, by making it a link
-    if (!isDisabled) {
-      tagName = 'a';
-      attributes = {
-        ...attributes,
-        'aria-label': ariaLabel,
-        href: url,
-        onClick: this.handleClick,
-      };
+  _createClass(PaginationLink, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.handleClick = this.handleClick.bind(this);
     }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      return !(0, _isEqual2.default)(this.props, nextProps);
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(e) {
+      this.props.handleClick(this.props.pageNumber, e);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          cssClasses = _props.cssClasses,
+          label = _props.label,
+          ariaLabel = _props.ariaLabel,
+          url = _props.url,
+          isDisabled = _props.isDisabled;
 
-    const element = React.createElement(tagName, attributes);
 
-    return <li className={cssClasses.item}>{element}</li>;
-  }
-}
+      var tagName = 'span';
+      var attributes = {
+        className: cssClasses.link,
+        dangerouslySetInnerHTML: {
+          __html: label
+        }
+      };
+
+      // "Enable" the element, by making it a link
+      if (!isDisabled) {
+        tagName = 'a';
+        attributes = _extends({}, attributes, {
+          'aria-label': ariaLabel,
+          href: url,
+          onClick: this.handleClick
+        });
+      }
+
+      var element = _preactCompat2.default.createElement(tagName, attributes);
+
+      return _preactCompat2.default.createElement(
+        'li',
+        { className: cssClasses.item },
+        element
+      );
+    }
+  }]);
+
+  return PaginationLink;
+}(_preactCompat.Component);
 
 PaginationLink.propTypes = {
-  ariaLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  cssClasses: PropTypes.shape({
-    item: PropTypes.string,
-    link: PropTypes.string,
+  ariaLabel: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]).isRequired,
+  cssClasses: _propTypes2.default.shape({
+    item: _propTypes2.default.string,
+    link: _propTypes2.default.string
   }),
-  handleClick: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  pageNumber: PropTypes.number,
-  url: PropTypes.string,
+  handleClick: _propTypes2.default.func.isRequired,
+  isDisabled: _propTypes2.default.bool,
+  label: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]).isRequired,
+  pageNumber: _propTypes2.default.number,
+  url: _propTypes2.default.string
 };
 
-export default PaginationLink;
+exports.default = PaginationLink;

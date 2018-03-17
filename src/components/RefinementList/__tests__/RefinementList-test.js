@@ -1,275 +1,247 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import expect from 'expect';
-import sinon from 'sinon';
-import { RawRefinementList as RefinementList } from '../RefinementList';
-import RefinementListItem from '../RefinementListItem';
+'use strict';
 
-const defaultProps = {
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _enzyme = require('enzyme');
+
+var _expect = require('expect');
+
+var _expect2 = _interopRequireDefault(_expect);
+
+var _sinon = require('sinon');
+
+var _sinon2 = _interopRequireDefault(_sinon);
+
+var _RefinementList = require('../RefinementList');
+
+var _RefinementListItem = require('../RefinementListItem');
+
+var _RefinementListItem2 = _interopRequireDefault(_RefinementListItem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultProps = {
   templateProps: {},
-  toggleRefinement: () => {},
+  toggleRefinement: function toggleRefinement() {}
 };
 
-describe('RefinementList', () => {
-  let createURL;
+describe('RefinementList', function () {
+  var createURL = void 0;
 
-  function shallowRender(extraProps = {}) {
-    createURL = sinon.spy();
-    const props = {
-      ...defaultProps,
-      createURL,
-      facetValues: [],
-      ...extraProps,
-    };
-    return shallow(React.createElement(RefinementList, props));
+  function shallowRender() {
+    var extraProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    createURL = _sinon2.default.spy();
+    var props = _extends({}, defaultProps, {
+      createURL: createURL,
+      facetValues: []
+    }, extraProps);
+    return (0, _enzyme.shallow)(_react2.default.createElement(_RefinementList.RawRefinementList, props));
   }
 
-  describe('cssClasses', () => {
-    it('should add the `list` class to the root element', () => {
+  describe('cssClasses', function () {
+    it('should add the `list` class to the root element', function () {
       // Given
-      const props = {
-        ...defaultProps,
+      var props = _extends({}, defaultProps, {
         cssClasses: {
-          list: 'list',
-        },
-      };
+          list: 'list'
+        }
+      });
 
       // When
-      const actual = shallowRender(props);
+      var actual = shallowRender(props);
 
       // Then
-      expect(actual.hasClass('list')).toEqual(true);
+      (0, _expect2.default)(actual.hasClass('list')).toEqual(true);
     });
 
-    it('should set item classes to the refinements', () => {
+    it('should set item classes to the refinements', function () {
       // Given
-      const props = {
-        ...defaultProps,
+      var props = _extends({}, defaultProps, {
         cssClasses: {
-          item: 'item',
+          item: 'item'
         },
-        facetValues: [{ value: 'foo', isRefined: true }],
-      };
+        facetValues: [{ value: 'foo', isRefined: true }]
+      });
 
       // When
-      const actual = shallowRender(props).find(RefinementListItem);
+      var actual = shallowRender(props).find(_RefinementListItem2.default);
 
       // Then
-      expect(actual.props().itemClassName).toContain('item');
+      (0, _expect2.default)(actual.props().itemClassName).toContain('item');
     });
 
-    it('should set active classes to the active refinements', () => {
+    it('should set active classes to the active refinements', function () {
       // Given
-      const props = {
-        ...defaultProps,
+      var props = _extends({}, defaultProps, {
         cssClasses: {
-          active: 'active',
+          active: 'active'
         },
-        facetValues: [
-          { value: 'foo', isRefined: true },
-          { value: 'bar', isRefined: false },
-        ],
-      };
+        facetValues: [{ value: 'foo', isRefined: true }, { value: 'bar', isRefined: false }]
+      });
 
       // When
-      const activeItem = shallowRender(props).find({ isRefined: true });
-      const inactiveItem = shallowRender(props).find({ isRefined: false });
+      var activeItem = shallowRender(props).find({ isRefined: true });
+      var inactiveItem = shallowRender(props).find({ isRefined: false });
 
       // Then
-      expect(activeItem.props().itemClassName).toContain('active');
-      expect(inactiveItem.props().itemClassName).not.toContain('active');
+      (0, _expect2.default)(activeItem.props().itemClassName).toContain('active');
+      (0, _expect2.default)(inactiveItem.props().itemClassName).not.toContain('active');
     });
   });
 
-  describe('items', () => {
-    it('should have the correct names', () => {
+  describe('items', function () {
+    it('should have the correct names', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-        ],
-      };
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', isRefined: false }, { value: 'bar', isRefined: false }]
+      });
 
       // When
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      var items = shallowRender(props).find(_RefinementListItem2.default);
+      var firstItem = items.at(0);
+      var secondItem = items.at(1);
 
       // Then
-      expect(firstItem.props().facetValueToRefine).toEqual('foo');
-      expect(secondItem.props().facetValueToRefine).toEqual('bar');
+      (0, _expect2.default)(firstItem.props().facetValueToRefine).toEqual('foo');
+      (0, _expect2.default)(secondItem.props().facetValueToRefine).toEqual('bar');
     });
 
-    it('should correctly set if refined or not', () => {
+    it('should correctly set if refined or not', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: true },
-        ],
-      };
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', isRefined: false }, { value: 'bar', isRefined: true }]
+      });
 
       // When
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      var items = shallowRender(props).find(_RefinementListItem2.default);
+      var firstItem = items.at(0);
+      var secondItem = items.at(1);
 
       // Then
-      expect(firstItem.props().isRefined).toEqual(false);
-      expect(secondItem.props().isRefined).toEqual(true);
+      (0, _expect2.default)(firstItem.props().isRefined).toEqual(false);
+      (0, _expect2.default)(secondItem.props().isRefined).toEqual(true);
     });
   });
 
-  describe('count', () => {
-    it('should pass the count to the templateData', () => {
+  describe('count', function () {
+    it('should pass the count to the templateData', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', count: 42, isRefined: false },
-          { value: 'bar', count: 16, isRefined: false },
-        ],
-      };
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', count: 42, isRefined: false }, { value: 'bar', count: 16, isRefined: false }]
+      });
 
       // When
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      var items = shallowRender(props).find(_RefinementListItem2.default);
+      var firstItem = items.at(0);
+      var secondItem = items.at(1);
 
       // Then
-      expect(firstItem.props().templateData.count).toEqual(42);
-      expect(secondItem.props().templateData.count).toEqual(16);
+      (0, _expect2.default)(firstItem.props().templateData.count).toEqual(42);
+      (0, _expect2.default)(secondItem.props().templateData.count).toEqual(16);
     });
   });
 
-  describe('showMore', () => {
-    it('adds a showMore link when the feature is enabled', () => {
+  describe('showMore', function () {
+    it('adds a showMore link when the feature is enabled', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
-        ],
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', isRefined: false }, { value: 'bar', isRefined: false }, { value: 'baz', isRefined: false }],
         showMore: true,
         isShowingMore: false,
-        canToggleShowMore: true,
-      };
+        canToggleShowMore: true
+      });
 
       // When
-      const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-inactive"]');
+      var root = shallowRender(props);
+      var actual = root.find('[templateKey="show-more-inactive"]');
 
       // Then
-      expect(actual).toHaveLength(1);
+      (0, _expect2.default)(actual).toHaveLength(1);
     });
 
-    it('does not add a showMore link when the feature is disabled', () => {
+    it('does not add a showMore link when the feature is disabled', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
-        ],
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', isRefined: false }, { value: 'bar', isRefined: false }, { value: 'baz', isRefined: false }],
         showMore: false,
-        isShowingMore: false,
-      };
+        isShowingMore: false
+      });
 
       // When
-      const root = shallowRender(props);
-      const actual = root
-        .find('Template')
-        .filter({ templateKey: 'show-more-inactive' });
+      var root = shallowRender(props);
+      var actual = root.find('Template').filter({ templateKey: 'show-more-inactive' });
 
       // Then
-      expect(actual).toHaveLength(0);
+      (0, _expect2.default)(actual).toHaveLength(0);
     });
 
-    it('should displays showLess', () => {
+    it('should displays showLess', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
-        ],
+      var props = _extends({}, defaultProps, {
+        facetValues: [{ value: 'foo', isRefined: false }, { value: 'bar', isRefined: false }, { value: 'baz', isRefined: false }],
         showMore: true,
         isShowingMore: true,
-        canToggleShowMore: true,
-      };
+        canToggleShowMore: true
+      });
 
       // When
-      const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-active"]');
+      var root = shallowRender(props);
+      var actual = root.find('[templateKey="show-more-active"]');
 
       // Then
-      expect(actual).toHaveLength(1);
+      (0, _expect2.default)(actual).toHaveLength(1);
     });
   });
 
-  describe('sublist', () => {
-    it('should create a subList with the sub values', () => {
+  describe('sublist', function () {
+    it('should create a subList with the sub values', function () {
       // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {
-            value: 'foo',
-            data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-      };
+      var props = _extends({}, defaultProps, {
+        facetValues: [{
+          value: 'foo',
+          data: [{ value: 'bar', isRefined: false }, { value: 'baz', isRefined: false }],
+          isRefined: false
+        }]
+      });
 
       // When
-      const root = shallowRender(props);
-      const mainItem = root.find(RefinementListItem).at(0);
-      const subList = shallow(mainItem.props().subItems);
-      const subItems = subList.find(RefinementListItem);
+      var root = shallowRender(props);
+      var mainItem = root.find(_RefinementListItem2.default).at(0);
+      var subList = (0, _enzyme.shallow)(mainItem.props().subItems);
+      var subItems = subList.find(_RefinementListItem2.default);
 
       // Then
-      expect(mainItem.props().facetValueToRefine).toEqual('foo');
-      expect(subItems.at(0).props().facetValueToRefine).toEqual('bar');
-      expect(subItems.at(1).props().facetValueToRefine).toEqual('baz');
+      (0, _expect2.default)(mainItem.props().facetValueToRefine).toEqual('foo');
+      (0, _expect2.default)(subItems.at(0).props().facetValueToRefine).toEqual('bar');
+      (0, _expect2.default)(subItems.at(1).props().facetValueToRefine).toEqual('baz');
     });
 
-    it('should add depth class for each depth', () => {
+    it('should add depth class for each depth', function () {
       // Given
-      const props = {
-        ...defaultProps,
+      var props = _extends({}, defaultProps, {
         cssClasses: {
-          depth: 'depth-',
+          depth: 'depth-'
         },
-        facetValues: [
-          {
-            value: 'foo',
-            data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-      };
+        facetValues: [{
+          value: 'foo',
+          data: [{ value: 'bar', isRefined: false }, { value: 'baz', isRefined: false }],
+          isRefined: false
+        }]
+      });
 
       // When
-      const root = shallowRender(props);
-      const mainItem = root.find(RefinementListItem).at(0);
-      const subList = shallow(mainItem.props().subItems);
+      var root = shallowRender(props);
+      var mainItem = root.find(_RefinementListItem2.default).at(0);
+      var subList = (0, _enzyme.shallow)(mainItem.props().subItems);
 
       // Then
-      expect(root.props().className).toContain('depth-0');
-      expect(subList.props().className).toContain('depth-1');
+      (0, _expect2.default)(root.props().className).toContain('depth-0');
+      (0, _expect2.default)(subList.props().className).toContain('depth-1');
     });
   });
 });

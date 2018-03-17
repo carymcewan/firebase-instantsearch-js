@@ -1,28 +1,42 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+'use strict';
 
-function render(
-  { items, refine, widgetParams: { containerNode, title } },
-  isFirstRendering
-) {
-  let select;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _index = require('../../../../index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function render(_ref, isFirstRendering) {
+  var items = _ref.items,
+      refine = _ref.refine,
+      _ref$widgetParams = _ref.widgetParams,
+      containerNode = _ref$widgetParams.containerNode,
+      title = _ref$widgetParams.title;
+
+  var select = void 0;
   if (isFirstRendering) {
-    const header = document.createElement('div');
+    var header = document.createElement('div');
     header.innerText = title;
     containerNode.appendChild(header);
     select = document.createElement('select');
 
-    select.addEventListener('change', e => refine(e.target.value));
+    select.addEventListener('change', function (e) {
+      return refine(e.target.value);
+    });
 
     containerNode.appendChild(select);
   } else {
     select = containerNode.querySelector('select');
   }
 
-  const options = items.map(item => {
-    const option = document.createElement('option');
+  var options = items.map(function (item) {
+    var option = document.createElement('option');
 
-    option.innerText = `${item.label} ${item.count}`;
+    option.innerText = item.label + ' ' + item.count;
     option.value = item.value;
     option.selected = item.isRefined;
 
@@ -30,7 +44,8 @@ function render(
   });
 
   select.textContent = '';
-  options.forEach(el => select.appendChild(el));
-}
-
-export default instantsearch.connectors.connectMenu(render);
+  options.forEach(function (el) {
+    return select.appendChild(el);
+  });
+} /* eslint-disable import/default */
+exports.default = _index2.default.connectors.connectMenu(render);

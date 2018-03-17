@@ -1,38 +1,54 @@
-import dropdowns from './dropdowns.js';
-import move from './mover.js';
-import activateClipboard from './activateClipboard.js';
-import bindRunExamples from './bindRunExamples.js';
+'use strict';
 
-import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
+var _dropdowns = require('./dropdowns.js');
 
-import '../../../src/css/instantsearch.scss';
-import '../../../src/css/instantsearch-theme-algolia.scss';
+var _dropdowns2 = _interopRequireDefault(_dropdowns);
+
+var _mover = require('./mover.js');
+
+var _mover2 = _interopRequireDefault(_mover);
+
+var _activateClipboard = require('./activateClipboard.js');
+
+var _activateClipboard2 = _interopRequireDefault(_activateClipboard);
+
+var _bindRunExamples = require('./bindRunExamples.js');
+
+var _bindRunExamples2 = _interopRequireDefault(_bindRunExamples);
+
+var _fixSidebar = require('./fix-sidebar.js');
+
+require('../../../src/css/instantsearch.scss');
+
+require('../../../src/css/instantsearch-theme-algolia.scss');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var alg = require('algolia-frontend-components/javascripts.js');
 
-const docSearch = {
+var docSearch = {
   apiKey: '64eb3d69b6fb84f3c04a24224b6268a7',
   indexName: 'instantsearchjs-v2',
-  inputSelector: '#searchbox',
+  inputSelector: '#searchbox'
 };
 
-const header = new alg.communityHeader(docSearch);
+var header = new alg.communityHeader(docSearch);
 
-const container = document.querySelector('.documentation-container');
-const codeSamples = document.querySelectorAll('.code-sample');
-const codeSamplesRunnable = document.querySelectorAll('.code-sample-runnable');
+var container = document.querySelector('.documentation-container');
+var codeSamples = document.querySelectorAll('.code-sample');
+var codeSamplesRunnable = document.querySelectorAll('.code-sample-runnable');
 
-dropdowns();
-move();
-activateClipboard(codeSamples);
-bindRunExamples(codeSamplesRunnable);
+(0, _dropdowns2.default)();
+(0, _mover2.default)();
+(0, _activateClipboard2.default)(codeSamples);
+(0, _bindRunExamples2.default)(codeSamplesRunnable);
 
-const sidebarContainer = document.querySelector('.sidebar');
-if(sidebarContainer) {
-  const headerHeight = document.querySelector('.algc-navigation').getBoundingClientRect().height;
-  const contentContainer = document.querySelector('.documentation-container');
-  fixSidebar({sidebarContainer, topOffset: headerHeight});
-  followSidebarNavigation(sidebarContainer.querySelectorAll('a'), contentContainer.querySelectorAll('h2'));
+var sidebarContainer = document.querySelector('.sidebar');
+if (sidebarContainer) {
+  var headerHeight = document.querySelector('.algc-navigation').getBoundingClientRect().height;
+  var contentContainer = document.querySelector('.documentation-container');
+  (0, _fixSidebar.fixSidebar)({ sidebarContainer: sidebarContainer, topOffset: headerHeight });
+  (0, _fixSidebar.followSidebarNavigation)(sidebarContainer.querySelectorAll('a'), contentContainer.querySelectorAll('h2'));
 }
 
 // The Following function will make the '.sidebar-opener'
@@ -40,13 +56,13 @@ if(sidebarContainer) {
 // documentations
 
 function toggleDocumentationSidebar() {
-  const sidebarNav = document.querySelector('nav.sidebar');
-  const trigger = document.querySelector('.sidebar-opener');
+  var sidebarNav = document.querySelector('nav.sidebar');
+  var trigger = document.querySelector('.sidebar-opener');
 
   function init() {
-    const bodySize = document.body.clientWidth;
+    var bodySize = document.body.clientWidth;
     if (bodySize <= 960 && sidebarNav) {
-      trigger.addEventListener('click', () => {
+      trigger.addEventListener('click', function () {
         sidebarNav.classList.toggle('Showed');
         trigger.classList.toggle('Showed');
       });
@@ -56,6 +72,6 @@ function toggleDocumentationSidebar() {
 }
 toggleDocumentationSidebar();
 
-window.addEventListener('resize', () => {
+window.addEventListener('resize', function () {
   toggleDocumentationSidebar();
 });

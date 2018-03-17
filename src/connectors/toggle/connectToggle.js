@@ -1,30 +1,19 @@
-import {
-  checkRendering,
-  escapeRefinement,
-  unescapeRefinement,
-} from '../../lib/utils.js';
+'use strict';
 
-import find from 'lodash/find';
-
-const usage = `Usage:
-var customToggle = connectToggle(function render(params, isFirstRendering) {
-  // params = {
-  //   value,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customToggle({
-    attributeName,
-    label,
-    [ values = {on: true, off: undefined} ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html
-`;
+exports.default = connectToggle;
+
+var _utils = require('../../lib/utils.js');
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   value,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customToggle({\n    attributeName,\n    label,\n    [ values = {on: true, off: undefined} ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html\n';
 
 /**
  * @typedef {Object} ToggleValue
@@ -103,32 +92,35 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectToggle(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectToggle(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {
-      attributeName,
-      label,
-      values: userValues = { on: true, off: undefined },
-    } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        label = widgetParams.label,
+        _widgetParams$values = widgetParams.values,
+        userValues = _widgetParams$values === undefined ? { on: true, off: undefined } : _widgetParams$values;
+
 
     if (!attributeName || !label) {
       throw new Error(usage);
     }
 
-    const hasAnOffValue = userValues.off !== undefined;
-    const on = userValues ? escapeRefinement(userValues.on) : undefined;
-    const off = userValues ? escapeRefinement(userValues.off) : undefined;
+    var hasAnOffValue = userValues.off !== undefined;
+    var on = userValues ? (0, _utils.escapeRefinement)(userValues.on) : undefined;
+    var off = userValues ? (0, _utils.escapeRefinement)(userValues.off) : undefined;
 
     return {
-      getConfiguration() {
+      getConfiguration: function getConfiguration() {
         return {
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attributeName]
         };
       },
+      _toggleRefinement: function _toggleRefinement(helper) {
+        var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            isRefined = _ref.isRefined;
 
-      _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -145,26 +137,25 @@ export default function connectToggle(renderFn, unmountFn) {
 
         helper.search();
       },
+      init: function init(_ref2) {
+        var _this = this;
 
-      init({ state, helper, createURL, instantSearchInstance }) {
-        this._createURL = isCurrentlyRefined => () =>
-          createURL(
-            state
-              .removeDisjunctiveFacetRefinement(
-                attributeName,
-                isCurrentlyRefined ? on : off
-              )
-              .addDisjunctiveFacetRefinement(
-                attributeName,
-                isCurrentlyRefined ? off : on
-              )
-          );
+        var state = _ref2.state,
+            helper = _ref2.helper,
+            createURL = _ref2.createURL,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-        this.toggleRefinement = opts => {
-          this._toggleRefinement(helper, opts);
+        this._createURL = function (isCurrentlyRefined) {
+          return function () {
+            return createURL(state.removeDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? on : off).addDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? off : on));
+          };
         };
 
-        const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+        this.toggleRefinement = function (opts) {
+          _this._toggleRefinement(helper, opts);
+        };
+
+        var isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
 
         // no need to refine anything at init if no custom off values
         if (hasAnOffValue) {
@@ -174,107 +165,99 @@ export default function connectToggle(renderFn, unmountFn) {
           }
         }
 
-        const onFacetValue = {
+        var onFacetValue = {
           name: label,
-          isRefined,
-          count: 0,
+          isRefined: isRefined,
+          count: 0
         };
 
-        const offFacetValue = {
+        var offFacetValue = {
           name: label,
           isRefined: hasAnOffValue && !isRefined,
-          count: 0,
+          count: 0
         };
 
-        const value = {
+        var value = {
           name: label,
-          isRefined,
+          isRefined: isRefined,
           count: null,
-          onFacetValue,
-          offFacetValue,
+          onFacetValue: onFacetValue,
+          offFacetValue: offFacetValue
         };
 
-        renderFn(
-          {
-            value,
-            createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          value: value,
+          createURL: this._createURL(value.isRefined),
+          refine: this.toggleRefinement,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref3) {
+        var helper = _ref3.helper,
+            results = _ref3.results,
+            state = _ref3.state,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      render({ helper, results, state, instantSearchInstance }) {
-        const isRefined = helper.state.isDisjunctiveFacetRefined(
-          attributeName,
-          on
-        );
-        const offValue = off === undefined ? false : off;
-        const allFacetValues = results.getFacetValues(attributeName);
+        var isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, on);
+        var offValue = off === undefined ? false : off;
+        var allFacetValues = results.getFacetValues(attributeName);
 
-        const onData = find(
-          allFacetValues,
-          ({ name }) => name === unescapeRefinement(on)
-        );
-        const onFacetValue = {
+        var onData = (0, _find2.default)(allFacetValues, function (_ref4) {
+          var name = _ref4.name;
+          return name === (0, _utils.unescapeRefinement)(on);
+        });
+        var onFacetValue = {
           name: label,
           isRefined: onData !== undefined ? onData.isRefined : false,
-          count: onData === undefined ? null : onData.count,
+          count: onData === undefined ? null : onData.count
         };
 
-        const offData = hasAnOffValue
-          ? find(
-              allFacetValues,
-              ({ name }) => name === unescapeRefinement(offValue)
-            )
-          : undefined;
-        const offFacetValue = {
+        var offData = hasAnOffValue ? (0, _find2.default)(allFacetValues, function (_ref5) {
+          var name = _ref5.name;
+          return name === (0, _utils.unescapeRefinement)(offValue);
+        }) : undefined;
+        var offFacetValue = {
           name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
-          count:
-            offData === undefined
-              ? allFacetValues.reduce((total, { count }) => total + count, 0)
-              : offData.count,
+          count: offData === undefined ? allFacetValues.reduce(function (total, _ref6) {
+            var count = _ref6.count;
+            return total + count;
+          }, 0) : offData.count
         };
 
         // what will we show by default,
         // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
         // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
-        const nextRefinement = isRefined ? offFacetValue : onFacetValue;
+        var nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
-        const value = {
+        var value = {
           name: label,
-          isRefined,
+          isRefined: isRefined,
           count: nextRefinement === undefined ? null : nextRefinement.count,
-          onFacetValue,
-          offFacetValue,
+          onFacetValue: onFacetValue,
+          offFacetValue: offFacetValue
         };
 
-        renderFn(
-          {
-            value,
-            state,
-            createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
-            helper,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          value: value,
+          state: state,
+          createURL: this._createURL(value.isRefined),
+          refine: this.toggleRefinement,
+          helper: helper,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
       },
+      dispose: function dispose(_ref7) {
+        var state = _ref7.state;
 
-      dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeDisjunctiveFacetRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+        var nextState = state.removeDisjunctiveFacetRefinement(attributeName).removeDisjunctiveFacet(attributeName);
 
         return nextState;
-      },
+      }
     };
   };
 }

@@ -1,69 +1,84 @@
-import sinon from 'sinon';
+'use strict';
 
-import algoliasearchHelper from 'algoliasearch-helper';
-const SearchParameters = algoliasearchHelper.SearchParameters;
-import refinementList from '../refinement-list.js';
-const instantSearchInstance = { templatesConfig: {} };
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-describe('refinementList()', () => {
-  let autoHideContainer;
-  let container;
-  let headerFooter;
-  let options;
-  let widget;
-  let ReactDOM;
+var _sinon = require('sinon');
 
-  beforeEach(() => {
+var _sinon2 = _interopRequireDefault(_sinon);
+
+var _algoliasearchHelper = require('algoliasearch-helper');
+
+var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
+
+var _refinementList = require('../refinement-list.js');
+
+var _refinementList2 = _interopRequireDefault(_refinementList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SearchParameters = _algoliasearchHelper2.default.SearchParameters;
+
+var instantSearchInstance = { templatesConfig: {} };
+
+describe('refinementList()', function () {
+  var autoHideContainer = void 0;
+  var container = void 0;
+  var headerFooter = void 0;
+  var options = void 0;
+  var widget = void 0;
+  var ReactDOM = void 0;
+
+  beforeEach(function () {
     container = document.createElement('div');
 
-    ReactDOM = { render: sinon.spy() };
-    refinementList.__Rewire__('render', ReactDOM.render);
-    autoHideContainer = sinon.stub().returnsArg(0);
-    refinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returnsArg(0);
-    refinementList.__Rewire__('headerFooterHOC', headerFooter);
+    ReactDOM = { render: _sinon2.default.spy() };
+    _refinementList2.default.__Rewire__('render', ReactDOM.render);
+    autoHideContainer = _sinon2.default.stub().returnsArg(0);
+    _refinementList2.default.__Rewire__('autoHideContainerHOC', autoHideContainer);
+    headerFooter = _sinon2.default.stub().returnsArg(0);
+    _refinementList2.default.__Rewire__('headerFooterHOC', headerFooter);
   });
 
-  describe('instantiated with wrong parameters', () => {
-    it('should fail if no container', () => {
+  describe('instantiated with wrong parameters', function () {
+    it('should fail if no container', function () {
       // Given
       options = { container: undefined, attributeName: 'foo' };
 
       // Then
-      expect(() => {
+      expect(function () {
         // When
-        refinementList(options);
+        (0, _refinementList2.default)(options);
       }).toThrow(/^Usage:/);
     });
   });
 
-  describe('render', () => {
-    const helper = {};
-    let results;
-    let state;
-    let createURL;
+  describe('render', function () {
+    var helper = {};
+    var results = void 0;
+    var state = void 0;
+    var createURL = void 0;
 
     function renderWidget(userOptions) {
-      widget = refinementList({ ...options, ...userOptions });
-      widget.init({ helper, createURL, instantSearchInstance });
-      return widget.render({ results, helper, state });
+      widget = (0, _refinementList2.default)(_extends({}, options, userOptions));
+      widget.init({ helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance });
+      return widget.render({ results: results, helper: helper, state: state });
     }
 
-    beforeEach(() => {
-      options = { container, attributeName: 'attributeName' };
+    beforeEach(function () {
+      options = { container: container, attributeName: 'attributeName' };
       results = {
-        getFacetValues: sinon
-          .stub()
-          .returns([{ name: 'foo' }, { name: 'bar' }]),
+        getFacetValues: _sinon2.default.stub().returns([{ name: 'foo' }, { name: 'bar' }])
       };
       state = SearchParameters.make({});
-      createURL = () => '#';
+      createURL = function createURL() {
+        return '#';
+      };
     });
 
-    describe('cssClasses', () => {
-      it('should call the component with the correct classes', () => {
+    describe('cssClasses', function () {
+      it('should call the component with the correct classes', function () {
         // Given
-        const cssClasses = {
+        var cssClasses = {
           root: ['root', 'cx'],
           header: 'header',
           body: 'body',
@@ -73,12 +88,12 @@ describe('refinementList()', () => {
           active: 'active',
           label: 'label',
           checkbox: 'checkbox',
-          count: 'count',
+          count: 'count'
         };
 
         // When
-        renderWidget({ cssClasses });
-        const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
+        renderWidget({ cssClasses: cssClasses });
+        var actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
 
         // Then
         expect(actual.root).toBe('ais-refinement-list root cx');
@@ -94,86 +109,75 @@ describe('refinementList()', () => {
       });
     });
 
-    describe('autoHideContainer', () => {
-      it('should set shouldAutoHideContainer to false if there are facetValues', () => {
+    describe('autoHideContainer', function () {
+      it('should set shouldAutoHideContainer to false if there are facetValues', function () {
         // Given
-        results.getFacetValues = sinon
-          .stub()
-          .returns([{ name: 'foo' }, { name: 'bar' }]);
+        results.getFacetValues = _sinon2.default.stub().returns([{ name: 'foo' }, { name: 'bar' }]);
 
         // When
         renderWidget();
-        const actual =
-          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        var actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(false);
       });
-      it('should set shouldAutoHideContainer to true if no facet values', () => {
+      it('should set shouldAutoHideContainer to true if no facet values', function () {
         // Given
-        results.getFacetValues = sinon.stub().returns([]);
+        results.getFacetValues = _sinon2.default.stub().returns([]);
 
         // When
         renderWidget();
-        const actual =
-          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        var actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(true);
       });
     });
 
-    describe('header', () => {
-      it('should pass the refined count to the header data', () => {
+    describe('header', function () {
+      it('should pass the refined count to the header data', function () {
         // Given
-        const facetValues = [
-          {
-            name: 'foo',
-            isRefined: true,
-          },
-          {
-            name: 'bar',
-            isRefined: true,
-          },
-          {
-            name: 'baz',
-            isRefined: false,
-          },
-        ];
-        results.getFacetValues = sinon.stub().returns(facetValues);
+        var facetValues = [{
+          name: 'foo',
+          isRefined: true
+        }, {
+          name: 'bar',
+          isRefined: true
+        }, {
+          name: 'baz',
+          isRefined: false
+        }];
+        results.getFacetValues = _sinon2.default.stub().returns(facetValues);
 
         // When
         renderWidget();
-        const props = ReactDOM.render.firstCall.args[0].props;
+        var props = ReactDOM.render.firstCall.args[0].props;
 
         // Then
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
       });
 
-      it('should dynamically update the header template on subsequent renders', () => {
+      it('should dynamically update the header template on subsequent renders', function () {
         // Given
-        const widgetOptions = { container, attributeName: 'type' };
-        const initOptions = { helper, createURL, instantSearchInstance };
-        const facetValues = [
-          {
-            name: 'foo',
-            isRefined: true,
-          },
-          {
-            name: 'bar',
-            isRefined: false,
-          },
-        ];
-        results.getFacetValues = sinon.stub().returns(facetValues);
-        const renderOptions = { results, helper, state };
+        var widgetOptions = { container: container, attributeName: 'type' };
+        var initOptions = { helper: helper, createURL: createURL, instantSearchInstance: instantSearchInstance };
+        var facetValues = [{
+          name: 'foo',
+          isRefined: true
+        }, {
+          name: 'bar',
+          isRefined: false
+        }];
+        results.getFacetValues = _sinon2.default.stub().returns(facetValues);
+        var renderOptions = { results: results, helper: helper, state: state };
 
         // When
-        widget = refinementList(widgetOptions);
+        widget = (0, _refinementList2.default)(widgetOptions);
         widget.init(initOptions);
         widget.render(renderOptions);
 
         // Then
-        let props = ReactDOM.render.firstCall.args[0].props;
+        var props = ReactDOM.render.firstCall.args[0].props;
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(1);
 
         // When... second render call
@@ -187,39 +191,41 @@ describe('refinementList()', () => {
     });
   });
 
-  describe('show more', () => {
-    it('should return a configuration with the highest limit value (default value)', () => {
-      const opts = {
-        container,
+  describe('show more', function () {
+    it('should return a configuration with the highest limit value (default value)', function () {
+      var opts = {
+        container: container,
         attributeName: 'attributeName',
         limit: 1,
-        showMore: {},
+        showMore: {}
       };
-      const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration({});
+      var wdgt = (0, _refinementList2.default)(opts);
+      var partialConfig = wdgt.getConfiguration({});
       expect(partialConfig.maxValuesPerFacet).toBe(100);
     });
 
-    it('should return a configuration with the highest limit value (custom value)', () => {
-      const opts = {
-        container,
+    it('should return a configuration with the highest limit value (custom value)', function () {
+      var opts = {
+        container: container,
         attributeName: 'attributeName',
         limit: 1,
-        showMore: { limit: 99 },
+        showMore: { limit: 99 }
       };
-      const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration({});
+      var wdgt = (0, _refinementList2.default)(opts);
+      var partialConfig = wdgt.getConfiguration({});
       expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
     });
 
-    it('should not accept a show more limit that is < limit', () => {
-      const opts = {
-        container,
+    it('should not accept a show more limit that is < limit', function () {
+      var opts = {
+        container: container,
         attributeName: 'attributeName',
         limit: 100,
-        showMore: { limit: 1 },
+        showMore: { limit: 1 }
       };
-      expect(() => refinementList(opts)).toThrow();
+      expect(function () {
+        return (0, _refinementList2.default)(opts);
+      }).toThrow();
     });
   });
 });

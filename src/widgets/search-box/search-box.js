@@ -1,149 +1,165 @@
-import forEach from 'lodash/forEach';
-import cx from 'classnames';
-import { bemHelper, getContainerNode, renderTemplate } from '../../lib/utils';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import defaultTemplates from './defaultTemplates';
+'use strict';
 
-const bem = bemHelper('ais-search-box');
-const KEY_ENTER = 13;
-const KEY_SUPPRESS = 8;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  placeholder,
-  poweredBy,
-  templates,
-  autofocus,
-  searchOnEnterKeyPressOnly,
-  wrapInput,
-  reset,
-  magnifier,
-  loadingIndicator,
-  // eslint-disable-next-line complexity
-}) => (
-  { refine, clear, query, onHistoryChange, isSearchStalled },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
-    const input = createInput(containerNode);
-    const isInputTargeted = input === containerNode;
-    let queryFromInput = query;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-    if (isInputTargeted) {
-      // To replace the node, we need to create an intermediate node
-      const placeholderNode = document.createElement('div');
-      input.parentNode.insertBefore(placeholderNode, input);
-      const parentNode = input.parentNode;
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      parentNode.replaceChild(wrappedInput, placeholderNode);
+exports.default = searchBox;
 
-      const initialInputValue = input.value;
+var _forEach = require('lodash/forEach');
 
-      // if the input contains a value, we provide it to the state
-      if (initialInputValue) {
-        queryFromInput = initialInputValue;
-        refine(initialInputValue, false);
+var _forEach2 = _interopRequireDefault(_forEach);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _utils = require('../../lib/utils');
+
+var _connectSearchBox = require('../../connectors/search-box/connectSearchBox');
+
+var _connectSearchBox2 = _interopRequireDefault(_connectSearchBox);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-search-box');
+var KEY_ENTER = 13;
+var KEY_SUPPRESS = 8;
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      placeholder = _ref.placeholder,
+      poweredBy = _ref.poweredBy,
+      templates = _ref.templates,
+      autofocus = _ref.autofocus,
+      searchOnEnterKeyPressOnly = _ref.searchOnEnterKeyPressOnly,
+      wrapInput = _ref.wrapInput,
+      reset = _ref.reset,
+      magnifier = _ref.magnifier,
+      loadingIndicator = _ref.loadingIndicator;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        clear = _ref2.clear,
+        query = _ref2.query,
+        onHistoryChange = _ref2.onHistoryChange,
+        isSearchStalled = _ref2.isSearchStalled;
+
+    if (isFirstRendering) {
+      var INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
+      var input = createInput(containerNode);
+      var isInputTargeted = input === containerNode;
+      var queryFromInput = query;
+
+      if (isInputTargeted) {
+        // To replace the node, we need to create an intermediate node
+        var placeholderNode = document.createElement('div');
+        input.parentNode.insertBefore(placeholderNode, input);
+        var parentNode = input.parentNode;
+        var wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
+        parentNode.replaceChild(wrappedInput, placeholderNode);
+
+        var initialInputValue = input.value;
+
+        // if the input contains a value, we provide it to the state
+        if (initialInputValue) {
+          queryFromInput = initialInputValue;
+          refine(initialInputValue, false);
+        }
+      } else {
+        var _wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
+        containerNode.appendChild(_wrappedInput);
+      }
+
+      if (magnifier) addMagnifier(input, magnifier, templates);
+      if (reset) addReset(input, reset, templates, clear);
+      if (loadingIndicator) addLoadingIndicator(input, loadingIndicator, templates);
+
+      addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
+
+      // Optional "powered by Algolia" widget
+      if (poweredBy) {
+        addPoweredBy(input, poweredBy, templates);
+      }
+
+      // When the page is coming from BFCache
+      // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
+      // then we force the input value to be the current query
+      // Otherwise, this happens:
+      // - <input> autocomplete = off (default)
+      // - search $query
+      // - navigate away
+      // - use back button
+      // - input query is empty (because <input> autocomplete = off)
+      window.addEventListener('pageshow', function () {
+        input.value = queryFromInput;
+      });
+
+      // Update value when query change outside of the input
+      onHistoryChange(function (fullState) {
+        input.value = fullState.query || '';
+      });
+
+      if (autofocus === true || autofocus === 'auto' && queryFromInput === '') {
+        input.focus();
+        input.setSelectionRange(queryFromInput.length, queryFromInput.length);
+      }
+
+      // search on enter
+      if (searchOnEnterKeyPressOnly) {
+        addListener(input, INPUT_EVENT, function (e) {
+          refine(getValue(e), false);
+        });
+        addListener(input, 'keyup', function (e) {
+          if (e.keyCode === KEY_ENTER) refine(getValue(e));
+        });
+      } else {
+        addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
+
+        // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
+        // can be removed as soon as we remove support for it
+        if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
+          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(refine)));
+        }
       }
     } else {
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      containerNode.appendChild(wrappedInput);
-    }
-
-    if (magnifier) addMagnifier(input, magnifier, templates);
-    if (reset) addReset(input, reset, templates, clear);
-    if (loadingIndicator)
-      addLoadingIndicator(input, loadingIndicator, templates);
-
-    addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
-
-    // Optional "powered by Algolia" widget
-    if (poweredBy) {
-      addPoweredBy(input, poweredBy, templates);
-    }
-
-    // When the page is coming from BFCache
-    // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
-    // then we force the input value to be the current query
-    // Otherwise, this happens:
-    // - <input> autocomplete = off (default)
-    // - search $query
-    // - navigate away
-    // - use back button
-    // - input query is empty (because <input> autocomplete = off)
-    window.addEventListener('pageshow', () => {
-      input.value = queryFromInput;
-    });
-
-    // Update value when query change outside of the input
-    onHistoryChange(fullState => {
-      input.value = fullState.query || '';
-    });
-
-    if (autofocus === true || (autofocus === 'auto' && queryFromInput === '')) {
-      input.focus();
-      input.setSelectionRange(queryFromInput.length, queryFromInput.length);
-    }
-
-    // search on enter
-    if (searchOnEnterKeyPressOnly) {
-      addListener(input, INPUT_EVENT, e => {
-        refine(getValue(e), false);
+      renderAfterInit({
+        containerNode: containerNode,
+        query: query,
+        loadingIndicator: loadingIndicator,
+        isSearchStalled: isSearchStalled
       });
-      addListener(input, 'keyup', e => {
-        if (e.keyCode === KEY_ENTER) refine(getValue(e));
-      });
-    } else {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
-
-      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
-      // can be removed as soon as we remove support for it
-      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(
-          input,
-          'keyup',
-          ifKey(KEY_SUPPRESS, getInputValueAndCall(refine))
-        );
-      }
     }
-  } else {
-    renderAfterInit({
-      containerNode,
-      query,
-      loadingIndicator,
-      isSearchStalled,
-    });
-  }
 
-  if (reset) {
-    const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
-    // hide reset button when there is no query
-    const resetButton =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode.querySelector(resetBtnSelector)
-        : containerNode.querySelector(resetBtnSelector);
-    resetButton.style.display = query && query.trim() ? 'block' : 'none';
-  }
+    if (reset) {
+      var resetBtnSelector = '.' + (0, _classnames2.default)(bem('reset-wrapper'));
+      // hide reset button when there is no query
+      var resetButton = containerNode.tagName === 'INPUT' ? containerNode.parentNode.querySelector(resetBtnSelector) : containerNode.querySelector(resetBtnSelector);
+      resetButton.style.display = query && query.trim() ? 'block' : 'none';
+    }
+  };
 };
 
-function renderAfterInit({
-  containerNode,
-  query,
-  loadingIndicator,
-  isSearchStalled,
-}) {
-  const input = getInput(containerNode);
-  const isFocused = document.activeElement === input;
+function renderAfterInit(_ref3) {
+  var containerNode = _ref3.containerNode,
+      query = _ref3.query,
+      loadingIndicator = _ref3.loadingIndicator,
+      isSearchStalled = _ref3.isSearchStalled;
+
+  var input = getInput(containerNode);
+  var isFocused = document.activeElement === input;
   if (!isFocused && query !== input.value) {
     input.value = query;
   }
 
   if (loadingIndicator) {
-    const rootElement =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode
-        : containerNode.firstChild;
+    var rootElement = containerNode.tagName === 'INPUT' ? containerNode.parentNode : containerNode.firstChild;
     if (isSearchStalled) {
       rootElement.classList.add('ais-stalled-search');
     } else {
@@ -152,24 +168,15 @@ function renderAfterInit({
   }
 }
 
-const disposer = containerNode => () => {
-  const range = document.createRange(); // IE10+
-  range.selectNodeContents(containerNode);
-  range.deleteContents();
+var disposer = function disposer(containerNode) {
+  return function () {
+    var range = document.createRange(); // IE10+
+    range.selectNodeContents(containerNode);
+    range.deleteContents();
+  };
 };
 
-const usage = `Usage:
-searchBox({
-  container,
-  [ placeholder ],
-  [ cssClasses.{input,poweredBy} ],
-  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],
-  [ wrapInput ],
-  [ autofocus ],
-  [ searchOnEnterKeyPressOnly ],
-  [ queryHook ]
-  [ reset=true || reset.{template, cssClasses.{root}} ]
-})`;
+var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClasses.{input,poweredBy} ],\n  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],\n  [ wrapInput ],\n  [ autofocus ],\n  [ searchOnEnterKeyPressOnly ],\n  [ queryHook ]\n  [ reset=true || reset.{template, cssClasses.{root}} ]\n})';
 
 /**
  * @typedef {Object} SearchBoxPoweredByCSSClasses
@@ -250,24 +257,34 @@ searchBox({
  *   })
  * );
  */
-export default function searchBox({
-  container,
-  placeholder = '',
-  cssClasses = {},
-  poweredBy = false,
-  wrapInput = true,
-  autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false,
-  reset = true,
-  magnifier = true,
-  loadingIndicator = false,
-  queryHook,
-} = {}) {
+function searchBox() {
+  var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref4.container,
+      _ref4$placeholder = _ref4.placeholder,
+      placeholder = _ref4$placeholder === undefined ? '' : _ref4$placeholder,
+      _ref4$cssClasses = _ref4.cssClasses,
+      cssClasses = _ref4$cssClasses === undefined ? {} : _ref4$cssClasses,
+      _ref4$poweredBy = _ref4.poweredBy,
+      poweredBy = _ref4$poweredBy === undefined ? false : _ref4$poweredBy,
+      _ref4$wrapInput = _ref4.wrapInput,
+      wrapInput = _ref4$wrapInput === undefined ? true : _ref4$wrapInput,
+      _ref4$autofocus = _ref4.autofocus,
+      autofocus = _ref4$autofocus === undefined ? 'auto' : _ref4$autofocus,
+      _ref4$searchOnEnterKe = _ref4.searchOnEnterKeyPressOnly,
+      searchOnEnterKeyPressOnly = _ref4$searchOnEnterKe === undefined ? false : _ref4$searchOnEnterKe,
+      _ref4$reset = _ref4.reset,
+      reset = _ref4$reset === undefined ? true : _ref4$reset,
+      _ref4$magnifier = _ref4.magnifier,
+      magnifier = _ref4$magnifier === undefined ? true : _ref4$magnifier,
+      _ref4$loadingIndicato = _ref4.loadingIndicator,
+      loadingIndicator = _ref4$loadingIndicato === undefined ? false : _ref4$loadingIndicato,
+      queryHook = _ref4.queryHook;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
@@ -279,26 +296,23 @@ export default function searchBox({
     poweredBy = {};
   }
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    placeholder,
-    poweredBy,
-    templates: defaultTemplates,
-    autofocus,
-    searchOnEnterKeyPressOnly,
-    wrapInput,
-    reset,
-    magnifier,
-    loadingIndicator,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    placeholder: placeholder,
+    poweredBy: poweredBy,
+    templates: _defaultTemplates2.default,
+    autofocus: autofocus,
+    searchOnEnterKeyPressOnly: searchOnEnterKeyPressOnly,
+    wrapInput: wrapInput,
+    reset: reset,
+    magnifier: magnifier,
+    loadingIndicator: loadingIndicator
   });
 
   try {
-    const makeWidget = connectSearchBox(
-      specializedRenderer,
-      disposer(containerNode)
-    );
-    return makeWidget({ queryHook });
+    var makeWidget = (0, _connectSearchBox2.default)(specializedRenderer, disposer(containerNode));
+    return makeWidget({ queryHook: queryHook });
   } catch (e) {
     throw new Error(usage);
   }
@@ -327,9 +341,11 @@ function getInput(containerNode) {
 
 function wrapInputFn(input, cssClasses) {
   // Wrap input in a .ais-search-box div
-  const wrapper = document.createElement('div');
-  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
+  var wrapper = document.createElement('div');
+  var CSSClassesToAdd = (0, _classnames2.default)(bem(null), cssClasses.root).split(' ');
+  CSSClassesToAdd.forEach(function (cssClass) {
+    return wrapper.classList.add(cssClass);
+  });
   wrapper.appendChild(input);
   return wrapper;
 }
@@ -338,7 +354,7 @@ function addListener(el, type, fn) {
   if (el.addEventListener) {
     el.addEventListener(type, fn);
   } else {
-    el.attachEvent(`on${type}`, fn);
+    el.attachEvent('on' + type, fn);
   }
 }
 
@@ -347,28 +363,31 @@ function getValue(e) {
 }
 
 function ifKey(expectedKeyCode, func) {
-  return actualEvent =>
-    actualEvent.keyCode === expectedKeyCode && func(actualEvent);
+  return function (actualEvent) {
+    return actualEvent.keyCode === expectedKeyCode && func(actualEvent);
+  };
 }
 
 function getInputValueAndCall(func) {
-  return actualEvent => func(getValue(actualEvent));
+  return function (actualEvent) {
+    return func(getValue(actualEvent));
+  };
 }
 
 function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
-  const defaultAttributes = {
+  var defaultAttributes = {
     autocapitalize: 'off',
     autocomplete: 'off',
     autocorrect: 'off',
-    placeholder,
+    placeholder: placeholder,
     role: 'textbox',
     spellcheck: 'false',
     type: 'text',
-    value: query,
+    value: query
   };
 
   // Overrides attributes if not already set
-  forEach(defaultAttributes, (value, key) => {
+  (0, _forEach2.default)(defaultAttributes, function (value, key) {
     if (input.hasAttribute(key)) {
       return;
     }
@@ -376,8 +395,10 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   });
 
   // Add classes
-  const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
-  CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
+  var CSSClassesToAdd = (0, _classnames2.default)(bem('input'), cssClasses.input).split(' ');
+  CSSClassesToAdd.forEach(function (cssClass) {
+    return input.classList.add(cssClass);
+  });
 }
 
 /**
@@ -390,30 +411,31 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
  * @param {function} clearFunction function called when the element is activated (clicked)
  * @returns {undefined} returns nothing
  */
-function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
-  reset = {
+function addReset(input, reset, _ref5, clearFunction) {
+  var resetTemplate = _ref5.reset;
+
+  reset = _extends({
     cssClasses: {},
-    template: resetTemplate,
-    ...reset,
+    template: resetTemplate
+  }, reset);
+
+  var resetCSSClasses = {
+    root: (0, _classnames2.default)(bem('reset'), reset.cssClasses.root)
   };
 
-  const resetCSSClasses = {
-    root: cx(bem('reset'), reset.cssClasses.root),
-  };
-
-  const stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: reset,
     data: {
-      cssClasses: resetCSSClasses,
-    },
+      cssClasses: resetCSSClasses
+    }
   });
 
-  const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('reset-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 
-  htmlNode.addEventListener('click', event => {
+  htmlNode.addEventListener('click', function (event) {
     event.preventDefault();
     clearFunction();
   });
@@ -427,60 +449,52 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
  * @param {object} $2 the default templates
  * @returns {undefined} returns nothing
  */
-function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
-  magnifier = {
+function addMagnifier(input, magnifier, _ref6) {
+  var magnifierTemplate = _ref6.magnifier;
+
+  magnifier = _extends({
     cssClasses: {},
-    template: magnifierTemplate,
-    ...magnifier,
+    template: magnifierTemplate
+  }, magnifier);
+
+  var magnifierCSSClasses = {
+    root: (0, _classnames2.default)(bem('magnifier'), magnifier.cssClasses.root)
   };
 
-  const magnifierCSSClasses = {
-    root: cx(bem('magnifier'), magnifier.cssClasses.root),
-  };
-
-  const stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: magnifier,
     data: {
-      cssClasses: magnifierCSSClasses,
-    },
+      cssClasses: magnifierCSSClasses
+    }
   });
 
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('magnifier-wrapper'))
-  );
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('magnifier-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 }
 
-function addLoadingIndicator(
-  input,
-  loadingIndicator,
-  { loadingIndicator: loadingIndicatorTemplate }
-) {
-  loadingIndicator = {
+function addLoadingIndicator(input, loadingIndicator, _ref7) {
+  var loadingIndicatorTemplate = _ref7.loadingIndicator;
+
+  loadingIndicator = _extends({
     cssClasses: {},
-    template: loadingIndicatorTemplate,
-    ...loadingIndicator,
+    template: loadingIndicatorTemplate
+  }, loadingIndicator);
+
+  var loadingIndicatorCSSClasses = {
+    root: (0, _classnames2.default)(bem('loading-indicator'), loadingIndicator.cssClasses.root)
   };
 
-  const loadingIndicatorCSSClasses = {
-    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
-  };
-
-  const stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: loadingIndicator,
     data: {
-      cssClasses: loadingIndicatorCSSClasses,
-    },
+      cssClasses: loadingIndicatorCSSClasses
+    }
   });
 
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('loading-indicator-wrapper'))
-  );
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('loading-indicator-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 }
@@ -493,44 +507,42 @@ function addLoadingIndicator(
  * @param {object} templates the default templates
  * @returns {undefined} returns nothing
  */
-function addPoweredBy(input, poweredBy, { poweredBy: poweredbyTemplate }) {
+function addPoweredBy(input, poweredBy, _ref8) {
+  var poweredbyTemplate = _ref8.poweredBy;
+
   // Default values
-  poweredBy = {
+  poweredBy = _extends({
     cssClasses: {},
-    template: poweredbyTemplate,
-    ...poweredBy,
+    template: poweredbyTemplate
+  }, poweredBy);
+
+  var poweredByCSSClasses = {
+    root: (0, _classnames2.default)(bem('powered-by'), poweredBy.cssClasses.root),
+    link: (0, _classnames2.default)(bem('powered-by-link'), poweredBy.cssClasses.link)
   };
 
-  const poweredByCSSClasses = {
-    root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-    link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
-  };
+  var url = 'https://www.algolia.com/?' + 'utm_source=instantsearch.js&' + 'utm_medium=website&' + ('utm_content=' + location.hostname + '&') + 'utm_campaign=poweredby';
 
-  const url =
-    'https://www.algolia.com/?' +
-    'utm_source=instantsearch.js&' +
-    'utm_medium=website&' +
-    `utm_content=${location.hostname}&` +
-    'utm_campaign=poweredby';
-
-  const stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: poweredBy,
     data: {
       cssClasses: poweredByCSSClasses,
-      url,
-    },
+      url: url
+    }
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  var htmlNode = createNodeFromString(stringNode);
 
   input.parentNode.insertBefore(htmlNode, input.nextSibling);
 }
 
 // Cross-browser way to create a DOM node from a string. We wrap in
 // a `span` to make sure we have one and only one node.
-function createNodeFromString(stringNode, rootClassname = '') {
-  const tmpNode = document.createElement('div');
-  tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
+function createNodeFromString(stringNode) {
+  var rootClassname = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  var tmpNode = document.createElement('div');
+  tmpNode.innerHTML = '<span class="' + rootClassname + '">' + stringNode.trim() + '</span>';
   return tmpNode.firstChild;
 }

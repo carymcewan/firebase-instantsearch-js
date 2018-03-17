@@ -1,16 +1,38 @@
-/** @module module:instantsearch */
+'use strict';
 
-// required for browsers not supporting Object.freeze (helper requirement)
-import '../shams/Object.freeze.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import toFactory from 'to-factory';
-import algoliasearchHelper from 'algoliasearch-helper';
+require('../shams/Object.freeze.js');
 
-import InstantSearch from './InstantSearch.js';
-import version from './version.js';
+var _toFactory = require('to-factory');
 
-import * as connectors from '../connectors/index.js';
-import * as widgets from '../widgets/index.js';
+var _toFactory2 = _interopRequireDefault(_toFactory);
+
+var _algoliasearchHelper = require('algoliasearch-helper');
+
+var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
+
+var _InstantSearch = require('./InstantSearch.js');
+
+var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
+
+var _version = require('./version.js');
+
+var _version2 = _interopRequireDefault(_version);
+
+var _index = require('../connectors/index.js');
+
+var connectors = _interopRequireWildcard(_index);
+
+var _index2 = require('../widgets/index.js');
+
+var widgets = _interopRequireWildcard(_index2);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * @external SearchParameters
@@ -86,12 +108,14 @@ import * as widgets from '../widgets/index.js';
  * @param {InstantSearchOptions} $0 The options
  * @return {InstantSearch} the instantsearch instance
  */
-const instantsearch = toFactory(InstantSearch);
+var instantsearch = (0, _toFactory2.default)(_InstantSearch2.default); /** @module module:instantsearch */
 
-instantsearch.createQueryString =
-  algoliasearchHelper.url.getQueryStringFromState;
+// required for browsers not supporting Object.freeze (helper requirement)
+
+
+instantsearch.createQueryString = _algoliasearchHelper2.default.url.getQueryStringFromState;
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
-instantsearch.version = version;
+instantsearch.version = _version2.default;
 
-export default instantsearch;
+exports.default = instantsearch;

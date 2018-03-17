@@ -1,86 +1,91 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /* eslint-disable */
 
 // This file is only use for devlopment purpose, the source are wrapped
 // in order to avoid to load GMaps globally. The codesource is available on GitHub.
 // See: https://github.com/googlemaps/v3-utility-library/tree/master/infobox
 
-const createInfoBox = googleReference => {
+var createInfoBox = function createInfoBox(googleReference) {
   /**
- * @name InfoBox
- * @version 1.1.13 [March 19, 2014]
- * @author Gary Little (inspired by proof-of-concept code from Pamela Fox of Google)
- * @copyright Copyright 2010 Gary Little [gary at luxcentral.com]
- * @fileoverview InfoBox extends the Google Maps JavaScript API V3 <tt>OverlayView</tt> class.
- *  <p>
- *  An InfoBox behaves like a <tt>google.maps.InfoWindow</tt>, but it supports several
- *  additional properties for advanced styling. An InfoBox can also be used as a map label.
- *  <p>
- *  An InfoBox also fires the same events as a <tt>google.maps.InfoWindow</tt>.
- */
+  * @name InfoBox
+  * @version 1.1.13 [March 19, 2014]
+  * @author Gary Little (inspired by proof-of-concept code from Pamela Fox of Google)
+  * @copyright Copyright 2010 Gary Little [gary at luxcentral.com]
+  * @fileoverview InfoBox extends the Google Maps JavaScript API V3 <tt>OverlayView</tt> class.
+  *  <p>
+  *  An InfoBox behaves like a <tt>google.maps.InfoWindow</tt>, but it supports several
+  *  additional properties for advanced styling. An InfoBox can also be used as a map label.
+  *  <p>
+  *  An InfoBox also fires the same events as a <tt>google.maps.InfoWindow</tt>.
+  */
 
   /* !
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *       http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
   /* jslint browser:true */
   /* global google */
 
   /**
- * @name InfoBoxOptions
- * @class This class represents the optional parameter passed to the {@link InfoBox} constructor.
- * @property {string|Node} content The content of the InfoBox (plain text or an HTML DOM node).
- * @property {boolean} [disableAutoPan=false] Disable auto-pan on <tt>open</tt>.
- * @property {number} maxWidth The maximum width (in pixels) of the InfoBox. Set to 0 if no maximum.
- * @property {Size} pixelOffset The offset (in pixels) from the top left corner of the InfoBox
- *  (or the bottom left corner if the <code>alignBottom</code> property is <code>true</code>)
- *  to the map pixel corresponding to <tt>position</tt>.
- * @property {LatLng} position The geographic location at which to display the InfoBox.
- * @property {number} zIndex The CSS z-index style value for the InfoBox.
- *  Note: This value overrides a zIndex setting specified in the <tt>boxStyle</tt> property.
- * @property {string} [boxClass="infoBox"] The name of the CSS class defining the styles for the InfoBox container.
- * @property {Object} [boxStyle] An object literal whose properties define specific CSS
- *  style values to be applied to the InfoBox. Style values defined here override those that may
- *  be defined in the <code>boxClass</code> style sheet. If this property is changed after the
- *  InfoBox has been created, all previously set styles (except those defined in the style sheet)
- *  are removed from the InfoBox before the new style values are applied.
- * @property {string} closeBoxMargin The CSS margin style value for the close box.
- *  The default is "2px" (a 2-pixel margin on all sides).
- * @property {string} closeBoxURL The URL of the image representing the close box.
- *  Note: The default is the URL for Google's standard close box.
- *  Set this property to "" if no close box is required.
- * @property {Size} infoBoxClearance Minimum offset (in pixels) from the InfoBox to the
- *  map edge after an auto-pan.
- * @property {boolean} [isHidden=false] Hide the InfoBox on <tt>open</tt>.
- *  [Deprecated in favor of the <tt>visible</tt> property.]
- * @property {boolean} [visible=true] Show the InfoBox on <tt>open</tt>.
- * @property {boolean} alignBottom Align the bottom left corner of the InfoBox to the <code>position</code>
- *  location (default is <tt>false</tt> which means that the top left corner of the InfoBox is aligned).
- * @property {string} pane The pane where the InfoBox is to appear (default is "floatPane").
- *  Set the pane to "mapPane" if the InfoBox is being used as a map label.
- *  Valid pane names are the property names for the <tt>google.maps.MapPanes</tt> object.
- * @property {boolean} enableEventPropagation Propagate mousedown, mousemove, mouseover, mouseout,
- *  mouseup, click, dblclick, touchstart, touchend, touchmove, and contextmenu events in the InfoBox
- *  (default is <tt>false</tt> to mimic the behavior of a <tt>google.maps.InfoWindow</tt>). Set
- *  this property to <tt>true</tt> if the InfoBox is being used as a map label.
- */
+  * @name InfoBoxOptions
+  * @class This class represents the optional parameter passed to the {@link InfoBox} constructor.
+  * @property {string|Node} content The content of the InfoBox (plain text or an HTML DOM node).
+  * @property {boolean} [disableAutoPan=false] Disable auto-pan on <tt>open</tt>.
+  * @property {number} maxWidth The maximum width (in pixels) of the InfoBox. Set to 0 if no maximum.
+  * @property {Size} pixelOffset The offset (in pixels) from the top left corner of the InfoBox
+  *  (or the bottom left corner if the <code>alignBottom</code> property is <code>true</code>)
+  *  to the map pixel corresponding to <tt>position</tt>.
+  * @property {LatLng} position The geographic location at which to display the InfoBox.
+  * @property {number} zIndex The CSS z-index style value for the InfoBox.
+  *  Note: This value overrides a zIndex setting specified in the <tt>boxStyle</tt> property.
+  * @property {string} [boxClass="infoBox"] The name of the CSS class defining the styles for the InfoBox container.
+  * @property {Object} [boxStyle] An object literal whose properties define specific CSS
+  *  style values to be applied to the InfoBox. Style values defined here override those that may
+  *  be defined in the <code>boxClass</code> style sheet. If this property is changed after the
+  *  InfoBox has been created, all previously set styles (except those defined in the style sheet)
+  *  are removed from the InfoBox before the new style values are applied.
+  * @property {string} closeBoxMargin The CSS margin style value for the close box.
+  *  The default is "2px" (a 2-pixel margin on all sides).
+  * @property {string} closeBoxURL The URL of the image representing the close box.
+  *  Note: The default is the URL for Google's standard close box.
+  *  Set this property to "" if no close box is required.
+  * @property {Size} infoBoxClearance Minimum offset (in pixels) from the InfoBox to the
+  *  map edge after an auto-pan.
+  * @property {boolean} [isHidden=false] Hide the InfoBox on <tt>open</tt>.
+  *  [Deprecated in favor of the <tt>visible</tt> property.]
+  * @property {boolean} [visible=true] Show the InfoBox on <tt>open</tt>.
+  * @property {boolean} alignBottom Align the bottom left corner of the InfoBox to the <code>position</code>
+  *  location (default is <tt>false</tt> which means that the top left corner of the InfoBox is aligned).
+  * @property {string} pane The pane where the InfoBox is to appear (default is "floatPane").
+  *  Set the pane to "mapPane" if the InfoBox is being used as a map label.
+  *  Valid pane names are the property names for the <tt>google.maps.MapPanes</tt> object.
+  * @property {boolean} enableEventPropagation Propagate mousedown, mousemove, mouseover, mouseout,
+  *  mouseup, click, dblclick, touchstart, touchend, touchmove, and contextmenu events in the InfoBox
+  *  (default is <tt>false</tt> to mimic the behavior of a <tt>google.maps.InfoWindow</tt>). Set
+  *  this property to <tt>true</tt> if the InfoBox is being used as a map label.
+  */
 
   /**
- * Creates an InfoBox with the options specified in {@link InfoBoxOptions}.
- *  Call <tt>InfoBox.open</tt> to add the box to the map.
- * @constructor
- * @param {InfoBoxOptions} [opt_opts]
- */
+  * Creates an InfoBox with the options specified in {@link InfoBoxOptions}.
+  *  Call <tt>InfoBox.open</tt> to add the box to the map.
+  * @constructor
+  * @param {InfoBoxOptions} [opt_opts]
+  */
   function InfoBox(opt_opts) {
     opt_opts = opt_opts || {};
 
@@ -91,8 +96,7 @@ const createInfoBox = googleReference => {
     this.content_ = opt_opts.content || '';
     this.disableAutoPan_ = opt_opts.disableAutoPan || false;
     this.maxWidth_ = opt_opts.maxWidth || 0;
-    this.pixelOffset_ =
-      opt_opts.pixelOffset || new googleReference.maps.Size(0, 0);
+    this.pixelOffset_ = opt_opts.pixelOffset || new googleReference.maps.Size(0, 0);
     this.position_ = opt_opts.position || new googleReference.maps.LatLng(0, 0);
     this.zIndex_ = opt_opts.zIndex || null;
 
@@ -101,14 +105,11 @@ const createInfoBox = googleReference => {
     this.boxClass_ = opt_opts.boxClass || 'infoBox';
     this.boxStyle_ = opt_opts.boxStyle || {};
     this.closeBoxMargin_ = opt_opts.closeBoxMargin || '2px';
-    this.closeBoxURL_ =
-      opt_opts.closeBoxURL ||
-      'http://www.google.com/intl/en_us/mapfiles/close.gif';
+    this.closeBoxURL_ = opt_opts.closeBoxURL || 'http://www.google.com/intl/en_us/mapfiles/close.gif';
     if (opt_opts.closeBoxURL === '') {
       this.closeBoxURL_ = '';
     }
-    this.infoBoxClearance_ =
-      opt_opts.infoBoxClearance || new googleReference.maps.Size(1, 1);
+    this.infoBoxClearance_ = opt_opts.infoBoxClearance || new googleReference.maps.Size(1, 1);
 
     if (typeof opt_opts.visible === 'undefined') {
       if (typeof opt_opts.isHidden === 'undefined') {
@@ -133,22 +134,22 @@ const createInfoBox = googleReference => {
   }
 
   /* InfoBox extends OverlayView in the Google Maps API v3.
- */
+  */
   InfoBox.prototype = new googleReference.maps.OverlayView();
 
   /**
- * Creates the DIV representing the InfoBox.
- * @private
- */
-  InfoBox.prototype.createInfoBoxDiv_ = function() {
-    let i;
-    let events;
-    let bw;
-    const me = this;
+  * Creates the DIV representing the InfoBox.
+  * @private
+  */
+  InfoBox.prototype.createInfoBoxDiv_ = function () {
+    var i = void 0;
+    var events = void 0;
+    var bw = void 0;
+    var me = this;
 
     // This handler prevents an event in the InfoBox from being passed on to the map.
     //
-    const cancelHandler = function(e) {
+    var cancelHandler = function cancelHandler(e) {
       e.cancelBubble = true;
       if (e.stopPropagation) {
         e.stopPropagation();
@@ -158,7 +159,7 @@ const createInfoBox = googleReference => {
     // This handler ignores the current event in the InfoBox and conditionally prevents
     // the event from being passed on to the map. It is used for the contextmenu event.
     //
-    const ignoreHandler = function(e) {
+    var ignoreHandler = function ignoreHandler(e) {
       e.returnValue = false;
 
       if (e.preventDefault) {
@@ -189,10 +190,7 @@ const createInfoBox = googleReference => {
 
       if (this.div_.style.width) {
         this.fixedWidthSet_ = true;
-      } else if (
-        this.maxWidth_ !== 0 &&
-        this.div_.offsetWidth > this.maxWidth_
-      ) {
+      } else if (this.maxWidth_ !== 0 && this.div_.offsetWidth > this.maxWidth_) {
         this.div_.style.width = this.maxWidth_;
         this.div_.style.overflow = 'auto';
         this.fixedWidthSet_ = true;
@@ -201,9 +199,7 @@ const createInfoBox = googleReference => {
 
         bw = this.getBoxWidths_();
 
-        this.div_.style.width = `${this.div_.offsetWidth -
-          bw.left -
-          bw.right}px`;
+        this.div_.style.width = this.div_.offsetWidth - bw.left - bw.right + 'px';
         this.fixedWidthSet_ = false;
       }
 
@@ -215,71 +211,45 @@ const createInfoBox = googleReference => {
         // Cancel event propagation.
         //
         // Note: mousemove not included (to resolve Issue 152)
-        events = [
-          'mousedown',
-          'mouseover',
-          'mouseout',
-          'mouseup',
-          'click',
-          'dblclick',
-          'touchstart',
-          'touchend',
-          'touchmove',
-        ];
+        events = ['mousedown', 'mouseover', 'mouseout', 'mouseup', 'click', 'dblclick', 'touchstart', 'touchend', 'touchmove'];
 
         for (i = 0; i < events.length; i++) {
-          this.eventListeners_.push(
-            googleReference.maps.event.addDomListener(
-              this.div_,
-              events[i],
-              cancelHandler
-            )
-          );
+          this.eventListeners_.push(googleReference.maps.event.addDomListener(this.div_, events[i], cancelHandler));
         }
 
         // Workaround for Google bug that causes the cursor to change to a pointer
         // when the mouse moves over a marker underneath InfoBox.
-        this.eventListeners_.push(
-          googleReference.maps.event.addDomListener(
-            this.div_,
-            'mouseover',
-            function(e) {
-              this.style.cursor = 'default';
-            }
-          )
-        );
+        this.eventListeners_.push(googleReference.maps.event.addDomListener(this.div_, 'mouseover', function (e) {
+          this.style.cursor = 'default';
+        }));
       }
 
-      this.contextListener_ = googleReference.maps.event.addDomListener(
-        this.div_,
-        'contextmenu',
-        ignoreHandler
-      );
+      this.contextListener_ = googleReference.maps.event.addDomListener(this.div_, 'contextmenu', ignoreHandler);
 
       /**
-     * This event is fired when the DIV containing the InfoBox's content is attached to the DOM.
-     * @name InfoBox#domready
-     * @event
-     */
+      * This event is fired when the DIV containing the InfoBox's content is attached to the DOM.
+      * @name InfoBox#domready
+      * @event
+      */
       googleReference.maps.event.trigger(this, 'domready');
     }
   };
 
   /**
- * Returns the HTML <IMG> tag for the close box.
- * @private
- */
-  InfoBox.prototype.getCloseBoxImg_ = function() {
-    let img = '';
+  * Returns the HTML <IMG> tag for the close box.
+  * @private
+  */
+  InfoBox.prototype.getCloseBoxImg_ = function () {
+    var img = '';
 
     if (this.closeBoxURL_ !== '') {
       img = '<img';
-      img += ` src='${this.closeBoxURL_}'`;
+      img += ' src=\'' + this.closeBoxURL_ + '\'';
       img += ' align=right'; // Do this because Opera chokes on style='float: right;'
       img += " style='";
       img += ' position: relative;'; // Required by MSIE
       img += ' cursor: pointer;';
-      img += ` margin: ${this.closeBoxMargin_};`;
+      img += ' margin: ' + this.closeBoxMargin_ + ';';
       img += "'>";
     }
 
@@ -287,32 +257,28 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Adds the click handler to the InfoBox close box.
- * @private
- */
-  InfoBox.prototype.addClickHandler_ = function() {
-    let closeBox;
+  * Adds the click handler to the InfoBox close box.
+  * @private
+  */
+  InfoBox.prototype.addClickHandler_ = function () {
+    var closeBox = void 0;
 
     if (this.closeBoxURL_ !== '') {
       closeBox = this.div_.firstChild;
-      this.closeListener_ = googleReference.maps.event.addDomListener(
-        closeBox,
-        'click',
-        this.getCloseClickHandler_()
-      );
+      this.closeListener_ = googleReference.maps.event.addDomListener(closeBox, 'click', this.getCloseClickHandler_());
     } else {
       this.closeListener_ = null;
     }
   };
 
   /**
- * Returns the function to call when the user clicks the close box of an InfoBox.
- * @private
- */
-  InfoBox.prototype.getCloseClickHandler_ = function() {
-    const me = this;
+  * Returns the function to call when the user clicks the close box of an InfoBox.
+  * @private
+  */
+  InfoBox.prototype.getCloseClickHandler_ = function () {
+    var me = this;
 
-    return function(e) {
+    return function (e) {
       // 1.0.3 fix: Always prevent propagation of a close box click to the map:
       e.cancelBubble = true;
 
@@ -321,10 +287,10 @@ const createInfoBox = googleReference => {
       }
 
       /**
-     * This event is fired when the InfoBox's close box is clicked.
-     * @name InfoBox#closeclick
-     * @event
-     */
+      * This event is fired when the InfoBox's close box is clicked.
+      * @name InfoBox#closeclick
+      * @event
+      */
       googleReference.maps.event.trigger(me, 'closeclick');
 
       me.close();
@@ -332,14 +298,14 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Pans the map so that the InfoBox appears entirely within the map's visible area.
- * @private
- */
-  InfoBox.prototype.panBox_ = function(disablePan) {
-    let map;
-    let bounds;
-    let xOffset = 0,
-      yOffset = 0;
+  * Pans the map so that the InfoBox appears entirely within the map's visible area.
+  * @private
+  */
+  InfoBox.prototype.panBox_ = function (disablePan) {
+    var map = void 0;
+    var bounds = void 0;
+    var xOffset = 0,
+        yOffset = 0;
 
     if (!disablePan) {
       map = this.getMap();
@@ -355,18 +321,16 @@ const createInfoBox = googleReference => {
 
         bounds = map.getBounds();
 
-        const mapDiv = map.getDiv();
-        const mapWidth = mapDiv.offsetWidth;
-        const mapHeight = mapDiv.offsetHeight;
-        const iwOffsetX = this.pixelOffset_.width;
-        const iwOffsetY = this.pixelOffset_.height;
-        const iwWidth = this.div_.offsetWidth;
-        const iwHeight = this.div_.offsetHeight;
-        const padX = this.infoBoxClearance_.width;
-        const padY = this.infoBoxClearance_.height;
-        const pixPosition = this.getProjection().fromLatLngToContainerPixel(
-          this.position_
-        );
+        var mapDiv = map.getDiv();
+        var mapWidth = mapDiv.offsetWidth;
+        var mapHeight = mapDiv.offsetHeight;
+        var iwOffsetX = this.pixelOffset_.width;
+        var iwOffsetY = this.pixelOffset_.height;
+        var iwWidth = this.div_.offsetWidth;
+        var iwHeight = this.div_.offsetHeight;
+        var padX = this.infoBoxClearance_.width;
+        var padY = this.infoBoxClearance_.height;
+        var pixPosition = this.getProjection().fromLatLngToContainerPixel(this.position_);
 
         if (pixPosition.x < -iwOffsetX + padX) {
           xOffset = pixPosition.x + iwOffsetX - padX;
@@ -388,7 +352,7 @@ const createInfoBox = googleReference => {
         if (!(xOffset === 0 && yOffset === 0)) {
           // Move the map to the shifted center.
           //
-          const c = map.getCenter();
+          var c = map.getCenter();
           map.panBy(xOffset, yOffset);
         }
       }
@@ -396,12 +360,13 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Sets the style of the InfoBox by setting the style sheet and applying
- * other specific styles requested.
- * @private
- */
-  InfoBox.prototype.setBoxStyle_ = function() {
-    let i, boxStyle;
+  * Sets the style of the InfoBox by setting the style sheet and applying
+  * other specific styles requested.
+  * @private
+  */
+  InfoBox.prototype.setBoxStyle_ = function () {
+    var i = void 0,
+        boxStyle = void 0;
 
     if (this.div_) {
       // Apply style values from the style sheet defined in the boxClass parameter:
@@ -424,15 +389,10 @@ const createInfoBox = googleReference => {
 
       // Fix up opacity style for benefit of MSIE:
       //
-      if (
-        typeof this.div_.style.opacity !== 'undefined' &&
-        this.div_.style.opacity !== ''
-      ) {
+      if (typeof this.div_.style.opacity !== 'undefined' && this.div_.style.opacity !== '') {
         // See http://www.quirksmode.org/css/opacity.html
-        this.div_.style.MsFilter = `"progid:DXImageTransform.Microsoft.Alpha(Opacity=${this
-          .div_.style.opacity * 100})"`;
-        this.div_.style.filter = `alpha(opacity=${this.div_.style.opacity *
-          100})`;
+        this.div_.style.MsFilter = '"progid:DXImageTransform.Microsoft.Alpha(Opacity=' + this.div_.style.opacity * 100 + ')"';
+        this.div_.style.filter = 'alpha(opacity=' + this.div_.style.opacity * 100 + ')';
       }
 
       // Apply required styles:
@@ -446,14 +406,14 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Get the widths of the borders of the InfoBox.
- * @private
- * @return {Object} widths object (top, bottom left, right)
- */
-  InfoBox.prototype.getBoxWidths_ = function() {
-    let computedStyle;
-    const bw = { top: 0, bottom: 0, left: 0, right: 0 };
-    const box = this.div_;
+  * Get the widths of the borders of the InfoBox.
+  * @private
+  * @return {Object} widths object (top, bottom left, right)
+  */
+  InfoBox.prototype.getBoxWidths_ = function () {
+    var computedStyle = void 0;
+    var bw = { top: 0, bottom: 0, left: 0, right: 0 };
+    var box = this.div_;
 
     if (document.defaultView && document.defaultView.getComputedStyle) {
       computedStyle = box.ownerDocument.defaultView.getComputedStyle(box, '');
@@ -481,9 +441,9 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Invoked when <tt>close</tt> is called. Do not call it directly.
- */
-  InfoBox.prototype.onRemove = function() {
+  * Invoked when <tt>close</tt> is called. Do not call it directly.
+  */
+  InfoBox.prototype.onRemove = function () {
     if (this.div_) {
       this.div_.parentNode.removeChild(this.div_);
       this.div_ = null;
@@ -491,23 +451,19 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Draws the InfoBox based on the current map projection and zoom level.
- */
-  InfoBox.prototype.draw = function() {
+  * Draws the InfoBox based on the current map projection and zoom level.
+  */
+  InfoBox.prototype.draw = function () {
     this.createInfoBoxDiv_();
 
-    const pixPosition = this.getProjection().fromLatLngToDivPixel(
-      this.position_
-    );
+    var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
 
-    this.div_.style.left = `${pixPosition.x + this.pixelOffset_.width}px`;
+    this.div_.style.left = pixPosition.x + this.pixelOffset_.width + 'px';
 
     if (this.alignBottom_) {
-      this.div_.style.bottom = `${-(
-        pixPosition.y + this.pixelOffset_.height
-      )}px`;
+      this.div_.style.bottom = -(pixPosition.y + this.pixelOffset_.height) + 'px';
     } else {
-      this.div_.style.top = `${pixPosition.y + this.pixelOffset_.height}px`;
+      this.div_.style.top = pixPosition.y + this.pixelOffset_.height + 'px';
     }
 
     if (this.isHidden_) {
@@ -518,13 +474,13 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Sets the options for the InfoBox. Note that changes to the <tt>maxWidth</tt>,
- *  <tt>closeBoxMargin</tt>, <tt>closeBoxURL</tt>, and <tt>enableEventPropagation</tt>
- *  properties have no affect until the current InfoBox is <tt>close</tt>d and a new one
- *  is <tt>open</tt>ed.
- * @param {InfoBoxOptions} opt_opts
- */
-  InfoBox.prototype.setOptions = function(opt_opts) {
+  * Sets the options for the InfoBox. Note that changes to the <tt>maxWidth</tt>,
+  *  <tt>closeBoxMargin</tt>, <tt>closeBoxURL</tt>, and <tt>enableEventPropagation</tt>
+  *  properties have no affect until the current InfoBox is <tt>close</tt>d and a new one
+  *  is <tt>open</tt>ed.
+  * @param {InfoBoxOptions} opt_opts
+  */
+  InfoBox.prototype.setOptions = function (opt_opts) {
     if (typeof opt_opts.boxClass !== 'undefined') {
       // Must be first
 
@@ -583,11 +539,11 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Sets the content of the InfoBox.
- *  The content can be plain text or an HTML DOM node.
- * @param {string|Node} content
- */
-  InfoBox.prototype.setContent = function(content) {
+  * Sets the content of the InfoBox.
+  *  The content can be plain text or an HTML DOM node.
+  * @param {string|Node} content
+  */
+  InfoBox.prototype.setContent = function (content) {
     this.content_ = content;
 
     if (this.div_) {
@@ -613,7 +569,7 @@ const createInfoBox = googleReference => {
       // (Ensures the close box does, in fact, float to the right.)
       //
       if (!this.fixedWidthSet_) {
-        this.div_.style.width = `${this.div_.offsetWidth}px`;
+        this.div_.style.width = this.div_.offsetWidth + 'px';
         if (typeof content.nodeType === 'undefined') {
           this.div_.innerHTML = this.getCloseBoxImg_() + content;
         } else {
@@ -626,18 +582,18 @@ const createInfoBox = googleReference => {
     }
 
     /**
-   * This event is fired when the content of the InfoBox changes.
-   * @name InfoBox#content_changed
-   * @event
-   */
+    * This event is fired when the content of the InfoBox changes.
+    * @name InfoBox#content_changed
+    * @event
+    */
     googleReference.maps.event.trigger(this, 'content_changed');
   };
 
   /**
- * Sets the geographic location of the InfoBox.
- * @param {LatLng} latlng
- */
-  InfoBox.prototype.setPosition = function(latlng) {
+  * Sets the geographic location of the InfoBox.
+  * @param {LatLng} latlng
+  */
+  InfoBox.prototype.setPosition = function (latlng) {
     this.position_ = latlng;
 
     if (this.div_) {
@@ -645,18 +601,18 @@ const createInfoBox = googleReference => {
     }
 
     /**
-   * This event is fired when the position of the InfoBox changes.
-   * @name InfoBox#position_changed
-   * @event
-   */
+    * This event is fired when the position of the InfoBox changes.
+    * @name InfoBox#position_changed
+    * @event
+    */
     googleReference.maps.event.trigger(this, 'position_changed');
   };
 
   /**
- * Sets the zIndex style for the InfoBox.
- * @param {number} index
- */
-  InfoBox.prototype.setZIndex = function(index) {
+  * Sets the zIndex style for the InfoBox.
+  * @param {number} index
+  */
+  InfoBox.prototype.setZIndex = function (index) {
     this.zIndex_ = index;
 
     if (this.div_) {
@@ -664,18 +620,18 @@ const createInfoBox = googleReference => {
     }
 
     /**
-   * This event is fired when the zIndex of the InfoBox changes.
-   * @name InfoBox#zindex_changed
-   * @event
-   */
+    * This event is fired when the zIndex of the InfoBox changes.
+    * @name InfoBox#zindex_changed
+    * @event
+    */
     googleReference.maps.event.trigger(this, 'zindex_changed');
   };
 
   /**
- * Sets the visibility of the InfoBox.
- * @param {boolean} isVisible
- */
-  InfoBox.prototype.setVisible = function(isVisible) {
+  * Sets the visibility of the InfoBox.
+  * @param {boolean} isVisible
+  */
+  InfoBox.prototype.setVisible = function (isVisible) {
     this.isHidden_ = !isVisible;
     if (this.div_) {
       this.div_.style.visibility = this.isHidden_ ? 'hidden' : 'visible';
@@ -683,35 +639,35 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Returns the content of the InfoBox.
- * @returns {string}
- */
-  InfoBox.prototype.getContent = function() {
+  * Returns the content of the InfoBox.
+  * @returns {string}
+  */
+  InfoBox.prototype.getContent = function () {
     return this.content_;
   };
 
   /**
- * Returns the geographic location of the InfoBox.
- * @returns {LatLng}
- */
-  InfoBox.prototype.getPosition = function() {
+  * Returns the geographic location of the InfoBox.
+  * @returns {LatLng}
+  */
+  InfoBox.prototype.getPosition = function () {
     return this.position_;
   };
 
   /**
- * Returns the zIndex for the InfoBox.
- * @returns {number}
- */
-  InfoBox.prototype.getZIndex = function() {
+  * Returns the zIndex for the InfoBox.
+  * @returns {number}
+  */
+  InfoBox.prototype.getZIndex = function () {
     return this.zIndex_;
   };
 
   /**
- * Returns a flag indicating whether the InfoBox is visible.
- * @returns {boolean}
- */
-  InfoBox.prototype.getVisible = function() {
-    let isVisible;
+  * Returns a flag indicating whether the InfoBox is visible.
+  * @returns {boolean}
+  */
+  InfoBox.prototype.getVisible = function () {
+    var isVisible = void 0;
 
     if (typeof this.getMap() === 'undefined' || this.getMap() === null) {
       isVisible = false;
@@ -722,9 +678,9 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Shows the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
- */
-  InfoBox.prototype.show = function() {
+  * Shows the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
+  */
+  InfoBox.prototype.show = function () {
     this.isHidden_ = false;
     if (this.div_) {
       this.div_.style.visibility = 'visible';
@@ -732,9 +688,9 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Hides the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
- */
-  InfoBox.prototype.hide = function() {
+  * Hides the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
+  */
+  InfoBox.prototype.hide = function () {
     this.isHidden_ = true;
     if (this.div_) {
       this.div_.style.visibility = 'hidden';
@@ -742,33 +698,25 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Adds the InfoBox to the specified map or Street View panorama. If <tt>anchor</tt>
- *  (usually a <tt>google.maps.Marker</tt>) is specified, the position
- *  of the InfoBox is set to the position of the <tt>anchor</tt>. If the
- *  anchor is dragged to a new location, the InfoBox moves as well.
- * @param {Map|StreetViewPanorama} map
- * @param {MVCObject} [anchor]
- */
-  InfoBox.prototype.open = function(map, anchor) {
-    const me = this;
+  * Adds the InfoBox to the specified map or Street View panorama. If <tt>anchor</tt>
+  *  (usually a <tt>google.maps.Marker</tt>) is specified, the position
+  *  of the InfoBox is set to the position of the <tt>anchor</tt>. If the
+  *  anchor is dragged to a new location, the InfoBox moves as well.
+  * @param {Map|StreetViewPanorama} map
+  * @param {MVCObject} [anchor]
+  */
+  InfoBox.prototype.open = function (map, anchor) {
+    var me = this;
 
     if (anchor) {
       this.position_ = anchor.getPosition();
-      this.moveListener_ = googleReference.maps.event.addListener(
-        anchor,
-        'position_changed',
-        function() {
-          me.setPosition(this.getPosition());
-        }
-      );
+      this.moveListener_ = googleReference.maps.event.addListener(anchor, 'position_changed', function () {
+        me.setPosition(this.getPosition());
+      });
 
-      this.mapListener_ = googleReference.maps.event.addListener(
-        anchor,
-        'map_changed',
-        function() {
-          me.setMap(this.map);
-        }
-      );
+      this.mapListener_ = googleReference.maps.event.addListener(anchor, 'map_changed', function () {
+        me.setMap(this.map);
+      });
     }
 
     this.setMap(map);
@@ -779,10 +727,10 @@ const createInfoBox = googleReference => {
   };
 
   /**
- * Removes the InfoBox from the map.
- */
-  InfoBox.prototype.close = function() {
-    let i;
+  * Removes the InfoBox from the map.
+  */
+  InfoBox.prototype.close = function () {
+    var i = void 0;
 
     if (this.closeListener_) {
       googleReference.maps.event.removeListener(this.closeListener_);
@@ -817,4 +765,4 @@ const createInfoBox = googleReference => {
   return InfoBox;
 };
 
-export default createInfoBox;
+exports.default = createInfoBox;

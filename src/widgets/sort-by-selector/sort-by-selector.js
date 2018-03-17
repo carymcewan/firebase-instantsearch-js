@@ -1,39 +1,57 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Selector from '../../components/Selector.js';
-import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = sortBySelector;
 
-const bem = bemHelper('ais-sort-by-selector');
+var _preactCompat = require('preact-compat');
 
-const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
-  { currentRefinement, options, refine, hasNoResults },
-  isFirstRendering
-) => {
-  if (isFirstRendering) return;
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
+var _classnames = require('classnames');
 
-  render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentRefinement}
-      options={options}
-      setValue={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-    />,
-    containerNode
-  );
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectSortBySelector = require('../../connectors/sort-by-selector/connectSortBySelector.js');
+
+var _connectSortBySelector2 = _interopRequireDefault(_connectSortBySelector);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-sort-by-selector');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      autoHideContainer = _ref.autoHideContainer;
+  return function (_ref2, isFirstRendering) {
+    var currentRefinement = _ref2.currentRefinement,
+        options = _ref2.options,
+        refine = _ref2.refine,
+        hasNoResults = _ref2.hasNoResults;
+
+    if (isFirstRendering) return;
+
+    var shouldAutoHideContainer = autoHideContainer && hasNoResults;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
+      cssClasses: cssClasses,
+      currentValue: currentRefinement,
+      options: options,
+      setValue: refine,
+      shouldAutoHideContainer: shouldAutoHideContainer
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-sortBySelector({
-  container,
-  indices,
-  [cssClasses.{root,select,item}={}],
-  [autoHideContainer=false]
-})`;
+var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{root,select,item}={}],\n  [autoHideContainer=false]\n})';
 
 /**
  * @typedef {Object} SortByWidgetCssClasses
@@ -78,37 +96,40 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector({
-  container,
-  indices,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-} = {}) {
+function sortBySelector() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      indices = _ref3.indices,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    autoHideContainer: autoHideContainer
   });
 
   try {
-    const makeWidget = connectSortBySelector(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ indices });
+    var makeWidget = (0, _connectSortBySelector2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ indices: indices });
   } catch (e) {
     throw new Error(usage);
   }

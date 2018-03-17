@@ -1,25 +1,15 @@
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   currentRefinement,
-  //   options,
-  //   refine,
-  //   hasNoResults,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customNumericSelector({
-    attributeName,
-    options,
-    [ operator = '=' ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html
-`;
+exports.default = connectNumericSelector;
+
+var _utils = require('../../lib/utils.js');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html\n';
 
 /**
  * @typedef {Object} NumericSelectorOption
@@ -94,33 +84,36 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectNumericSelector(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectNumericSelector(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { attributeName, options, operator = '=' } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        options = widgetParams.options,
+        _widgetParams$operato = widgetParams.operator,
+        operator = _widgetParams$operato === undefined ? '=' : _widgetParams$operato;
+
 
     if (!attributeName || !options) {
       throw new Error(usage);
     }
 
     return {
-      getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-        const value = this._getRefinedValue(searchParametersFromUrl);
+      getConfiguration: function getConfiguration(currentSearchParameters, searchParametersFromUrl) {
+        var value = this._getRefinedValue(searchParametersFromUrl);
         if (value) {
           return {
-            numericRefinements: {
-              [attributeName]: {
-                [operator]: [this._getRefinedValue(searchParametersFromUrl)],
-              },
-            },
+            numericRefinements: _defineProperty({}, attributeName, _defineProperty({}, operator, [this._getRefinedValue(searchParametersFromUrl)]))
           };
         }
         return {};
       },
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            instantSearchInstance = _ref.instantSearchInstance;
 
-      init({ helper, instantSearchInstance }) {
-        this._refine = value => {
+        this._refine = function (value) {
           helper.clearRefinements(attributeName);
           if (value !== undefined && value !== 'undefined') {
             helper.addNumericRefinement(attributeName, operator, value);
@@ -128,52 +121,44 @@ export default function connectNumericSelector(renderFn, unmountFn) {
           helper.search();
         };
 
-        renderFn(
-          {
-            currentRefinement: this._getRefinedValue(helper.state),
-            options,
-            refine: this._refine,
-            hasNoResults: true,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          currentRefinement: this._getRefinedValue(helper.state),
+          options: options,
+          refine: this._refine,
+          hasNoResults: true,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref2) {
+        var helper = _ref2.helper,
+            results = _ref2.results,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-      render({ helper, results, instantSearchInstance }) {
-        renderFn(
-          {
-            currentRefinement: this._getRefinedValue(helper.state),
-            options,
-            refine: this._refine,
-            hasNoResults: results.nbHits === 0,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          currentRefinement: this._getRefinedValue(helper.state),
+          options: options,
+          refine: this._refine,
+          hasNoResults: results.nbHits === 0,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
       },
+      dispose: function dispose(_ref3) {
+        var state = _ref3.state;
 
-      dispose({ state }) {
         unmountFn();
         return state.removeNumericRefinement(attributeName);
       },
-
-      _getRefinedValue(state) {
+      _getRefinedValue: function _getRefinedValue(state) {
         // This is reimplementing state.getNumericRefinement
         // But searchParametersFromUrl is not an actual SearchParameters object
         // It's only the object structure without the methods, because getStateFromQueryString
         // is not sending a SearchParameters. There's no way given how we built the helper
         // to initialize a true partial state where only the refinements are present
-        return state &&
-          state.numericRefinements &&
-          state.numericRefinements[attributeName] !== undefined &&
-          state.numericRefinements[attributeName][operator] !== undefined &&
-          state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
-          ? state.numericRefinements[attributeName][operator][0]
-          : options[0].value;
-      },
+        return state && state.numericRefinements && state.numericRefinements[attributeName] !== undefined && state.numericRefinements[attributeName][operator] !== undefined && state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
+        ? state.numericRefinements[attributeName][operator][0] : options[0].value;
+      }
     };
   };
 }

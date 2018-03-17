@@ -1,84 +1,111 @@
-import React, { Component } from 'preact-compat';
-import PropTypes from 'prop-types';
-import cloneDeep from 'lodash/cloneDeep';
-import isEqual from 'lodash/isEqual';
-import { isReactElement, renderTemplate } from '../lib/utils';
+'use strict';
 
-export class PureTemplate extends Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      !isEqual(this.props.data, nextProps.data) ||
-      this.props.templateKey !== nextProps.templateKey ||
-      !isEqual(this.props.rootProps, nextProps.rootProps)
-    );
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PureTemplate = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _cloneDeep = require('lodash/cloneDeep');
+
+var _cloneDeep2 = _interopRequireDefault(_cloneDeep);
+
+var _isEqual = require('lodash/isEqual');
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+var _utils = require('../lib/utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PureTemplate = exports.PureTemplate = function (_Component) {
+  _inherits(PureTemplate, _Component);
+
+  function PureTemplate() {
+    _classCallCheck(this, PureTemplate);
+
+    return _possibleConstructorReturn(this, (PureTemplate.__proto__ || Object.getPrototypeOf(PureTemplate)).apply(this, arguments));
   }
 
-  render() {
-    const RootTagName = this.props.rootTagName;
-    const useCustomCompileOptions = this.props.useCustomCompileOptions[
-      this.props.templateKey
-    ];
-    const compileOptions = useCustomCompileOptions
-      ? this.props.templatesConfig.compileOptions
-      : {};
-
-    const content = renderTemplate({
-      templates: this.props.templates,
-      templateKey: this.props.templateKey,
-      compileOptions,
-      helpers: this.props.templatesConfig.helpers,
-      data: this.props.data,
-    });
-
-    if (content === null) {
-      // Adds a noscript to the DOM but virtual DOM is null
-      // See http://facebook.github.io/react/docs/component-specs.html#render
-      return null;
+  _createClass(PureTemplate, [{
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps) {
+      return !(0, _isEqual2.default)(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey || !(0, _isEqual2.default)(this.props.rootProps, nextProps.rootProps);
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var RootTagName = this.props.rootTagName;
+      var useCustomCompileOptions = this.props.useCustomCompileOptions[this.props.templateKey];
+      var compileOptions = useCustomCompileOptions ? this.props.templatesConfig.compileOptions : {};
 
-    if (isReactElement(content)) {
-      throw new Error(
-        'Support for templates as React elements has been removed, please use react-instantsearch'
-      );
+      var content = (0, _utils.renderTemplate)({
+        templates: this.props.templates,
+        templateKey: this.props.templateKey,
+        compileOptions: compileOptions,
+        helpers: this.props.templatesConfig.helpers,
+        data: this.props.data
+      });
+
+      if (content === null) {
+        // Adds a noscript to the DOM but virtual DOM is null
+        // See http://facebook.github.io/react/docs/component-specs.html#render
+        return null;
+      }
+
+      if ((0, _utils.isReactElement)(content)) {
+        throw new Error('Support for templates as React elements has been removed, please use react-instantsearch');
+      }
+
+      return _preactCompat2.default.createElement(RootTagName, _extends({}, this.props.rootProps, {
+        dangerouslySetInnerHTML: { __html: content }
+      }));
     }
+  }]);
 
-    return (
-      <RootTagName
-        {...this.props.rootProps}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
-    );
-  }
-}
+  return PureTemplate;
+}(_preactCompat.Component);
 
 PureTemplate.propTypes = {
-  data: PropTypes.object,
-  rootProps: PropTypes.object,
-  rootTagName: PropTypes.string,
-  templateKey: PropTypes.string,
-  templates: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.func])
-  ),
-  templatesConfig: PropTypes.shape({
-    helpers: PropTypes.objectOf(PropTypes.func),
+  data: _propTypes2.default.object,
+  rootProps: _propTypes2.default.object,
+  rootTagName: _propTypes2.default.string,
+  templateKey: _propTypes2.default.string,
+  templates: _propTypes2.default.objectOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func])),
+  templatesConfig: _propTypes2.default.shape({
+    helpers: _propTypes2.default.objectOf(_propTypes2.default.func),
     // https://github.com/twitter/hogan.js/#compilation-options
-    compileOptions: PropTypes.shape({
-      asString: PropTypes.bool,
-      sectionTags: PropTypes.arrayOf(
-        PropTypes.shape({
-          o: PropTypes.string,
-          c: PropTypes.string,
-        })
-      ),
-      delimiters: PropTypes.string,
-      disableLambda: PropTypes.bool,
-    }),
+    compileOptions: _propTypes2.default.shape({
+      asString: _propTypes2.default.bool,
+      sectionTags: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        o: _propTypes2.default.string,
+        c: _propTypes2.default.string
+      })),
+      delimiters: _propTypes2.default.string,
+      disableLambda: _propTypes2.default.bool
+    })
   }),
-  transformData: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.objectOf(PropTypes.func),
-  ]),
-  useCustomCompileOptions: PropTypes.objectOf(PropTypes.bool),
+  transformData: _propTypes2.default.oneOfType([_propTypes2.default.func, _propTypes2.default.objectOf(_propTypes2.default.func)]),
+  useCustomCompileOptions: _propTypes2.default.objectOf(_propTypes2.default.bool)
 };
 
 PureTemplate.defaultProps = {
@@ -86,7 +113,7 @@ PureTemplate.defaultProps = {
   rootTagName: 'div',
   useCustomCompileOptions: {},
   templates: {},
-  templatesConfig: {},
+  templatesConfig: {}
 };
 
 function transformData(fn, templateKey, originalData) {
@@ -94,10 +121,10 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
-  const clonedData = cloneDeep(originalData);
+  var clonedData = (0, _cloneDeep2.default)(originalData);
 
-  let data;
-  const typeFn = typeof fn;
+  var data = void 0;
+  var typeFn = typeof fn === 'undefined' ? 'undefined' : _typeof(fn);
   if (typeFn === 'function') {
     data = fn(clonedData);
   } else if (typeFn === 'object') {
@@ -110,17 +137,13 @@ function transformData(fn, templateKey, originalData) {
       data = originalData;
     }
   } else {
-    throw new Error(
-      `transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`
-    );
+    throw new Error('transformData must be a function or an object, was ' + typeFn + ' (key : ' + templateKey + ')');
   }
 
-  const dataType = typeof data;
-  const expectedType = typeof originalData;
+  var dataType = typeof data === 'undefined' ? 'undefined' : _typeof(data);
+  var expectedType = typeof originalData === 'undefined' ? 'undefined' : _typeof(originalData);
   if (dataType !== expectedType) {
-    throw new Error(
-      `\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`
-    );
+    throw new Error('`transformData` must return a `' + expectedType + '`, got `' + dataType + '`.');
   }
   return data;
 }
@@ -128,14 +151,13 @@ function transformData(fn, templateKey, originalData) {
 // Resolve transformData before Template, so transformData is always called
 // even if the data is the same. Allowing you to dynamically inject conditions in
 // transformData that will force re-rendering
-const withTransformData = TemplateToWrap => props => {
-  const data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
-  return (
-    <TemplateToWrap
-      {...props}
-      data={transformData(props.transformData, props.templateKey, data)} // eslint-disable-line react/prop-types
-    />
-  );
+var withTransformData = function withTransformData(TemplateToWrap) {
+  return function (props) {
+    var data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
+    return _preactCompat2.default.createElement(TemplateToWrap, _extends({}, props, {
+      data: transformData(props.transformData, props.templateKey, data) // eslint-disable-line react/prop-types
+    }));
+  };
 };
 
-export default withTransformData(PureTemplate);
+exports.default = withTransformData(PureTemplate);

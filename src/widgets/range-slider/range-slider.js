@@ -1,91 +1,99 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Slider from '../../components/Slider/Slider.js';
-import connectRange from '../../connectors/range/connectRange.js';
-
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-
-const defaultTemplates = {
-  header: '',
-  footer: '',
-};
-
-const bem = bemHelper('ais-range-slider');
-
-const renderer = ({
-  containerNode,
-  cssClasses,
-  pips,
-  step,
-  tooltips,
-  autoHideContainer,
-  collapsible,
-  renderState,
-  templates,
-}) => ({ refine, range, start, instantSearchInstance }, isFirstRendering) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
-
-  const { min: minRange, max: maxRange } = range;
-  const shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
-
-  const [minStart, maxStart] = start;
-  const minFinite = minStart === -Infinity ? minRange : minStart;
-  const maxFinite = maxStart === Infinity ? maxRange : maxStart;
-
-  // Clamp values to the range for avoid extra rendering & refinement
-  // Should probably be done on the connector side, but we need to stay
-  // backward compatible so we still need to pass [-Infinity, Infinity]
-  const values = [
-    minFinite > maxRange ? maxRange : minFinite,
-    maxFinite < minRange ? minRange : maxFinite,
-  ];
-
-  render(
-    <Slider
-      cssClasses={cssClasses}
-      refine={refine}
-      min={minRange}
-      max={maxRange}
-      values={values}
-      tooltips={tooltips}
-      step={step}
-      pips={pips}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      collapsible={collapsible}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
-};
-
-const usage = `Usage:
-rangeSlider({
-  container,
-  attributeName,
-  [ min ],
-  [ max ],
-  [ pips = true ],
-  [ step = 1 ],
-  [ precision = 0 ],
-  [ tooltips=true ],
-  [ templates.{header, footer} ],
-  [ cssClasses.{root, header, body, footer} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-`;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = rangeSlider;
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Slider = require('../../components/Slider/Slider.js');
+
+var _Slider2 = _interopRequireDefault(_Slider);
+
+var _connectRange = require('../../connectors/range/connectRange.js');
+
+var _connectRange2 = _interopRequireDefault(_connectRange);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultTemplates = {
+  header: '',
+  footer: ''
+};
+
+var bem = (0, _utils.bemHelper)('ais-range-slider');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      pips = _ref.pips,
+      step = _ref.step,
+      tooltips = _ref.tooltips,
+      autoHideContainer = _ref.autoHideContainer,
+      collapsible = _ref.collapsible,
+      renderState = _ref.renderState,
+      templates = _ref.templates;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        range = _ref2.range,
+        start = _ref2.start,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        defaultTemplates: defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var minRange = range.min,
+        maxRange = range.max;
+
+    var shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
+
+    var _start = _slicedToArray(start, 2),
+        minStart = _start[0],
+        maxStart = _start[1];
+
+    var minFinite = minStart === -Infinity ? minRange : minStart;
+    var maxFinite = maxStart === Infinity ? maxRange : maxStart;
+
+    // Clamp values to the range for avoid extra rendering & refinement
+    // Should probably be done on the connector side, but we need to stay
+    // backward compatible so we still need to pass [-Infinity, Infinity]
+    var values = [minFinite > maxRange ? maxRange : minFinite, maxFinite < minRange ? minRange : maxFinite];
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Slider2.default, {
+      cssClasses: cssClasses,
+      refine: refine,
+      min: minRange,
+      max: maxRange,
+      values: values,
+      tooltips: tooltips,
+      step: step,
+      pips: pips,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      collapsible: collapsible,
+      templateProps: renderState.templateProps
+    }), containerNode);
+  };
+};
+
+var usage = 'Usage:\nrangeSlider({\n  container,\n  attributeName,\n  [ min ],\n  [ max ],\n  [ pips = true ],\n  [ step = 1 ],\n  [ precision = 0 ],\n  [ tooltips=true ],\n  [ templates.{header, footer} ],\n  [ cssClasses.{root, header, body, footer} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n});\n';
 
 /**
  * @typedef {Object} RangeSliderTemplates
@@ -164,49 +172,57 @@ rangeSlider({
  *   })
  * );
  */
-export default function rangeSlider({
-  container,
-  attributeName,
-  min,
-  max,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-  step,
-  pips = true,
-  precision = 0,
-  tooltips = true,
-  autoHideContainer = true,
-  collapsible = false,
-} = {}) {
+function rangeSlider() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      min = _ref3.min,
+      max = _ref3.max,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      step = _ref3.step,
+      _ref3$pips = _ref3.pips,
+      pips = _ref3$pips === undefined ? true : _ref3$pips,
+      _ref3$precision = _ref3.precision,
+      precision = _ref3$precision === undefined ? 0 : _ref3$precision,
+      _ref3$tooltips = _ref3.tooltips,
+      tooltips = _ref3$tooltips === undefined ? true : _ref3$tooltips,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    step,
-    pips,
-    tooltips,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    step: step,
+    pips: pips,
+    tooltips: tooltips,
     renderState: {},
-    templates,
-    autoHideContainer,
-    collapsible,
-    cssClasses,
+    templates: templates,
+    autoHideContainer: autoHideContainer,
+    collapsible: collapsible,
+    cssClasses: cssClasses
   });
 
   try {
-    const makeWidget = connectRange(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attributeName, min, max, precision });
+    var makeWidget = (0, _connectRange2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ attributeName: attributeName, min: min, max: max, precision: precision });
   } catch (e) {
     throw new Error(usage);
   }

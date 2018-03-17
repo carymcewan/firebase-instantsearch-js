@@ -1,15 +1,38 @@
-import algoliasearchHelper from 'algoliasearch-helper';
-import urlHelper from 'algoliasearch-helper/src/url';
-import isEqual from 'lodash/isEqual';
-import assign from 'lodash/assign';
+'use strict';
 
-const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _algoliasearchHelper = require('algoliasearch-helper');
+
+var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
+
+var _url = require('algoliasearch-helper/src/url');
+
+var _url2 = _interopRequireDefault(_url);
+
+var _isEqual = require('lodash/isEqual');
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+var _assign = require('lodash/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AlgoliaSearchHelper = _algoliasearchHelper2.default.AlgoliaSearchHelper;
 
 function timerMaker(t0) {
-  let t = t0;
+  var t = t0;
   return function timer() {
-    const now = Date.now();
-    const delta = now - t;
+    var now = Date.now();
+    var delta = now - t;
     t = now;
     return delta;
   };
@@ -27,13 +50,15 @@ function timerMaker(t0) {
  * Handles the legacy browsers
  * @type {UrlUtil}
  */
-const hashUrlUtils = {
+var hashUrlUtils = {
   ignoreNextPopState: false,
   character: '#',
-  onpopstate(cb) {
-    this._onHashChange = hash => {
-      if (this.ignoreNextPopState) {
-        this.ignoreNextPopState = false;
+  onpopstate: function onpopstate(cb) {
+    var _this = this;
+
+    this._onHashChange = function (hash) {
+      if (_this.ignoreNextPopState) {
+        _this.ignoreNextPopState = false;
         return;
       }
 
@@ -42,7 +67,7 @@ const hashUrlUtils = {
 
     window.addEventListener('hashchange', this._onHashChange);
   },
-  pushState(qs) {
+  pushState: function pushState(qs) {
     // hash change or location assign does trigger an hashchange event
     // so every time we change it manually, we inform the code
     // to ignore the next hashchange event
@@ -50,45 +75,45 @@ const hashUrlUtils = {
     this.ignoreNextPopState = true;
     window.location.assign(getFullURL(this.createURL(qs)));
   },
-  createURL(qs) {
+  createURL: function createURL(qs) {
     return window.location.search + this.character + qs;
   },
-  readUrl() {
+  readUrl: function readUrl() {
     return window.location.hash.slice(1);
   },
-  dispose() {
+  dispose: function dispose() {
     window.removeEventListener('hashchange', this._onHashChange);
     window.location.assign(getFullURL(''));
-  },
+  }
 };
 
 /**
  * Handles the modern API
  * @type {UrlUtil}
  */
-const modernUrlUtils = {
+var modernUrlUtils = {
   character: '?',
-  onpopstate(cb) {
-    this._onPopState = (...args) => cb(...args);
+  onpopstate: function onpopstate(cb) {
+    this._onPopState = function () {
+      return cb.apply(undefined, arguments);
+    };
     window.addEventListener('popstate', this._onPopState);
   },
-  pushState(qs, { getHistoryState }) {
-    window.history.pushState(
-      getHistoryState(),
-      '',
-      getFullURL(this.createURL(qs))
-    );
+  pushState: function pushState(qs, _ref) {
+    var getHistoryState = _ref.getHistoryState;
+
+    window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
-  createURL(qs) {
+  createURL: function createURL(qs) {
     return this.character + qs + document.location.hash;
   },
-  readUrl() {
+  readUrl: function readUrl() {
     return window.location.search.slice(1);
   },
-  dispose() {
+  dispose: function dispose() {
     window.removeEventListener('popstate', this._onPopState);
     window.history.pushState(null, null, getFullURL(''));
-  },
+  }
 };
 
 // we always push the full url to the url bar. Not a relative one.
@@ -101,136 +126,148 @@ function getFullURL(relative) {
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.hostname}${
-    window.location.port ? `:${window.location.port}` : ''
-  }`;
+  return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
 }
 
 // see InstantSearch.js file for urlSync options
-class URLSync {
-  constructor(urlUtils, options) {
+
+var URLSync = function () {
+  function URLSync(urlUtils, options) {
+    _classCallCheck(this, URLSync);
+
     this.urlUtils = urlUtils;
     this.originalConfig = null;
     this.timer = timerMaker(Date.now());
     this.mapping = options.mapping || {};
-    this.getHistoryState = options.getHistoryState || (() => null);
+    this.getHistoryState = options.getHistoryState || function () {
+      return null;
+    };
     this.threshold = options.threshold || 700;
-    this.trackedParameters = options.trackedParameters || [
-      'query',
-      'attribute:*',
-      'index',
-      'page',
-      'hitsPerPage',
-    ];
+    this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
     this.firstRender = true;
 
-    this.searchParametersFromUrl = AlgoliaSearchHelper.getConfigurationFromQueryString(
-      this.urlUtils.readUrl(),
-      { mapping: this.mapping }
-    );
+    this.searchParametersFromUrl = AlgoliaSearchHelper.getConfigurationFromQueryString(this.urlUtils.readUrl(), { mapping: this.mapping });
   }
 
-  init({ state }) {
-    this.initState = state;
-  }
+  _createClass(URLSync, [{
+    key: 'init',
+    value: function init(_ref2) {
+      var state = _ref2.state;
 
-  getConfiguration(currentConfiguration) {
-    // we need to create a REAL helper to then get its state. Because some parameters
-    // like hierarchicalFacet.rootPath are then triggering a default refinement that would
-    // be not present if it was not going trough the SearchParameters constructor
-    this.originalConfig = algoliasearchHelper(
-      { addAlgoliaAgent() {} },
-      currentConfiguration.index,
-      currentConfiguration
-    ).state;
-    return this.searchParametersFromUrl;
-  }
+      this.initState = state;
+    }
+  }, {
+    key: 'getConfiguration',
+    value: function getConfiguration(currentConfiguration) {
+      // we need to create a REAL helper to then get its state. Because some parameters
+      // like hierarchicalFacet.rootPath are then triggering a default refinement that would
+      // be not present if it was not going trough the SearchParameters constructor
+      this.originalConfig = (0, _algoliasearchHelper2.default)({
+        addAlgoliaAgent: function addAlgoliaAgent() {}
+      }, currentConfiguration.index, currentConfiguration).state;
+      return this.searchParametersFromUrl;
+    }
+  }, {
+    key: 'render',
+    value: function render(_ref3) {
+      var _this2 = this;
 
-  render({ helper, state }) {
-    if (this.firstRender) {
-      this.firstRender = false;
-      this.onHistoryChange(this.onPopState.bind(this, helper));
-      helper.on('change', s => this.renderURLFromState(s));
+      var helper = _ref3.helper,
+          state = _ref3.state;
 
-      const initStateQs = this.getQueryString(this.initState);
-      const stateQs = this.getQueryString(state);
-      if (initStateQs !== stateQs) {
-        // force update the URL, if the state has changed since the initial URL read
-        // We do this in order to make a URL update when there is search function
-        // that prevent the search of the initial rendering
-        // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-        this.renderURLFromState(state);
+      if (this.firstRender) {
+        this.firstRender = false;
+        this.onHistoryChange(this.onPopState.bind(this, helper));
+        helper.on('change', function (s) {
+          return _this2.renderURLFromState(s);
+        });
+
+        var initStateQs = this.getQueryString(this.initState);
+        var stateQs = this.getQueryString(state);
+        if (initStateQs !== stateQs) {
+          // force update the URL, if the state has changed since the initial URL read
+          // We do this in order to make a URL update when there is search function
+          // that prevent the search of the initial rendering
+          // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+          this.renderURLFromState(state);
+        }
       }
     }
-  }
+  }, {
+    key: 'dispose',
+    value: function dispose(_ref4) {
+      var helper = _ref4.helper;
 
-  dispose({ helper }) {
-    helper.removeListener('change', this.renderURLFromState);
-    this.urlUtils.dispose();
-  }
+      helper.removeListener('change', this.renderURLFromState);
+      this.urlUtils.dispose();
+    }
+  }, {
+    key: 'onPopState',
+    value: function onPopState(helper, fullState) {
+      clearTimeout(this.urlUpdateTimeout);
+      // compare with helper.state
+      var partialHelperState = helper.getState(this.trackedParameters);
+      var fullHelperState = (0, _assign2.default)({}, this.originalConfig, partialHelperState);
 
-  onPopState(helper, fullState) {
-    clearTimeout(this.urlUpdateTimeout);
-    // compare with helper.state
-    const partialHelperState = helper.getState(this.trackedParameters);
-    const fullHelperState = assign({}, this.originalConfig, partialHelperState);
+      if ((0, _isEqual2.default)(fullHelperState, fullState)) return;
 
-    if (isEqual(fullHelperState, fullState)) return;
+      helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
+    }
+  }, {
+    key: 'renderURLFromState',
+    value: function renderURLFromState(state) {
+      var _this3 = this;
 
-    helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
-  }
+      var qs = this.getQueryString(state);
+      clearTimeout(this.urlUpdateTimeout);
+      this.urlUpdateTimeout = setTimeout(function () {
+        _this3.urlUtils.pushState(qs, { getHistoryState: _this3.getHistoryState });
+      }, this.threshold);
+    }
+  }, {
+    key: 'getQueryString',
+    value: function getQueryString(state) {
+      var currentQueryString = this.urlUtils.readUrl();
+      var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
 
-  renderURLFromState(state) {
-    const qs = this.getQueryString(state);
-    clearTimeout(this.urlUpdateTimeout);
-    this.urlUpdateTimeout = setTimeout(() => {
-      this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
-    }, this.threshold);
-  }
-
-  getQueryString(state) {
-    const currentQueryString = this.urlUtils.readUrl();
-    const foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(
-      currentQueryString,
-      { mapping: this.mapping }
-    );
-
-    return urlHelper.getQueryStringFromState(
-      state.filter(this.trackedParameters),
-      {
+      return _url2.default.getQueryStringFromState(state.filter(this.trackedParameters), {
         moreAttributes: foreignConfig,
         mapping: this.mapping,
-        safe: true,
-      }
-    );
-  }
+        safe: true
+      });
+    }
 
-  // External APIs
+    // External APIs
 
-  createURL(state, { absolute }) {
-    const filteredState = state.filter(this.trackedParameters);
+  }, {
+    key: 'createURL',
+    value: function createURL(state, _ref5) {
+      var absolute = _ref5.absolute;
 
-    const relative = this.urlUtils.createURL(
-      algoliasearchHelper.url.getQueryStringFromState(filteredState, {
-        mapping: this.mapping,
-      })
-    );
+      var filteredState = state.filter(this.trackedParameters);
 
-    return absolute ? getFullURL(relative) : relative;
-  }
+      var relative = this.urlUtils.createURL(_algoliasearchHelper2.default.url.getQueryStringFromState(filteredState, {
+        mapping: this.mapping
+      }));
 
-  onHistoryChange(fn) {
-    this.urlUtils.onpopstate(() => {
-      const qs = this.urlUtils.readUrl();
-      const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(
-        qs,
-        { mapping: this.mapping }
-      );
-      const fullState = assign({}, this.originalConfig, partialState);
-      fn(fullState);
-    });
-  }
-}
+      return absolute ? getFullURL(relative) : relative;
+    }
+  }, {
+    key: 'onHistoryChange',
+    value: function onHistoryChange(fn) {
+      var _this4 = this;
+
+      this.urlUtils.onpopstate(function () {
+        var qs = _this4.urlUtils.readUrl();
+        var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, { mapping: _this4.mapping });
+        var fullState = (0, _assign2.default)({}, _this4.originalConfig, partialState);
+        fn(fullState);
+      });
+    }
+  }]);
+
+  return URLSync;
+}();
 
 /**
  * Instantiate a url sync widget. This widget let you synchronize the search
@@ -249,13 +286,17 @@ class URLSync {
  * it'll use the query parameters using the modern history API.
  * @return {object} the widget instance
  */
-function urlSync(options = {}) {
-  const useHash = options.useHash || false;
-  const customUrlUtils = options.urlUtils;
 
-  const urlUtils = customUrlUtils || (useHash ? hashUrlUtils : modernUrlUtils);
+
+function urlSync() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var useHash = options.useHash || false;
+  var customUrlUtils = options.urlUtils;
+
+  var urlUtils = customUrlUtils || (useHash ? hashUrlUtils : modernUrlUtils);
 
   return new URLSync(urlUtils, options);
 }
 
-export default urlSync;
+exports.default = urlSync;

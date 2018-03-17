@@ -1,84 +1,61 @@
-/* eslint-disable import/default */
+'use strict';
 
-import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const stories = storiesOf('CurrentRefinedValues');
+var _devNovel = require('dev-novel');
 
-export default () => {
-  stories
-    .add(
-      'default',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({ container })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
-    )
-    .add(
-      'with header',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({
-              container,
-              templates: {
-                header: 'Current refinements',
-              },
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
-    )
-    .add(
-      'with header but no refinements',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
-            container,
-            autoHideContainer: false,
-            templates: {
-              header: 'Current refinements',
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with clearsQuery',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({
-              container,
-              clearsQuery: true,
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
-    );
+var _index = require('../../../../index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _wrapWithHits = require('../../utils/wrap-with-hits.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var stories = (0, _devNovel.storiesOf)('CurrentRefinedValues'); /* eslint-disable import/default */
+
+exports.default = function () {
+  stories.add('default', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    window.search.addWidget(_index2.default.widgets.currentRefinedValues({ container: container }));
+  }, {
+    searchParameters: {
+      disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+      disjunctiveFacets: ['brand'],
+      numericRefinements: { price: { '>=': [100] } }
+    }
+  })).add('with header', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    window.search.addWidget(_index2.default.widgets.currentRefinedValues({
+      container: container,
+      templates: {
+        header: 'Current refinements'
+      }
+    }));
+  }, {
+    searchParameters: {
+      disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+      disjunctiveFacets: ['brand'],
+      numericRefinements: { price: { '>=': [100] } }
+    }
+  })).add('with header but no refinements', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    window.search.addWidget(_index2.default.widgets.currentRefinedValues({
+      container: container,
+      autoHideContainer: false,
+      templates: {
+        header: 'Current refinements'
+      }
+    }));
+  })).add('with clearsQuery', (0, _wrapWithHits.wrapWithHits)(function (container) {
+    window.search.addWidget(_index2.default.widgets.currentRefinedValues({
+      container: container,
+      clearsQuery: true
+    }));
+  }, {
+    searchParameters: {
+      disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+      disjunctiveFacets: ['brand'],
+      numericRefinements: { price: { '>=': [100] } }
+    }
+  }));
 };

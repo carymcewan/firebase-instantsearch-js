@@ -1,27 +1,41 @@
-import markdown from 'markdown-it';
-import highlight from '../syntaxHighlighting.js';
+'use strict';
 
-const md = markdown();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = helpers;
+
+var _markdownIt = require('markdown-it');
+
+var _markdownIt2 = _interopRequireDefault(_markdownIt);
+
+var _syntaxHighlighting = require('../syntaxHighlighting.js');
+
+var _syntaxHighlighting2 = _interopRequireDefault(_syntaxHighlighting);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var md = (0, _markdownIt2.default)();
 
 // this plugin provides ATM one helper to easily compute the publicPath of assets
-export default function helpers(filenames, metalsmith, cb) {
+function helpers(filenames, metalsmith, cb) {
   metalsmith.metadata().h = {
-    markdown(src) {
+    markdown: function markdown(src) {
       return md.render(src);
     },
-    highlight(src, opts) {
-      const lang = opts && opts.lang;
-      const inline = opts && opts.inline;
-      const runnable = opts && opts.runnable;
+    highlight: function highlight(src, opts) {
+      var lang = opts && opts.lang;
+      var inline = opts && opts.inline;
+      var runnable = opts && opts.runnable;
 
-      return highlight(src, lang, inline, runnable);
+      return (0, _syntaxHighlighting2.default)(src, lang, inline, runnable);
     },
-    maybeActive(navPath, singlePathOrArrayOfPaths) {
-      const pathsToTest = [].concat(singlePathOrArrayOfPaths);
-      return pathsToTest.some(pathToTest => navPath.indexOf(pathToTest) === 0) ?
-        'active' :
-        '';
-    },
+    maybeActive: function maybeActive(navPath, singlePathOrArrayOfPaths) {
+      var pathsToTest = [].concat(singlePathOrArrayOfPaths);
+      return pathsToTest.some(function (pathToTest) {
+        return navPath.indexOf(pathToTest) === 0;
+      }) ? 'active' : '';
+    }
   };
 
   cb();

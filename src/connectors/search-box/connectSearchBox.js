@@ -1,23 +1,13 @@
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customSearchBox = connectSearchBox(function render(params, isFirstRendering) {
-  // params = {
-  //   query,
-  //   onHistoryChange,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  //   clear,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customSearchBox({
-    [ queryHook ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html
-`;
+exports.default = connectSearchBox;
+
+var _utils = require('../../lib/utils.js');
+
+var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //   clear,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html\n';
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
@@ -75,82 +65,86 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectSearchBox(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectSearchBox(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { queryHook } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var queryHook = widgetParams.queryHook;
+
 
     function clear(helper) {
-      return function() {
+      return function () {
         helper.setQuery('');
         helper.search();
       };
     }
 
     return {
-      _clear() {},
-      _cachedClear() {
+      _clear: function _clear() {},
+      _cachedClear: function _cachedClear() {
         this._clear();
       },
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            onHistoryChange = _ref.onHistoryChange,
+            instantSearchInstance = _ref.instantSearchInstance;
 
-      init({ helper, onHistoryChange, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
-        this._refine = (() => {
-          let previousQuery;
+        this._refine = function () {
+          var previousQuery = void 0;
 
-          const setQueryAndSearch = (q, doSearch = true) => {
+          var setQueryAndSearch = function setQueryAndSearch(q) {
+            var doSearch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
             if (q !== helper.state.query) {
               previousQuery = helper.state.query;
               helper.setQuery(q);
             }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
-              helper.search();
+            if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
           };
 
-          return queryHook
-            ? q => queryHook(q, setQueryAndSearch)
-            : setQueryAndSearch;
-        })();
+          return queryHook ? function (q) {
+            return queryHook(q, setQueryAndSearch);
+          } : setQueryAndSearch;
+        }();
 
         this._onHistoryChange = onHistoryChange;
 
-        renderFn(
-          {
-            query: helper.state.query,
-            onHistoryChange: this._onHistoryChange,
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
-            instantSearchInstance,
-          },
-          true
-        );
+        renderFn({
+          query: helper.state.query,
+          onHistoryChange: this._onHistoryChange,
+          refine: this._refine,
+          clear: this._cachedClear,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, true);
       },
+      render: function render(_ref2) {
+        var helper = _ref2.helper,
+            instantSearchInstance = _ref2.instantSearchInstance,
+            searchMetadata = _ref2.searchMetadata;
 
-      render({ helper, instantSearchInstance, searchMetadata }) {
         this._clear = clear(helper);
 
-        renderFn(
-          {
-            query: helper.state.query,
-            onHistoryChange: this._onHistoryChange,
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
-            instantSearchInstance,
-            isSearchStalled: searchMetadata.isSearchStalled,
-          },
-          false
-        );
+        renderFn({
+          query: helper.state.query,
+          onHistoryChange: this._onHistoryChange,
+          refine: this._refine,
+          clear: this._cachedClear,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance,
+          isSearchStalled: searchMetadata.isSearchStalled
+        }, false);
       },
+      dispose: function dispose(_ref3) {
+        var state = _ref3.state;
 
-      dispose({ state }) {
         unmountFn();
         return state.setQuery('');
-      },
+      }
     };
   };
 }

@@ -1,108 +1,169 @@
-import React, { Component } from 'preact-compat';
-import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+'use strict';
 
-export class RawRangeInput extends Component {
-  constructor(props) {
-    super(props);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RawRangeInput = undefined;
 
-    this.state = {
-      min: props.values.min,
-      max: props.values.max,
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _autoHideContainer = require('../../decorators/autoHideContainer.js');
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+var _headerFooter = require('../../decorators/headerFooter.js');
+
+var _headerFooter2 = _interopRequireDefault(_headerFooter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RawRangeInput = exports.RawRangeInput = function (_Component) {
+  _inherits(RawRangeInput, _Component);
+
+  function RawRangeInput(props) {
+    _classCallCheck(this, RawRangeInput);
+
+    var _this = _possibleConstructorReturn(this, (RawRangeInput.__proto__ || Object.getPrototypeOf(RawRangeInput)).call(this, props));
+
+    _this.onChange = function (name) {
+      return function (event) {
+        _this.setState(_defineProperty({}, name, event.currentTarget.value));
+      };
     };
+
+    _this.onSubmit = function (event) {
+      event.preventDefault();
+
+      _this.props.refine([_this.state.min, _this.state.max]);
+    };
+
+    _this.state = {
+      min: props.values.min,
+      max: props.values.max
+    };
+    return _this;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      min: nextProps.values.min,
-      max: nextProps.values.max,
-    });
-  }
+  _createClass(RawRangeInput, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.setState({
+        min: nextProps.values.min,
+        max: nextProps.values.max
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _state = this.state,
+          minValue = _state.min,
+          maxValue = _state.max;
+      var _props = this.props,
+          min = _props.min,
+          max = _props.max,
+          step = _props.step,
+          cssClasses = _props.cssClasses,
+          labels = _props.labels;
 
-  onChange = name => event => {
-    this.setState({
-      [name]: event.currentTarget.value,
-    });
-  };
+      var isDisabled = min >= max;
 
-  onSubmit = event => {
-    event.preventDefault();
+      return _preactCompat2.default.createElement(
+        'form',
+        { className: cssClasses.form, onSubmit: this.onSubmit },
+        _preactCompat2.default.createElement(
+          'fieldset',
+          { className: cssClasses.fieldset },
+          _preactCompat2.default.createElement(
+            'label',
+            { className: cssClasses.labelMin },
+            _preactCompat2.default.createElement('input', {
+              className: cssClasses.inputMin,
+              type: 'number',
+              min: min,
+              max: max,
+              step: step,
+              value: minValue,
+              onChange: this.onChange('min'),
+              placeholder: min,
+              disabled: isDisabled
+            })
+          ),
+          _preactCompat2.default.createElement(
+            'span',
+            { className: cssClasses.separator },
+            labels.separator
+          ),
+          _preactCompat2.default.createElement(
+            'label',
+            { className: cssClasses.labelMax },
+            _preactCompat2.default.createElement('input', {
+              className: cssClasses.inputMax,
+              type: 'number',
+              min: min,
+              max: max,
+              step: step,
+              value: maxValue,
+              onChange: this.onChange('max'),
+              placeholder: max,
+              disabled: isDisabled
+            })
+          ),
+          _preactCompat2.default.createElement(
+            'button',
+            {
+              role: 'button',
+              className: cssClasses.submit,
+              disabled: isDisabled
+            },
+            labels.submit
+          )
+        )
+      );
+    }
+  }]);
 
-    this.props.refine([this.state.min, this.state.max]);
-  };
-
-  render() {
-    const { min: minValue, max: maxValue } = this.state;
-    const { min, max, step, cssClasses, labels } = this.props;
-    const isDisabled = min >= max;
-
-    return (
-      <form className={cssClasses.form} onSubmit={this.onSubmit}>
-        <fieldset className={cssClasses.fieldset}>
-          <label className={cssClasses.labelMin}>
-            <input
-              className={cssClasses.inputMin}
-              type="number"
-              min={min}
-              max={max}
-              step={step}
-              value={minValue}
-              onChange={this.onChange('min')}
-              placeholder={min}
-              disabled={isDisabled}
-            />
-          </label>
-          <span className={cssClasses.separator}>{labels.separator}</span>
-          <label className={cssClasses.labelMax}>
-            <input
-              className={cssClasses.inputMax}
-              type="number"
-              min={min}
-              max={max}
-              step={step}
-              value={maxValue}
-              onChange={this.onChange('max')}
-              placeholder={max}
-              disabled={isDisabled}
-            />
-          </label>
-          <button
-            role="button"
-            className={cssClasses.submit}
-            disabled={isDisabled}
-          >
-            {labels.submit}
-          </button>
-        </fieldset>
-      </form>
-    );
-  }
-}
+  return RawRangeInput;
+}(_preactCompat.Component);
 
 RawRangeInput.propTypes = {
-  min: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
-  step: PropTypes.number.isRequired,
-  values: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
+  min: _propTypes2.default.number.isRequired,
+  max: _propTypes2.default.number.isRequired,
+  step: _propTypes2.default.number.isRequired,
+  values: _propTypes2.default.shape({
+    min: _propTypes2.default.number,
+    max: _propTypes2.default.number
   }).isRequired,
-  cssClasses: PropTypes.shape({
-    form: PropTypes.string.isRequired,
-    fieldset: PropTypes.string.isRequired,
-    labelMin: PropTypes.string.isRequired,
-    inputMin: PropTypes.string.isRequired,
-    separator: PropTypes.string.isRequired,
-    labelMax: PropTypes.string.isRequired,
-    inputMax: PropTypes.string.isRequired,
-    submit: PropTypes.string.isRequired,
+  cssClasses: _propTypes2.default.shape({
+    form: _propTypes2.default.string.isRequired,
+    fieldset: _propTypes2.default.string.isRequired,
+    labelMin: _propTypes2.default.string.isRequired,
+    inputMin: _propTypes2.default.string.isRequired,
+    separator: _propTypes2.default.string.isRequired,
+    labelMax: _propTypes2.default.string.isRequired,
+    inputMax: _propTypes2.default.string.isRequired,
+    submit: _propTypes2.default.string.isRequired
   }).isRequired,
-  labels: PropTypes.shape({
-    separator: PropTypes.string.isRequired,
-    submit: PropTypes.string.isRequired,
+  labels: _propTypes2.default.shape({
+    separator: _propTypes2.default.string.isRequired,
+    submit: _propTypes2.default.string.isRequired
   }).isRequired,
-  refine: PropTypes.func.isRequired,
+  refine: _propTypes2.default.func.isRequired
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRangeInput));
+exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(RawRangeInput));

@@ -1,17 +1,41 @@
-import {runMode} from 'codemirror/addon/runmode/runmode.node';
-import 'codemirror/mode/groovy/groovy';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/diff/diff';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/shell/shell';
-import escape from 'escape-html';
+'use strict';
 
-export default function highlight(source, lang = 'javascript', inline = false, runnable = true) {
-  const inlineClassNames = ['CodeMirror', 'cm-s-mdn-like'];
-  const blockClassNames = [...inlineClassNames, 'code-sample'];
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = highlight;
+
+var _runmode = require('codemirror/addon/runmode/runmode.node');
+
+require('codemirror/mode/groovy/groovy');
+
+require('codemirror/mode/xml/xml');
+
+require('codemirror/mode/diff/diff');
+
+require('codemirror/mode/clike/clike');
+
+require('codemirror/mode/jsx/jsx');
+
+require('codemirror/mode/htmlmixed/htmlmixed');
+
+require('codemirror/mode/javascript/javascript');
+
+require('codemirror/mode/shell/shell');
+
+var _escapeHtml = require('escape-html');
+
+var _escapeHtml2 = _interopRequireDefault(_escapeHtml);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function highlight(source) {
+  var lang = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'javascript';
+  var inline = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var runnable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
+  var inlineClassNames = ['CodeMirror', 'cm-s-mdn-like'];
+  var blockClassNames = [].concat(inlineClassNames, ['code-sample']);
 
   if (runnable) {
     blockClassNames.push('code-sample-runnable');
@@ -21,20 +45,22 @@ export default function highlight(source, lang = 'javascript', inline = false, r
     lang = 'htmlmixed';
   }
 
-  let output = '';
-  runMode(source, lang, (text, style) => {
-    text = escape(text);
+  var output = '';
+  (0, _runmode.runMode)(source, lang, function (text, style) {
+    text = (0, _escapeHtml2.default)(text);
     if (!style) {
       output += text;
       return;
     }
-    const className = style.split(' ').map(s => `cm-${s}`).join(' ');
-    output += `<span class="${className}">${text}</span>`;
+    var className = style.split(' ').map(function (s) {
+      return 'cm-' + s;
+    }).join(' ');
+    output += '<span class="' + className + '">' + text + '</span>';
   });
 
   if (inline) {
-    return `<code class="${inlineClassNames.join(' ')}">${output}</code>`;
+    return '<code class="' + inlineClassNames.join(' ') + '">' + output + '</code>';
   }
 
-  return `<pre class="${blockClassNames.join(' ')}"><code>${output}</code></pre>`;
+  return '<pre class="' + blockClassNames.join(' ') + '"><code>' + output + '</code></pre>';
 }

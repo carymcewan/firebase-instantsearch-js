@@ -1,64 +1,73 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
-import cx from 'classnames';
+'use strict';
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = clearAll;
 
-import connectClearAll from '../../connectors/clear-all/connectClearAll.js';
+var _preactCompat = require('preact-compat');
 
-import defaultTemplates from './defaultTemplates.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const bem = bemHelper('ais-clear-all');
+var _ClearAll = require('../../components/ClearAll/ClearAll.js');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  autoHideContainer,
-  renderState,
-  templates,
-}) => (
-  { refine, hasRefinements, createURL, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _ClearAll2 = _interopRequireDefault(_ClearAll);
 
-  const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
+var _classnames = require('classnames');
 
-  render(
-    <ClearAllWithHOCs
-      refine={refine}
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      hasRefinements={hasRefinements}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={renderState.templateProps}
-      url={createURL()}
-    />,
-    containerNode
-  );
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _utils = require('../../lib/utils.js');
+
+var _connectClearAll = require('../../connectors/clear-all/connectClearAll.js');
+
+var _connectClearAll2 = _interopRequireDefault(_connectClearAll);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-clear-all');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      collapsible = _ref.collapsible,
+      autoHideContainer = _ref.autoHideContainer,
+      renderState = _ref.renderState,
+      templates = _ref.templates;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        hasRefinements = _ref2.hasRefinements,
+        createURL = _ref2.createURL,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && !hasRefinements;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_ClearAll2.default, {
+      refine: refine,
+      collapsible: collapsible,
+      cssClasses: cssClasses,
+      hasRefinements: hasRefinements,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      templateProps: renderState.templateProps,
+      url: createURL()
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-clearAll({
-  container,
-  [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={link: 'Clear all'} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ excludeAttributes=[] ]
-})`;
+var usage = 'Usage:\nclearAll({\n  container,\n  [ cssClasses.{root,header,body,footer,link}={} ],\n  [ templates.{header,link,footer}={link: \'Clear all\'} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ excludeAttributes=[] ]\n})';
 /**
  * @typedef {Object} ClearAllCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
@@ -110,43 +119,49 @@ clearAll({
  *   })
  * );
  */
-export default function clearAll({
-  container,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-  collapsible = false,
-  autoHideContainer = true,
-  excludeAttributes = [],
-  clearsQuery = false,
-}) {
+function clearAll(_ref3) {
+  var container = _ref3.container,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$excludeAttribut = _ref3.excludeAttributes,
+      excludeAttributes = _ref3$excludeAttribut === undefined ? [] : _ref3$excludeAttribut,
+      _ref3$clearsQuery = _ref3.clearsQuery,
+      clearsQuery = _ref3$clearsQuery === undefined ? false : _ref3$clearsQuery;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    collapsible,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    collapsible: collapsible,
+    autoHideContainer: autoHideContainer,
     renderState: {},
-    templates,
+    templates: templates
   });
 
   try {
-    const makeWidget = connectClearAll(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ excludeAttributes, clearsQuery });
+    var makeWidget = (0, _connectClearAll2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ excludeAttributes: excludeAttributes, clearsQuery: clearsQuery });
   } catch (e) {
     throw new Error(usage);
   }

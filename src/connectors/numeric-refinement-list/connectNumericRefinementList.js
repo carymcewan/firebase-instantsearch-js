@@ -1,26 +1,19 @@
-import includes from 'lodash/includes';
+'use strict';
 
-import { checkRendering } from '../../lib/utils.js';
-
-const usage = `Usage:
-var customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   items,
-  //   hasNoResults,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  //  }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customNumericRefinementList({
-    attributeName,
-    options,
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
-`;
+exports.default = connectNumericRefinementList;
+
+var _includes = require('lodash/includes');
+
+var _includes2 = _interopRequireDefault(_includes);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
 
 /**
  * @typedef {Object} NumericRefinementListOption
@@ -111,74 +104,83 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectNumericRefinementList(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectNumericRefinementList(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { attributeName, options } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        options = widgetParams.options;
+
 
     if (!attributeName || !options) {
       throw new Error(usage);
     }
 
     return {
-      init({ helper, createURL, instantSearchInstance }) {
-        this._refine = facetValue => {
-          const refinedState = refine(
-            helper.state,
-            attributeName,
-            options,
-            facetValue
-          );
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            createURL = _ref.createURL,
+            instantSearchInstance = _ref.instantSearchInstance;
+
+        this._refine = function (facetValue) {
+          var refinedState = refine(helper.state, attributeName, options, facetValue);
           helper.setState(refinedState).search();
         };
 
-        this._createURL = state => facetValue =>
-          createURL(refine(state, attributeName, options, facetValue));
-        this._prepareItems = state =>
-          options.map(({ start, end, name: label }) => ({
-            label,
-            value: window.encodeURI(JSON.stringify({ start, end })),
-            isRefined: isRefined(state, attributeName, { start, end }),
-          }));
+        this._createURL = function (state) {
+          return function (facetValue) {
+            return createURL(refine(state, attributeName, options, facetValue));
+          };
+        };
+        this._prepareItems = function (state) {
+          return options.map(function (_ref2) {
+            var start = _ref2.start,
+                end = _ref2.end,
+                label = _ref2.name;
+            return {
+              label: label,
+              value: window.encodeURI(JSON.stringify({ start: start, end: end })),
+              isRefined: isRefined(state, attributeName, { start: start, end: end })
+            };
+          });
+        };
 
-        renderFn(
-          {
-            createURL: this._createURL(helper.state),
-            items: this._prepareItems(helper.state),
-            hasNoResults: true,
-            refine: this._refine,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          createURL: this._createURL(helper.state),
+          items: this._prepareItems(helper.state),
+          hasNoResults: true,
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      render: function render(_ref3) {
+        var results = _ref3.results,
+            state = _ref3.state,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      render({ results, state, instantSearchInstance }) {
-        renderFn(
-          {
-            createURL: this._createURL(state),
-            items: this._prepareItems(state),
-            hasNoResults: results.nbHits === 0,
-            refine: this._refine,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          createURL: this._createURL(state),
+          items: this._prepareItems(state),
+          hasNoResults: results.nbHits === 0,
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
       },
+      dispose: function dispose(_ref4) {
+        var state = _ref4.state;
 
-      dispose({ state }) {
         unmountFn();
         return state.clearRefinements(attributeName);
-      },
+      }
     };
   };
 }
 
 function isRefined(state, attributeName, option) {
-  const currentRefinements = state.getNumericRefinements(attributeName);
+  var currentRefinements = state.getNumericRefinements(attributeName);
 
   if (option.start !== undefined && option.end !== undefined) {
     if (option.start === option.end) {
@@ -202,11 +204,11 @@ function isRefined(state, attributeName, option) {
 }
 
 function refine(state, attributeName, options, facetValue) {
-  let resolvedState = state;
+  var resolvedState = state;
 
-  const refinedOption = JSON.parse(window.decodeURI(facetValue));
+  var refinedOption = JSON.parse(window.decodeURI(facetValue));
 
-  const currentRefinements = resolvedState.getNumericRefinements(attributeName);
+  var currentRefinements = resolvedState.getNumericRefinements(attributeName);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
     return resolvedState.clearRefinements(attributeName);
@@ -223,17 +225,9 @@ function refine(state, attributeName, options, facetValue) {
 
     if (refinedOption.start === refinedOption.end) {
       if (hasNumericRefinement(currentRefinements, '=', refinedOption.start)) {
-        resolvedState = resolvedState.removeNumericRefinement(
-          attributeName,
-          '=',
-          refinedOption.start
-        );
+        resolvedState = resolvedState.removeNumericRefinement(attributeName, '=', refinedOption.start);
       } else {
-        resolvedState = resolvedState.addNumericRefinement(
-          attributeName,
-          '=',
-          refinedOption.start
-        );
+        resolvedState = resolvedState.addNumericRefinement(attributeName, '=', refinedOption.start);
       }
       return resolvedState;
     }
@@ -241,33 +235,17 @@ function refine(state, attributeName, options, facetValue) {
 
   if (refinedOption.start !== undefined) {
     if (hasNumericRefinement(currentRefinements, '>=', refinedOption.start)) {
-      resolvedState = resolvedState.removeNumericRefinement(
-        attributeName,
-        '>=',
-        refinedOption.start
-      );
+      resolvedState = resolvedState.removeNumericRefinement(attributeName, '>=', refinedOption.start);
     } else {
-      resolvedState = resolvedState.addNumericRefinement(
-        attributeName,
-        '>=',
-        refinedOption.start
-      );
+      resolvedState = resolvedState.addNumericRefinement(attributeName, '>=', refinedOption.start);
     }
   }
 
   if (refinedOption.end !== undefined) {
     if (hasNumericRefinement(currentRefinements, '<=', refinedOption.end)) {
-      resolvedState = resolvedState.removeNumericRefinement(
-        attributeName,
-        '<=',
-        refinedOption.end
-      );
+      resolvedState = resolvedState.removeNumericRefinement(attributeName, '<=', refinedOption.end);
     } else {
-      resolvedState = resolvedState.addNumericRefinement(
-        attributeName,
-        '<=',
-        refinedOption.end
-      );
+      resolvedState = resolvedState.addNumericRefinement(attributeName, '<=', refinedOption.end);
     }
   }
 
@@ -277,8 +255,8 @@ function refine(state, attributeName, options, facetValue) {
 }
 
 function hasNumericRefinement(currentRefinements, operator, value) {
-  const hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  const includesValue = includes(currentRefinements[operator], value);
+  var hasOperatorRefinements = currentRefinements[operator] !== undefined;
+  var includesValue = (0, _includes2.default)(currentRefinements[operator], value);
 
   return hasOperatorRefinements && includesValue;
 }

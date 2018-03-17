@@ -1,71 +1,75 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hierarchicalMenu;
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-hierarchical-menu');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  autoHideContainer,
-  collapsible,
-  cssClasses,
-  containerNode,
-  transformData,
-  templates,
-  renderState,
-}) => (
-  { createURL, items, refine, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={items}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={renderState.templateProps}
-      toggleRefinement={refine}
-    />,
-    containerNode
-  );
+var _connectHierarchicalMenu = require('../../connectors/hierarchical-menu/connectHierarchicalMenu');
+
+var _connectHierarchicalMenu2 = _interopRequireDefault(_connectHierarchicalMenu);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hierarchical-menu');
+
+var renderer = function renderer(_ref) {
+  var autoHideContainer = _ref.autoHideContainer,
+      collapsible = _ref.collapsible,
+      cssClasses = _ref.cssClasses,
+      containerNode = _ref.containerNode,
+      transformData = _ref.transformData,
+      templates = _ref.templates,
+      renderState = _ref.renderState;
+  return function (_ref2, isFirstRendering) {
+    var createURL = _ref2.createURL,
+        items = _ref2.items,
+        refine = _ref2.refine,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && items.length === 0;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
+      collapsible: collapsible,
+      createURL: createURL,
+      cssClasses: cssClasses,
+      facetValues: items,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      templateProps: renderState.templateProps,
+      toggleRefinement: refine
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-hierarchicalMenu({
-  container,
-  attributes,
-  [ separator=' > ' ],
-  [ rootPath ],
-  [ showParentLevel=false ],
-  [ limit=10 ],
-  [ sortBy=['name:asc'] ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
+var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separator=\' > \' ],\n  [ rootPath ],\n  [ showParentLevel=false ],\n  [ limit=10 ],\n  [ sortBy=[\'name:asc\'] ],\n  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],\n  [ templates.{header, item, footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
@@ -187,61 +191,70 @@ hierarchicalMenu({
  *   })
  * );
  */
-export default function hierarchicalMenu({
-  container,
-  attributes,
-  separator = ' > ',
-  rootPath = null,
-  showParentLevel = true,
-  limit = 10,
-  sortBy = ['name:asc'],
-  cssClasses: userCssClasses = {},
-  autoHideContainer = true,
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-} = {}) {
+function hierarchicalMenu() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      attributes = _ref3.attributes,
+      _ref3$separator = _ref3.separator,
+      separator = _ref3$separator === undefined ? ' > ' : _ref3$separator,
+      _ref3$rootPath = _ref3.rootPath,
+      rootPath = _ref3$rootPath === undefined ? null : _ref3$rootPath,
+      _ref3$showParentLevel = _ref3.showParentLevel,
+      showParentLevel = _ref3$showParentLevel === undefined ? true : _ref3$showParentLevel,
+      _ref3$limit = _ref3.limit,
+      limit = _ref3$limit === undefined ? 10 : _ref3$limit,
+      _ref3$sortBy = _ref3.sortBy,
+      sortBy = _ref3$sortBy === undefined ? ['name:asc'] : _ref3$sortBy,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      transformData = _ref3.transformData;
+
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
     depth: bem('list', 'lvl'),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
-  const specializedRenderer = renderer({
-    autoHideContainer,
-    collapsible,
-    cssClasses,
-    containerNode,
-    transformData,
-    templates,
-    renderState: {},
+  var specializedRenderer = renderer({
+    autoHideContainer: autoHideContainer,
+    collapsible: collapsible,
+    cssClasses: cssClasses,
+    containerNode: containerNode,
+    transformData: transformData,
+    templates: templates,
+    renderState: {}
   });
 
   try {
-    const makeHierarchicalMenu = connectHierarchicalMenu(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
-    );
+    var makeHierarchicalMenu = (0, _connectHierarchicalMenu2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
     return makeHierarchicalMenu({
-      attributes,
-      separator,
-      rootPath,
-      showParentLevel,
-      limit,
-      sortBy,
+      attributes: attributes,
+      separator: separator,
+      rootPath: rootPath,
+      showParentLevel: showParentLevel,
+      limit: limit,
+      sortBy: sortBy
     });
   } catch (e) {
     throw new Error(usage);

@@ -1,23 +1,26 @@
-import { storiesOf } from 'dev-novel';
-import { wrapWithHitsAndJquery } from '../../utils/wrap-with-hits.js';
-import * as widgets from '../widgets/index.js';
+'use strict';
 
-const stories = storiesOf('HierarchicalMenu');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default () => {
-  stories.add(
-    'default',
-    wrapWithHitsAndJquery(containerNode => {
-      window.search.addWidget(
-        widgets.hierarchicalMenu({
-          containerNode,
-          attributes: [
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ],
-        })
-      );
-    })
-  );
+var _devNovel = require('dev-novel');
+
+var _wrapWithHits = require('../../utils/wrap-with-hits.js');
+
+var _index = require('../widgets/index.js');
+
+var widgets = _interopRequireWildcard(_index);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var stories = (0, _devNovel.storiesOf)('HierarchicalMenu');
+
+exports.default = function () {
+  stories.add('default', (0, _wrapWithHits.wrapWithHitsAndJquery)(function (containerNode) {
+    window.search.addWidget(widgets.hierarchicalMenu({
+      containerNode: containerNode,
+      attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2']
+    }));
+  }));
 };

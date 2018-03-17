@@ -1,47 +1,34 @@
-import { checkRendering } from '../../lib/utils.js';
-import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+'use strict';
 
-const usage = `Usage:
-var customRefinementList = connectRefinementList(function render(params) {
-  // params = {
-  //   isFromSearch,
-  //   createURL,
-  //   items,
-  //   refine,
-  //   searchForItems,
-  //   instantSearchInstance,
-  //   canRefine,
-  //   toggleShowMore,
-  //   isShowingMore,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customRefinementList({
-    attributeName,
-    [ operator = 'or' ],
-    [ limit ],
-    [ showMoreLimit ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = false ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
-`;
+exports.checkUsage = undefined;
 
-export const checkUsage = ({
-  attributeName,
-  operator,
-  usageMessage,
-  showMoreLimit,
-  limit,
-}) => {
-  const noAttributeName = attributeName === undefined;
-  const invalidOperator = !/^(and|or)$/.test(operator);
-  const invalidShowMoreLimit =
-    showMoreLimit !== undefined
-      ? isNaN(showMoreLimit) || showMoreLimit < limit
-      : false;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = connectRefinementList;
+
+var _utils = require('../../lib/utils.js');
+
+var _escapeHighlight = require('../../lib/escape-highlight.js');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
+
+var checkUsage = exports.checkUsage = function checkUsage(_ref) {
+  var attributeName = _ref.attributeName,
+      operator = _ref.operator,
+      usageMessage = _ref.usageMessage,
+      showMoreLimit = _ref.showMoreLimit,
+      limit = _ref.limit;
+
+  var noAttributeName = attributeName === undefined;
+  var invalidOperator = !/^(and|or)$/.test(operator);
+  var invalidShowMoreLimit = showMoreLimit !== undefined ? isNaN(showMoreLimit) || showMoreLimit < limit : false;
 
   if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
     throw new Error(usageMessage);
@@ -145,140 +132,128 @@ export const checkUsage = ({
  *   })
  * );
  */
-export default function connectRefinementList(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectRefinementList(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {
-      attributeName,
-      operator = 'or',
-      limit = 10,
-      showMoreLimit,
-      sortBy = ['isRefined', 'count:desc', 'name:asc'],
-      escapeFacetValues = false,
-    } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributeName = widgetParams.attributeName,
+        _widgetParams$operato = widgetParams.operator,
+        operator = _widgetParams$operato === undefined ? 'or' : _widgetParams$operato,
+        _widgetParams$limit = widgetParams.limit,
+        limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
+        showMoreLimit = widgetParams.showMoreLimit,
+        _widgetParams$sortBy = widgetParams.sortBy,
+        sortBy = _widgetParams$sortBy === undefined ? ['isRefined', 'count:desc', 'name:asc'] : _widgetParams$sortBy,
+        _widgetParams$escapeF = widgetParams.escapeFacetValues,
+        escapeFacetValues = _widgetParams$escapeF === undefined ? false : _widgetParams$escapeF;
 
-    checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
 
-    const formatItems = ({ name: label, ...item }) => ({
-      ...item,
-      label,
-      value: label,
-      highlighted: label,
-    });
+    checkUsage({ attributeName: attributeName, operator: operator, usage: usage, limit: limit, showMoreLimit: showMoreLimit });
 
-    const render = ({
-      items,
-      state,
-      createURL,
-      helperSpecializedSearchFacetValues,
-      refine,
-      isFromSearch,
-      isFirstSearch,
-      isShowingMore,
-      toggleShowMore,
-      hasExhaustiveItems,
-      instantSearchInstance,
-    }) => {
+    var formatItems = function formatItems(_ref2) {
+      var label = _ref2.name,
+          item = _objectWithoutProperties(_ref2, ['name']);
+
+      return _extends({}, item, {
+        label: label,
+        value: label,
+        highlighted: label
+      });
+    };
+
+    var _render = function _render(_ref3) {
+      var items = _ref3.items,
+          state = _ref3.state,
+          createURL = _ref3.createURL,
+          helperSpecializedSearchFacetValues = _ref3.helperSpecializedSearchFacetValues,
+          refine = _ref3.refine,
+          isFromSearch = _ref3.isFromSearch,
+          isFirstSearch = _ref3.isFirstSearch,
+          isShowingMore = _ref3.isShowingMore,
+          toggleShowMore = _ref3.toggleShowMore,
+          hasExhaustiveItems = _ref3.hasExhaustiveItems,
+          instantSearchInstance = _ref3.instantSearchInstance;
+
       // Compute a specific createURL method able to link to any facet value state change
-      const _createURL = facetValue =>
-        createURL(state.toggleRefinement(attributeName, facetValue));
+      var _createURL = function _createURL(facetValue) {
+        return createURL(state.toggleRefinement(attributeName, facetValue));
+      };
 
       // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
       // function
-      const searchFacetValues =
-        helperSpecializedSearchFacetValues &&
-        helperSpecializedSearchFacetValues(
-          state,
-          createURL,
-          helperSpecializedSearchFacetValues,
-          refine,
-          instantSearchInstance
-        );
+      var searchFacetValues = helperSpecializedSearchFacetValues && helperSpecializedSearchFacetValues(state, createURL, helperSpecializedSearchFacetValues, refine, instantSearchInstance);
 
-      renderFn(
-        {
-          createURL: _createURL,
-          items,
-          refine,
-          searchForItems: searchFacetValues,
-          instantSearchInstance,
-          isFromSearch,
-          canRefine: isFromSearch || items.length > 0,
-          widgetParams,
-          isShowingMore,
-          canToggleShowMore: showMoreLimit
-            ? isShowingMore || !hasExhaustiveItems
-            : false,
-          toggleShowMore,
-          hasExhaustiveItems,
-        },
-        isFirstSearch
-      );
+      renderFn({
+        createURL: _createURL,
+        items: items,
+        refine: refine,
+        searchForItems: searchFacetValues,
+        instantSearchInstance: instantSearchInstance,
+        isFromSearch: isFromSearch,
+        canRefine: isFromSearch || items.length > 0,
+        widgetParams: widgetParams,
+        isShowingMore: isShowingMore,
+        canToggleShowMore: showMoreLimit ? isShowingMore || !hasExhaustiveItems : false,
+        toggleShowMore: toggleShowMore,
+        hasExhaustiveItems: hasExhaustiveItems
+      }, isFirstSearch);
     };
 
-    let lastResultsFromMainSearch;
-    let searchForFacetValues;
-    let refine;
+    var lastResultsFromMainSearch = void 0;
+    var searchForFacetValues = void 0;
+    var refine = void 0;
 
-    const createSearchForFacetValues = helper => (
-      state,
-      createURL,
-      helperSpecializedSearchFacetValues,
-      toggleRefinement,
-      instantSearchInstance
-    ) => query => {
-      if (query === '' && lastResultsFromMainSearch) {
-        // render with previous data from the helper.
-        render({
-          items: lastResultsFromMainSearch,
-          state,
-          createURL,
-          helperSpecializedSearchFacetValues,
-          refine: toggleRefinement,
-          isFromSearch: false,
-          isFirstSearch: false,
-          instantSearchInstance,
-          hasExhaustiveItems: false, // SFFV should not be used with show more
-        });
-      } else {
-        const tags = {
-          highlightPreTag: escapeFacetValues
-            ? tagConfig.highlightPreTag
-            : undefined,
-          highlightPostTag: escapeFacetValues
-            ? tagConfig.highlightPostTag
-            : undefined,
-        };
-
-        helper
-          .searchForFacetValues(attributeName, query, limit, tags)
-          .then(results => {
-            const facetValues = escapeFacetValues
-              ? escapeFacets(results.facetHits)
-              : results.facetHits;
-
-            const normalizedFacetValues = facetValues.map(
-              ({ value, ...item }) => ({
-                ...item,
-                value,
-                label: value,
-              })
-            );
-
-            render({
-              items: normalizedFacetValues,
-              state,
-              createURL,
-              helperSpecializedSearchFacetValues,
+    var createSearchForFacetValues = function createSearchForFacetValues(helper) {
+      return function (state, createURL, helperSpecializedSearchFacetValues, toggleRefinement, instantSearchInstance) {
+        return function (query) {
+          if (query === '' && lastResultsFromMainSearch) {
+            // render with previous data from the helper.
+            _render({
+              items: lastResultsFromMainSearch,
+              state: state,
+              createURL: createURL,
+              helperSpecializedSearchFacetValues: helperSpecializedSearchFacetValues,
               refine: toggleRefinement,
-              isFromSearch: true,
+              isFromSearch: false,
               isFirstSearch: false,
-              instantSearchInstance,
-              hasExhaustiveItems: false, // SFFV should not be used with show more
+              instantSearchInstance: instantSearchInstance,
+              hasExhaustiveItems: false // SFFV should not be used with show more
             });
-          });
-      }
+          } else {
+            var tags = {
+              highlightPreTag: escapeFacetValues ? _escapeHighlight.tagConfig.highlightPreTag : undefined,
+              highlightPostTag: escapeFacetValues ? _escapeHighlight.tagConfig.highlightPostTag : undefined
+            };
+
+            helper.searchForFacetValues(attributeName, query, limit, tags).then(function (results) {
+              var facetValues = escapeFacetValues ? (0, _escapeHighlight.escapeFacets)(results.facetHits) : results.facetHits;
+
+              var normalizedFacetValues = facetValues.map(function (_ref4) {
+                var value = _ref4.value,
+                    item = _objectWithoutProperties(_ref4, ['value']);
+
+                return _extends({}, item, {
+                  value: value,
+                  label: value
+                });
+              });
+
+              _render({
+                items: normalizedFacetValues,
+                state: state,
+                createURL: createURL,
+                helperSpecializedSearchFacetValues: helperSpecializedSearchFacetValues,
+                refine: toggleRefinement,
+                isFromSearch: true,
+                isFirstSearch: false,
+                instantSearchInstance: instantSearchInstance,
+                hasExhaustiveItems: false // SFFV should not be used with show more
+              });
+            });
+          }
+        };
+      };
     };
 
     return {
@@ -286,129 +261,116 @@ export default function connectRefinementList(renderFn, unmountFn) {
 
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
+      toggleShowMore: function toggleShowMore() {},
+      cachedToggleShowMore: function cachedToggleShowMore() {
         this.toggleShowMore();
       },
+      createToggleShowMore: function createToggleShowMore(renderOptions) {
+        var _this = this;
 
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
+        return function () {
+          _this.isShowingMore = !_this.isShowingMore;
+          _this.render(renderOptions);
         };
       },
-
-      getLimit() {
+      getLimit: function getLimit() {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [
-            attributeName,
-          ],
-        };
+
+      getConfiguration: function getConfiguration() {
+        var configuration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var widgetConfiguration = _defineProperty({}, operator === 'and' ? 'facets' : 'disjunctiveFacets', [attributeName]);
 
         if (limit !== undefined) {
-          const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+          var currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
           if (showMoreLimit === undefined) {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit
-            );
+            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
           } else {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit,
-              showMoreLimit
-            );
+            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit, showMoreLimit);
           }
         }
 
         return widgetConfiguration;
       },
 
-      init({ helper, createURL, instantSearchInstance }) {
+      init: function init(_ref5) {
+        var helper = _ref5.helper,
+            createURL = _ref5.createURL,
+            instantSearchInstance = _ref5.instantSearchInstance;
+
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        refine = facetValue =>
-          helper.toggleRefinement(attributeName, facetValue).search();
+        refine = function refine(facetValue) {
+          return helper.toggleRefinement(attributeName, facetValue).search();
+        };
 
         searchForFacetValues = createSearchForFacetValues(helper);
 
-        render({
+        _render({
           items: [],
           state: helper.state,
-          createURL,
+          createURL: createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine,
+          refine: refine,
           isFromSearch: false,
           isFirstSearch: true,
-          instantSearchInstance,
+          instantSearchInstance: instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
-          hasExhaustiveItems: true,
+          hasExhaustiveItems: true
         });
       },
+      render: function render(renderOptions) {
+        var results = renderOptions.results,
+            state = renderOptions.state,
+            createURL = renderOptions.createURL,
+            instantSearchInstance = renderOptions.instantSearchInstance;
 
-      render(renderOptions) {
-        const {
-          results,
-          state,
-          createURL,
-          instantSearchInstance,
-        } = renderOptions;
 
-        const facetValues = results.getFacetValues(attributeName, { sortBy });
-        const items = facetValues.slice(0, this.getLimit()).map(formatItems);
+        var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
+        var items = facetValues.slice(0, this.getLimit()).map(formatItems);
 
-        const maxValuesPerFacetConfig = state.getQueryParameter(
-          'maxValuesPerFacet'
-        );
-        const currentLimit = this.getLimit();
+        var maxValuesPerFacetConfig = state.getQueryParameter('maxValuesPerFacet');
+        var currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
         // is when it is strictly under the number requested unless we know that another
         // widget has requested more values (maxValuesPerFacet > getLimit()).
         // Because this is used for making the search of facets unable or not, it is important
         // to be conservative here.
-        const hasExhaustiveItems =
-          maxValuesPerFacetConfig > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
+        var hasExhaustiveItems = maxValuesPerFacetConfig > currentLimit ? facetValues.length <= currentLimit : facetValues.length < currentLimit;
 
         lastResultsFromMainSearch = items;
 
         this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
-        render({
-          items,
-          state,
-          createURL,
+        _render({
+          items: items,
+          state: state,
+          createURL: createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine,
+          refine: refine,
           isFromSearch: false,
           isFirstSearch: false,
-          instantSearchInstance,
+          instantSearchInstance: instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
-          hasExhaustiveItems,
+          hasExhaustiveItems: hasExhaustiveItems
         });
       },
+      dispose: function dispose(_ref6) {
+        var state = _ref6.state;
 
-      dispose({ state }) {
         unmountFn();
 
         if (operator === 'and') {
-          return state
-            .removeFacetRefinement(attributeName)
-            .removeFacet(attributeName);
+          return state.removeFacetRefinement(attributeName).removeFacet(attributeName);
         } else {
-          return state
-            .removeDisjunctiveFacetRefinement(attributeName)
-            .removeDisjunctiveFacet(attributeName);
+          return state.removeDisjunctiveFacetRefinement(attributeName).removeDisjunctiveFacet(attributeName);
         }
-      },
+      }
     };
   };
 }

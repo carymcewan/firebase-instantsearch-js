@@ -1,37 +1,18 @@
-import noop from 'lodash/noop';
-import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
+'use strict';
 
-const usage = `Usage:
-
-var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   position,
-  //   refine,
-  //   clearMapRefinement,
-  //   isRefinedWithMap,
-  //   toggleRefineOnMapMove,
-  //   isRefineOnMapMove,
-  //   setMapMoveSinceLastRefine,
-  //   hasMapMoveSinceLastRefine,
-  //   hasMapMoveSinceLastRefine,
-  //   widgetParams,
-  //   instantSearchInstance,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 
-search.addWidget(
-  customGeoSearch({
-    [ enableRefineOnMapMove = true ],
-    [ enableGeolocationWithIP = true ],
-    [ position ],
-    [ radius ],
-    [ precision ],
-  })
-);
+var _noop = require('lodash/noop');
 
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html
-`;
+var _noop2 = _interopRequireDefault(_noop);
+
+var _utils = require('../../lib/utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   position,\n  //   refine,\n  //   clearMapRefinement,\n  //   isRefinedWithMap,\n  //   toggleRefineOnMapMove,\n  //   isRefineOnMapMove,\n  //   setMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   widgetParams,\n  //   instantSearchInstance,\n  // }\n});\n\nsearch.addWidget(\n  customGeoSearch({\n    [ enableRefineOnMapMove = true ],\n    [ enableGeolocationWithIP = true ],\n    [ position ],\n    [ radius ],\n    [ precision ],\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html\n';
 
 /**
  * @typedef {Object} LatLng
@@ -123,119 +104,132 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-const connectGeoSearch = (renderFn, unmountFn) => {
-  checkRendering(renderFn, usage);
+var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {
-      enableRefineOnMapMove = true,
-      enableGeolocationWithIP = true,
-      position,
-      radius,
-      precision,
-    } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _widgetParams$enableR = widgetParams.enableRefineOnMapMove,
+        enableRefineOnMapMove = _widgetParams$enableR === undefined ? true : _widgetParams$enableR,
+        _widgetParams$enableG = widgetParams.enableGeolocationWithIP,
+        enableGeolocationWithIP = _widgetParams$enableG === undefined ? true : _widgetParams$enableG,
+        position = widgetParams.position,
+        radius = widgetParams.radius,
+        precision = widgetParams.precision;
 
-    const widgetState = {
+
+    var widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       lastRefinePosition: '',
       lastRefineBoundingBox: '',
-      internalToggleRefineOnMapMove: noop,
-      internalSetMapMoveSinceLastRefine: noop,
+      internalToggleRefineOnMapMove: _noop2.default,
+      internalSetMapMoveSinceLastRefine: _noop2.default
     };
 
-    const getPositionFromState = state =>
-      state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
-
-    const refine = helper => ({ northEast: ne, southWest: sw }) => {
-      const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
-
-      helper.setQueryParameter('insideBoundingBox', boundingBox).search();
-
-      widgetState.hasMapMoveSinceLastRefine = false;
-      widgetState.lastRefineBoundingBox = boundingBox;
+    var getPositionFromState = function getPositionFromState(state) {
+      return state.aroundLatLng && (0, _utils.parseAroundLatLngFromString)(state.aroundLatLng);
     };
 
-    const clearMapRefinement = helper => () => {
-      helper.setQueryParameter('insideBoundingBox').search();
+    var refine = function refine(helper) {
+      return function (_ref) {
+        var ne = _ref.northEast,
+            sw = _ref.southWest;
+
+        var boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
+
+        helper.setQueryParameter('insideBoundingBox', boundingBox).search();
+
+        widgetState.hasMapMoveSinceLastRefine = false;
+        widgetState.lastRefineBoundingBox = boundingBox;
+      };
     };
 
-    const isRefinedWithMap = state => () => Boolean(state.insideBoundingBox);
-
-    const toggleRefineOnMapMove = () =>
-      widgetState.internalToggleRefineOnMapMove();
-    const createInternalToggleRefinementonMapMove = (render, args) => () => {
-      widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
-
-      render(args);
+    var clearMapRefinement = function clearMapRefinement(helper) {
+      return function () {
+        helper.setQueryParameter('insideBoundingBox').search();
+      };
     };
 
-    const isRefineOnMapMove = () => widgetState.isRefineOnMapMove;
+    var isRefinedWithMap = function isRefinedWithMap(state) {
+      return function () {
+        return Boolean(state.insideBoundingBox);
+      };
+    };
 
-    const setMapMoveSinceLastRefine = () =>
-      widgetState.internalSetMapMoveSinceLastRefine();
-    const createInternalSetMapMoveSinceLastRefine = (render, args) => () => {
-      const shouldTriggerRender =
-        widgetState.hasMapMoveSinceLastRefine !== true;
+    var toggleRefineOnMapMove = function toggleRefineOnMapMove() {
+      return widgetState.internalToggleRefineOnMapMove();
+    };
+    var createInternalToggleRefinementonMapMove = function createInternalToggleRefinementonMapMove(render, args) {
+      return function () {
+        widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
 
-      widgetState.hasMapMoveSinceLastRefine = true;
-
-      if (shouldTriggerRender) {
         render(args);
-      }
+      };
     };
 
-    const hasMapMoveSinceLastRefine = () =>
-      widgetState.hasMapMoveSinceLastRefine;
-
-    const init = initArgs => {
-      const { state, helper, instantSearchInstance } = initArgs;
-      const isFirstRendering = true;
-
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
-        noop,
-        initArgs
-      );
-
-      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-        noop,
-        initArgs
-      );
-
-      renderFn(
-        {
-          items: [],
-          position: getPositionFromState(state),
-          refine: refine(helper),
-          clearMapRefinement: clearMapRefinement(helper),
-          isRefinedWithMap: isRefinedWithMap(state),
-          toggleRefineOnMapMove,
-          isRefineOnMapMove,
-          setMapMoveSinceLastRefine,
-          hasMapMoveSinceLastRefine,
-          widgetParams,
-          instantSearchInstance,
-        },
-        isFirstRendering
-      );
+    var isRefineOnMapMove = function isRefineOnMapMove() {
+      return widgetState.isRefineOnMapMove;
     };
 
-    const render = renderArgs => {
-      const { results, helper, instantSearchInstance } = renderArgs;
-      const isFirstRendering = false;
+    var setMapMoveSinceLastRefine = function setMapMoveSinceLastRefine() {
+      return widgetState.internalSetMapMoveSinceLastRefine();
+    };
+    var createInternalSetMapMoveSinceLastRefine = function createInternalSetMapMoveSinceLastRefine(render, args) {
+      return function () {
+        var shouldTriggerRender = widgetState.hasMapMoveSinceLastRefine !== true;
+
+        widgetState.hasMapMoveSinceLastRefine = true;
+
+        if (shouldTriggerRender) {
+          render(args);
+        }
+      };
+    };
+
+    var hasMapMoveSinceLastRefine = function hasMapMoveSinceLastRefine() {
+      return widgetState.hasMapMoveSinceLastRefine;
+    };
+
+    var init = function init(initArgs) {
+      var state = initArgs.state,
+          helper = initArgs.helper,
+          instantSearchInstance = initArgs.instantSearchInstance;
+
+      var isFirstRendering = true;
+
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(_noop2.default, initArgs);
+
+      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(_noop2.default, initArgs);
+
+      renderFn({
+        items: [],
+        position: getPositionFromState(state),
+        refine: refine(helper),
+        clearMapRefinement: clearMapRefinement(helper),
+        isRefinedWithMap: isRefinedWithMap(state),
+        toggleRefineOnMapMove: toggleRefineOnMapMove,
+        isRefineOnMapMove: isRefineOnMapMove,
+        setMapMoveSinceLastRefine: setMapMoveSinceLastRefine,
+        hasMapMoveSinceLastRefine: hasMapMoveSinceLastRefine,
+        widgetParams: widgetParams,
+        instantSearchInstance: instantSearchInstance
+      }, isFirstRendering);
+    };
+
+    var render = function render(renderArgs) {
+      var results = renderArgs.results,
+          helper = renderArgs.helper,
+          instantSearchInstance = renderArgs.instantSearchInstance;
+
+      var isFirstRendering = false;
       // We don't use the state provided by the render function because we need
       // to be sure that the state is the latest one for the following condition
-      const state = helper.getState();
+      var state = helper.getState();
 
-      const positionChangedSinceLastRefine =
-        Boolean(state.aroundLatLng) &&
-        Boolean(widgetState.lastRefinePosition) &&
-        state.aroundLatLng !== widgetState.lastRefinePosition;
+      var positionChangedSinceLastRefine = Boolean(state.aroundLatLng) && Boolean(widgetState.lastRefinePosition) && state.aroundLatLng !== widgetState.lastRefinePosition;
 
-      const boundingBoxChangedSinceLastRefine =
-        !state.insideBoundingBox &&
-        Boolean(widgetState.lastRefineBoundingBox) &&
-        state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
+      var boundingBoxChangedSinceLastRefine = !state.insideBoundingBox && Boolean(widgetState.lastRefineBoundingBox) && state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
 
       if (positionChangedSinceLastRefine || boundingBoxChangedSinceLastRefine) {
         widgetState.hasMapMoveSinceLastRefine = false;
@@ -244,52 +238,40 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       widgetState.lastRefinePosition = state.aroundLatLng || '';
       widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
-        render,
-        renderArgs
-      );
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(render, renderArgs);
 
-      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
-        render,
-        renderArgs
-      );
+      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(render, renderArgs);
 
-      renderFn(
-        {
-          items: results.hits.filter(hit => hit._geoloc),
-          position: getPositionFromState(state),
-          refine: refine(helper),
-          clearMapRefinement: clearMapRefinement(helper),
-          isRefinedWithMap: isRefinedWithMap(state),
-          toggleRefineOnMapMove,
-          isRefineOnMapMove,
-          setMapMoveSinceLastRefine,
-          hasMapMoveSinceLastRefine,
-          widgetParams,
-          instantSearchInstance,
-        },
-        isFirstRendering
-      );
+      renderFn({
+        items: results.hits.filter(function (hit) {
+          return hit._geoloc;
+        }),
+        position: getPositionFromState(state),
+        refine: refine(helper),
+        clearMapRefinement: clearMapRefinement(helper),
+        isRefinedWithMap: isRefinedWithMap(state),
+        toggleRefineOnMapMove: toggleRefineOnMapMove,
+        isRefineOnMapMove: isRefineOnMapMove,
+        setMapMoveSinceLastRefine: setMapMoveSinceLastRefine,
+        hasMapMoveSinceLastRefine: hasMapMoveSinceLastRefine,
+        widgetParams: widgetParams,
+        instantSearchInstance: instantSearchInstance
+      }, isFirstRendering);
     };
 
     return {
-      init,
-      render,
+      init: init,
+      render: render,
 
-      getConfiguration(previous) {
-        const configuration = {};
+      getConfiguration: function getConfiguration(previous) {
+        var configuration = {};
 
-        if (
-          enableGeolocationWithIP &&
-          !position &&
-          !previous.aroundLatLng &&
-          previous.aroundLatLngViaIP === undefined
-        ) {
+        if (enableGeolocationWithIP && !position && !previous.aroundLatLng && previous.aroundLatLngViaIP === undefined) {
           configuration.aroundLatLngViaIP = true;
         }
 
         if (position && !previous.aroundLatLng && !previous.aroundLatLngViaIP) {
-          configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
+          configuration.aroundLatLng = position.lat + ', ' + position.lng;
         }
 
         if (radius && !previous.aroundRadius) {
@@ -302,11 +284,12 @@ const connectGeoSearch = (renderFn, unmountFn) => {
 
         return configuration;
       },
+      dispose: function dispose(_ref2) {
+        var state = _ref2.state;
 
-      dispose({ state }) {
         unmountFn();
 
-        let nextState = state;
+        var nextState = state;
 
         if (enableGeolocationWithIP && !position) {
           nextState = state.setQueryParameter('aroundLatLngViaIP');
@@ -325,9 +308,9 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         }
 
         return nextState;
-      },
+      }
     };
   };
 };
 
-export default connectGeoSearch;
+exports.default = connectGeoSearch;

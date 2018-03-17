@@ -1,22 +1,31 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = builder;
+
+var _metalsmith = require('metalsmith');
+
+var _metalsmith2 = _interopRequireDefault(_metalsmith);
+
+var _config = require('./config.js');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /* eslint-disable no-console */
-import metalsmith from 'metalsmith';
-import config from './config.js';
+function builder(_ref, cb) {
+  var _ref$clean = _ref.clean,
+      clean = _ref$clean === undefined ? true : _ref$clean,
+      middlewares = _ref.middlewares;
 
-
-export default function builder({
-  clean = true,
-  middlewares,
-}, cb) {
   console.time('metalsmith build');
   // default source directory is join(__dirname, 'src');
   // https://github.com/metalsmith/metalsmith#sourcepath
-  metalsmith(__dirname)
-    .metadata(config)
-    .clean(clean)
-    .destination(config.docsDist)
-    .use(middlewares)
-    .build(err => {
-      console.timeEnd('metalsmith build');
-      cb(err);
-    });
+  (0, _metalsmith2.default)(__dirname).metadata(_config2.default).clean(clean).destination(_config2.default.docsDist).use(middlewares).build(function (err) {
+    console.timeEnd('metalsmith build');
+    cb(err);
+  });
 }

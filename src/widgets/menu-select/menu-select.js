@@ -1,65 +1,73 @@
-import React, { render } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import connectMenu from '../../connectors/menu/connectMenu';
-import defaultTemplates from './defaultTemplates';
-import MenuSelect from '../../components/MenuSelect';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = menuSelect;
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-menu-select');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  autoHideContainer,
-  renderState,
-  templates,
-  transformData,
-}) => (
-  { refine, items, canRefine, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  render(
-    <MenuSelect
-      cssClasses={cssClasses}
-      items={items}
-      refine={refine}
-      templateProps={renderState.templateProps}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      canRefine={canRefine}
-    />,
-    containerNode
-  );
+var _connectMenu = require('../../connectors/menu/connectMenu');
+
+var _connectMenu2 = _interopRequireDefault(_connectMenu);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _MenuSelect = require('../../components/MenuSelect');
+
+var _MenuSelect2 = _interopRequireDefault(_MenuSelect);
+
+var _utils = require('../../lib/utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-menu-select');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      autoHideContainer = _ref.autoHideContainer,
+      renderState = _ref.renderState,
+      templates = _ref.templates,
+      transformData = _ref.transformData;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        items = _ref2.items,
+        canRefine = _ref2.canRefine,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && !canRefine;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_MenuSelect2.default, {
+      cssClasses: cssClasses,
+      items: items,
+      refine: refine,
+      templateProps: renderState.templateProps,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      canRefine: canRefine
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-menuSelect({
-  container,
-  attributeName,
-  [ sortBy=['name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root,select,option,header,footer} ]
-  [ templates.{header,item,footer,seeAllOption} ],
-  [ transformData.{item} ],
-  [ autoHideContainer ]
-})`;
+var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,select,option,header,footer} ]\n  [ templates.{header,item,footer,seeAllOption} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ]\n})';
 
 /**
  * @typedef {Object} MenuSelectCSSClasses
@@ -115,41 +123,46 @@ menuSelect({
  *   })
  * );
  */
-export default function menuSelect({
-  container,
-  attributeName,
-  sortBy = ['name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true,
-}) {
+function menuSelect(_ref3) {
+  var container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      _ref3$sortBy = _ref3.sortBy,
+      sortBy = _ref3$sortBy === undefined ? ['name:asc'] : _ref3$sortBy,
+      _ref3$limit = _ref3.limit,
+      limit = _ref3$limit === undefined ? 10 : _ref3$limit,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      transformData = _ref3.transformData,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain;
+
   if (!container || !attributeName) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    select: cx(bem('select'), userCssClasses.select),
-    option: cx(bem('option'), userCssClasses.option),
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    select: (0, _classnames2.default)(bem('select'), userCssClasses.select),
+    option: (0, _classnames2.default)(bem('option'), userCssClasses.option)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    autoHideContainer: autoHideContainer,
     renderState: {},
-    templates,
-    transformData,
+    templates: templates,
+    transformData: transformData
   });
 
   try {
-    const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({ attributeName, limit, sortBy });
+    var makeWidget = (0, _connectMenu2.default)(specializedRenderer);
+    return makeWidget({ attributeName: attributeName, limit: limit, sortBy: sortBy });
   } catch (e) {
     throw new Error(usage);
   }

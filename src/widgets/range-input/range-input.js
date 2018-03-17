@@ -1,79 +1,97 @@
-import React, { render } from 'preact-compat';
-import cx from 'classnames';
-import RangeInput from '../../components/RangeInput/RangeInput.js';
-import connectRange from '../../connectors/range/connectRange.js';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
+'use strict';
 
-const bem = bemHelper('ais-range-input');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const renderer = ({
-  containerNode,
-  templates,
-  cssClasses,
-  labels,
-  autoHideContainer,
-  collapsible,
-  renderState,
-}) => (
-  { refine, range, start, widgetParams, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-    return;
-  }
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-  const { min: rangeMin, max: rangeMax } = range;
-  const [minValue, maxValue] = start;
+exports.default = rangeInput;
 
-  const step = 1 / Math.pow(10, widgetParams.precision);
-  const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
+var _preactCompat = require('preact-compat');
 
-  const values = {
-    min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
-    max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _RangeInput = require('../../components/RangeInput/RangeInput.js');
+
+var _RangeInput2 = _interopRequireDefault(_RangeInput);
+
+var _connectRange = require('../../connectors/range/connectRange.js');
+
+var _connectRange2 = _interopRequireDefault(_connectRange);
+
+var _utils = require('../../lib/utils.js');
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-range-input');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      templates = _ref.templates,
+      cssClasses = _ref.cssClasses,
+      labels = _ref.labels,
+      autoHideContainer = _ref.autoHideContainer,
+      collapsible = _ref.collapsible,
+      renderState = _ref.renderState;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        range = _ref2.range,
+        start = _ref2.start,
+        widgetParams = _ref2.widgetParams,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+
+      return;
+    }
+
+    var rangeMin = range.min,
+        rangeMax = range.max;
+
+    var _start = _slicedToArray(start, 2),
+        minValue = _start[0],
+        maxValue = _start[1];
+
+    var step = 1 / Math.pow(10, widgetParams.precision);
+    var shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
+
+    var values = {
+      min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
+      max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined
+    };
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RangeInput2.default, {
+      min: rangeMin,
+      max: rangeMax,
+      step: step,
+      values: values,
+      cssClasses: cssClasses,
+      labels: labels,
+      refine: refine,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      collapsible: collapsible,
+      templateProps: renderState.templateProps
+    }), containerNode);
   };
-
-  render(
-    <RangeInput
-      min={rangeMin}
-      max={rangeMax}
-      step={step}
-      values={values}
-      cssClasses={cssClasses}
-      labels={labels}
-      refine={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      collapsible={collapsible}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
 };
 
-const usage = `Usage:
-rangeInput({
-  container,
-  attributeName,
-  [ min ],
-  [ max ],
-  [ precision = 0 ],
-  [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],
-  [ templates.{header, footer} ],
-  [ labels.{separator, button} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
+var usage = 'Usage:\nrangeInput({\n  container,\n  attributeName,\n  [ min ],\n  [ max ],\n  [ precision = 0 ],\n  [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],\n  [ templates.{header, footer} ],\n  [ labels.{separator, button} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
 
 /**
  * @typedef {Object} RangeInputClasses
@@ -146,63 +164,69 @@ rangeInput({
  *   })
  * );
  */
-export default function rangeInput({
-  container,
-  attributeName,
-  min,
-  max,
-  precision = 0,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  labels: userLabels = {},
-  autoHideContainer = true,
-  collapsible = false,
-} = {}) {
+function rangeInput() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      min = _ref3.min,
+      max = _ref3.max,
+      _ref3$precision = _ref3.precision,
+      precision = _ref3$precision === undefined ? 0 : _ref3$precision,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      _ref3$labels = _ref3.labels,
+      userLabels = _ref3$labels === undefined ? {} : _ref3$labels,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const labels = {
+  var labels = _extends({
     separator: 'to',
-    submit: 'Go',
-    ...userLabels,
+    submit: 'Go'
+  }, userLabels);
+
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    form: (0, _classnames2.default)(bem('form'), userCssClasses.form),
+    fieldset: (0, _classnames2.default)(bem('fieldset'), userCssClasses.fieldset),
+    labelMin: (0, _classnames2.default)(bem('labelMin'), userCssClasses.labelMin),
+    inputMin: (0, _classnames2.default)(bem('inputMin'), userCssClasses.inputMin),
+    separator: (0, _classnames2.default)(bem('separator'), userCssClasses.separator),
+    labelMax: (0, _classnames2.default)(bem('labelMax'), userCssClasses.labelMax),
+    inputMax: (0, _classnames2.default)(bem('inputMax'), userCssClasses.inputMax),
+    submit: (0, _classnames2.default)(bem('submit'), userCssClasses.submit),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer)
   };
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    form: cx(bem('form'), userCssClasses.form),
-    fieldset: cx(bem('fieldset'), userCssClasses.fieldset),
-    labelMin: cx(bem('labelMin'), userCssClasses.labelMin),
-    inputMin: cx(bem('inputMin'), userCssClasses.inputMin),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    labelMax: cx(bem('labelMax'), userCssClasses.labelMax),
-    inputMax: cx(bem('inputMax'), userCssClasses.inputMax),
-    submit: cx(bem('submit'), userCssClasses.submit),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
-
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    templates,
-    labels,
-    autoHideContainer,
-    collapsible,
-    renderState: {},
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    templates: templates,
+    labels: labels,
+    autoHideContainer: autoHideContainer,
+    collapsible: collapsible,
+    renderState: {}
   });
 
   try {
-    const makeWidget = connectRange(specializedRenderer);
+    var makeWidget = (0, _connectRange2.default)(specializedRenderer);
 
     return makeWidget({
-      attributeName,
-      min,
-      max,
-      precision,
+      attributeName: attributeName,
+      min: min,
+      max: max,
+      precision: precision
     });
   } catch (e) {
     throw new Error(usage);

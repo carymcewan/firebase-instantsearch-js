@@ -1,55 +1,68 @@
-import expect from 'expect';
-import sinon from 'sinon';
-import hits from '../hits.js';
-import defaultTemplates from '../defaultTemplates.js';
+'use strict';
 
-describe('hits call', () => {
-  it('throws an exception when no container', () => {
-    expect(hits).toThrow();
+var _expect = require('expect');
+
+var _expect2 = _interopRequireDefault(_expect);
+
+var _sinon = require('sinon');
+
+var _sinon2 = _interopRequireDefault(_sinon);
+
+var _hits = require('../hits.js');
+
+var _hits2 = _interopRequireDefault(_hits);
+
+var _defaultTemplates = require('../defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('hits call', function () {
+  it('throws an exception when no container', function () {
+    (0, _expect2.default)(_hits2.default).toThrow();
   });
 });
 
-describe('hits()', () => {
-  let ReactDOM;
-  let container;
-  let templateProps;
-  let widget;
-  let results;
+describe('hits()', function () {
+  var ReactDOM = void 0;
+  var container = void 0;
+  var templateProps = void 0;
+  var widget = void 0;
+  var results = void 0;
 
-  beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
-    hits.__Rewire__('render', ReactDOM.render);
+  beforeEach(function () {
+    ReactDOM = { render: _sinon2.default.spy() };
+    _hits2.default.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     templateProps = {
       transformData: undefined,
       templatesConfig: undefined,
-      templates: defaultTemplates,
-      useCustomCompileOptions: { item: false, empty: false },
+      templates: _defaultTemplates2.default,
+      useCustomCompileOptions: { item: false, empty: false }
     };
-    widget = hits({ container, cssClasses: { root: ['root', 'cx'] } });
-    widget.init({ instantSearchInstance: { templateProps } });
+    widget = (0, _hits2.default)({ container: container, cssClasses: { root: ['root', 'cx'] } });
+    widget.init({ instantSearchInstance: { templateProps: templateProps } });
     results = { hits: [{ first: 'hit', second: 'hit' }] };
   });
 
-  it('calls twice ReactDOM.render(<Hits props />, container)', () => {
-    widget.render({ results });
-    widget.render({ results });
+  it('calls twice ReactDOM.render(<Hits props />, container)', function () {
+    widget.render({ results: results });
+    widget.render({ results: results });
 
-    expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    (0, _expect2.default)(ReactDOM.render.callCount).toBe(2);
+    (0, _expect2.default)(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    (0, _expect2.default)(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    (0, _expect2.default)(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+    (0, _expect2.default)(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  it('does not accept both item and allItems templates', () => {
-    expect(
-      hits.bind({ container, templates: { item: '', allItems: '' } })
-    ).toThrow();
+  it('does not accept both item and allItems templates', function () {
+    (0, _expect2.default)(_hits2.default.bind({ container: container, templates: { item: '', allItems: '' } })).toThrow();
   });
 
-  afterEach(() => {
-    hits.__ResetDependency__('render');
+  afterEach(function () {
+    _hits2.default.__ResetDependency__('render');
   });
 });

@@ -1,38 +1,55 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Selector from '../../components/Selector.js';
-import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = numericSelector;
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-numeric-selector');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
-  { currentRefinement, refine, hasNoResults, options },
-  isFirstRendering
-) => {
-  if (isFirstRendering) return;
+var _classnames = require('classnames');
 
-  render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentRefinement}
-      options={options}
-      setValue={refine}
-      shouldAutoHideContainer={autoHideContainer && hasNoResults}
-    />,
-    containerNode
-  );
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectNumericSelector = require('../../connectors/numeric-selector/connectNumericSelector.js');
+
+var _connectNumericSelector2 = _interopRequireDefault(_connectNumericSelector);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-numeric-selector');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      autoHideContainer = _ref.autoHideContainer,
+      cssClasses = _ref.cssClasses;
+  return function (_ref2, isFirstRendering) {
+    var currentRefinement = _ref2.currentRefinement,
+        refine = _ref2.refine,
+        hasNoResults = _ref2.hasNoResults,
+        options = _ref2.options;
+
+    if (isFirstRendering) return;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
+      cssClasses: cssClasses,
+      currentValue: currentRefinement,
+      options: options,
+      setValue: refine,
+      shouldAutoHideContainer: autoHideContainer && hasNoResults
+    }), containerNode);
+  };
 };
 
-const usage = `Usage: numericSelector({
-  container,
-  attributeName,
-  options,
-  cssClasses.{root,select,item},
-  autoHideContainer
-})`;
+var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options,\n  cssClasses.{root,select,item},\n  autoHideContainer\n})';
 
 /**
  * @typedef {Object} NumericOption
@@ -89,39 +106,41 @@ const usage = `Usage: numericSelector({
  *   })
  * );
  */
-export default function numericSelector({
-  container,
-  operator = '=',
-  attributeName,
-  options,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-}) {
-  const containerNode = getContainerNode(container);
+function numericSelector(_ref3) {
+  var container = _ref3.container,
+      _ref3$operator = _ref3.operator,
+      operator = _ref3$operator === undefined ? '=' : _ref3$operator,
+      attributeName = _ref3.attributeName,
+      options = _ref3.options,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain;
+
+  var containerNode = (0, _utils.getContainerNode)(container);
   if (!container || !options || options.length === 0 || !attributeName) {
     throw new Error(usage);
   }
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
-  const specializedRenderer = renderer({
-    autoHideContainer,
-    containerNode,
-    cssClasses,
+  var specializedRenderer = renderer({
+    autoHideContainer: autoHideContainer,
+    containerNode: containerNode,
+    cssClasses: cssClasses
   });
 
   try {
-    const makeNumericSelector = connectNumericSelector(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
-    );
-    return makeNumericSelector({ operator, attributeName, options });
+    var makeNumericSelector = (0, _connectNumericSelector2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeNumericSelector({ operator: operator, attributeName: attributeName, options: options });
   } catch (e) {
     throw new Error(usage);
   }

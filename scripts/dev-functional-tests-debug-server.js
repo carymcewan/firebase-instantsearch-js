@@ -1,16 +1,22 @@
+'use strict';
+
+var _testServer = require('../functional-tests/testServer.js');
+
+var _testServer2 = _interopRequireDefault(_testServer);
+
+var _devFunctionalTestsCompileWatch = require('./dev-functional-tests-compile-watch.js');
+
+var _devFunctionalTestsCompileWatch2 = _interopRequireDefault(_devFunctionalTestsCompileWatch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /* eslint-disable no-console */
-import testServer from '../functional-tests/testServer.js';
-import watch from './dev-functional-tests-compile-watch.js';
+(0, _devFunctionalTestsCompileWatch2.default)(function () {});
 
-watch(() => {});
-
-testServer
-  .start()
-  .then(serverInstance =>
-    console.log(`http://localhost:${serverInstance.address().port}`)
-  )
-  .catch(e =>
-    setTimeout(() => {
-      throw e;
-    }, 0)
-  );
+_testServer2.default.start().then(function (serverInstance) {
+  return console.log('http://localhost:' + serverInstance.address().port);
+}).catch(function (e) {
+  return setTimeout(function () {
+    throw e;
+  }, 0);
+});

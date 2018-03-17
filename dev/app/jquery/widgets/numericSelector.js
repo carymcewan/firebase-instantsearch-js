@@ -1,34 +1,36 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+'use strict';
 
-const renderFn = (
-  { currentRefinement, options, refine, widgetParams: { containerNode } },
-  isFirstRendering
-) => {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _index = require('../../../../index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var renderFn = function renderFn(_ref, isFirstRendering) {
+  var currentRefinement = _ref.currentRefinement,
+      options = _ref.options,
+      refine = _ref.refine,
+      containerNode = _ref.widgetParams.containerNode;
+
   if (isFirstRendering) {
-    const markup = '<select></select>';
+    var markup = '<select></select>';
     containerNode.append(markup);
   }
 
-  const optionsHTML = options.map(
-    ({ value, label }) => `
-    <option
-      value="${value}"
-      ${currentRefinement === value ? 'selected' : ''}
-    >
-      ${label}
-    </option>
-  `
-  );
+  var optionsHTML = options.map(function (_ref2) {
+    var value = _ref2.value,
+        label = _ref2.label;
+    return '\n    <option\n      value="' + value + '"\n      ' + (currentRefinement === value ? 'selected' : '') + '\n    >\n      ' + label + '\n    </option>\n  ';
+  });
 
   containerNode.find('select').html(optionsHTML);
 
-  containerNode
-    .find('select')
-    .off('change')
-    .on('change', e => {
-      refine(e.target.value);
-    });
-};
-
-export default instantsearch.connectors.connectNumericSelector(renderFn);
+  containerNode.find('select').off('change').on('change', function (e) {
+    refine(e.target.value);
+  });
+}; /* eslint-disable import/default */
+exports.default = _index2.default.connectors.connectNumericSelector(renderFn);

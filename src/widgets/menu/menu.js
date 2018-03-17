@@ -1,89 +1,96 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import defaultTemplates from './defaultTemplates.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import connectMenu from '../../connectors/menu/connectMenu.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-  prefixKeys,
-} from '../../lib/utils.js';
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-const bem = bemHelper('ais-menu');
+exports.default = menu;
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  autoHideContainer,
-  renderState,
-  templates,
-  transformData,
-  showMoreConfig,
-}) => (
-  {
-    refine,
-    items,
-    createURL,
-    canRefine,
-    instantSearchInstance,
-    isShowingMore,
-    toggleShowMore,
-    canToggleShowMore,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _getShowMoreConfig = require('../../lib/show-more/getShowMoreConfig.js');
+
+var _getShowMoreConfig2 = _interopRequireDefault(_getShowMoreConfig);
+
+var _connectMenu = require('../../connectors/menu/connectMenu.js');
+
+var _connectMenu2 = _interopRequireDefault(_connectMenu);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-menu');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      collapsible = _ref.collapsible,
+      autoHideContainer = _ref.autoHideContainer,
+      renderState = _ref.renderState,
+      templates = _ref.templates,
+      transformData = _ref.transformData,
+      showMoreConfig = _ref.showMoreConfig;
+  return function (_ref2, isFirstRendering) {
+    var refine = _ref2.refine,
+        items = _ref2.items,
+        createURL = _ref2.createURL,
+        canRefine = _ref2.canRefine,
+        instantSearchInstance = _ref2.instantSearchInstance,
+        isShowingMore = _ref2.isShowingMore,
+        toggleShowMore = _ref2.toggleShowMore,
+        canToggleShowMore = _ref2.canToggleShowMore;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var facetValues = items.map(function (facetValue) {
+      return _extends({}, facetValue, {
+        url: createURL(facetValue.name)
+      });
     });
-    return;
-  }
+    var shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  const facetValues = items.map(facetValue => ({
-    ...facetValue,
-    url: createURL(facetValue.name),
-  }));
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
-
-  render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showMore={showMoreConfig !== null}
-      templateProps={renderState.templateProps}
-      toggleRefinement={refine}
-      toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      canToggleShowMore={canToggleShowMore}
-    />,
-    containerNode
-  );
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
+      collapsible: collapsible,
+      createURL: createURL,
+      cssClasses: cssClasses,
+      facetValues: facetValues,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      showMore: showMoreConfig !== null,
+      templateProps: renderState.templateProps,
+      toggleRefinement: refine,
+      toggleShowMore: toggleShowMore,
+      isShowingMore: isShowingMore,
+      canToggleShowMore: canToggleShowMore
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-menu({
-  container,
-  attributeName,
-  [ sortBy=['name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root,list,item} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ]
-})`;
+var usage = 'Usage:\nmenu({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,list,item} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ]\n})';
 
 /**
  * @typedef {Object} MenuCSSClasses
@@ -164,64 +171,68 @@ menu({
  *   })
  * );
  */
-export default function menu({
-  container,
-  attributeName,
-  sortBy = ['name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-  showMore = false,
-}) {
+function menu(_ref3) {
+  var container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      _ref3$sortBy = _ref3.sortBy,
+      sortBy = _ref3$sortBy === undefined ? ['name:asc'] : _ref3$sortBy,
+      _ref3$limit = _ref3.limit,
+      limit = _ref3$limit === undefined ? 10 : _ref3$limit,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      transformData = _ref3.transformData,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$showMore = _ref3.showMore,
+      showMore = _ref3$showMore === undefined ? false : _ref3$showMore;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const showMoreConfig = getShowMoreConfig(showMore);
+  var showMoreConfig = (0, _getShowMoreConfig2.default)(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || undefined;
-  const showMoreTemplates =
-    showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
-  const allTemplates = showMoreTemplates
-    ? { ...templates, ...showMoreTemplates }
-    : templates;
+  var showMoreLimit = showMoreConfig && showMoreConfig.limit || undefined;
+  var showMoreTemplates = showMoreConfig && (0, _utils.prefixKeys)('show-more-', showMoreConfig.templates);
+  var allTemplates = showMoreTemplates ? _extends({}, templates, showMoreTemplates) : templates;
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    collapsible,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    collapsible: collapsible,
+    autoHideContainer: autoHideContainer,
     renderState: {},
     templates: allTemplates,
-    transformData,
-    showMoreConfig,
+    transformData: transformData,
+    showMoreConfig: showMoreConfig
   });
 
   try {
-    const makeWidget = connectMenu(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
+    var makeWidget = (0, _connectMenu2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ attributeName: attributeName, limit: limit, sortBy: sortBy, showMoreLimit: showMoreLimit });
   } catch (e) {
     throw new Error(usage);
   }

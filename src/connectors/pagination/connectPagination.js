@@ -1,26 +1,19 @@
-import { checkRendering } from '../../lib/utils.js';
-import Paginator from './Paginator';
+'use strict';
 
-const usage = `Usage:
-var customPagination = connectPagination(function render(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   currentRefinement,
-  //   nbHits,
-  //   nbPages,
-  //   pages,
-  //   refine,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customPagination({
-    [ maxPages ]
-    [ padding ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html
-`;
+exports.default = connectPagination;
+
+var _utils = require('../../lib/utils.js');
+
+var _Paginator = require('./Paginator');
+
+var _Paginator2 = _interopRequireDefault(_Paginator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customPagination = connectPagination(function render(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   currentRefinement,\n  //   nbHits,\n  //   nbPages,\n  //   pages,\n  //   refine,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPagination({\n    [ maxPages ]\n    [ padding ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html\n';
 
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
@@ -97,73 +90,82 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectPagination(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectPagination(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { maxPages, padding = 3 } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var maxPages = widgetParams.maxPages,
+        _widgetParams$padding = widgetParams.padding,
+        padding = _widgetParams$padding === undefined ? 3 : _widgetParams$padding;
 
-    const pager = new Paginator({
+
+    var pager = new _Paginator2.default({
       currentPage: 0,
       total: 0,
-      padding,
+      padding: padding
     });
 
     return {
-      init({ helper, createURL, instantSearchInstance }) {
-        this.refine = page => {
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            createURL = _ref.createURL,
+            instantSearchInstance = _ref.instantSearchInstance;
+
+        this.refine = function (page) {
           helper.setPage(page);
           helper.search();
         };
 
-        this.createURL = state => page => createURL(state.setPage(page));
+        this.createURL = function (state) {
+          return function (page) {
+            return createURL(state.setPage(page));
+          };
+        };
 
-        renderFn(
-          {
-            createURL: this.createURL(helper.state),
-            currentRefinement: helper.getPage() || 0,
-            nbHits: 0,
-            nbPages: 0,
-            pages: [],
-            isFirstPage: true,
-            isLastPage: true,
-            refine: this.refine,
-            widgetParams,
-            instantSearchInstance,
-          },
-          true
-        );
+        renderFn({
+          createURL: this.createURL(helper.state),
+          currentRefinement: helper.getPage() || 0,
+          nbHits: 0,
+          nbPages: 0,
+          pages: [],
+          isFirstPage: true,
+          isLastPage: true,
+          refine: this.refine,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, true);
       },
+      getMaxPage: function getMaxPage(_ref2) {
+        var nbPages = _ref2.nbPages;
 
-      getMaxPage({ nbPages }) {
         return maxPages !== undefined ? Math.min(maxPages, nbPages) : nbPages;
       },
+      render: function render(_ref3) {
+        var results = _ref3.results,
+            state = _ref3.state,
+            instantSearchInstance = _ref3.instantSearchInstance;
 
-      render({ results, state, instantSearchInstance }) {
-        const nbPages = this.getMaxPage(results);
+        var nbPages = this.getMaxPage(results);
         pager.currentPage = state.page;
         pager.total = nbPages;
 
-        renderFn(
-          {
-            createURL: this.createURL(state),
-            currentRefinement: state.page,
-            refine: this.refine,
-            nbHits: results.nbHits,
-            nbPages,
-            pages: pager.pages(),
-            isFirstPage: pager.isFirstPage(),
-            isLastPage: pager.isLastPage(),
-            widgetParams,
-            instantSearchInstance,
-          },
-          false
-        );
+        renderFn({
+          createURL: this.createURL(state),
+          currentRefinement: state.page,
+          refine: this.refine,
+          nbHits: results.nbHits,
+          nbPages: nbPages,
+          pages: pager.pages(),
+          isFirstPage: pager.isFirstPage(),
+          isLastPage: pager.isLastPage(),
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, false);
       },
-
-      dispose() {
+      dispose: function dispose() {
         unmountFn();
-      },
+      }
     };
   };
 }

@@ -1,25 +1,46 @@
-// extracted from https://github.com/treygriffith/metalsmith-assets
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // extracted from https://github.com/treygriffith/metalsmith-assets
 // converted to es6 (http://lebab.io/try-it)
 // tweaked to add `stats` to the file object
 
-import fs from 'fs';
-import path from 'path';
-import readdir from 'recursive-readdir';
-import mode from 'stat-mode';
-import {each} from 'async';
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _recursiveReaddir = require('recursive-readdir');
+
+var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
+
+var _statMode = require('stat-mode');
+
+var _statMode2 = _interopRequireDefault(_statMode);
+
+var _async = require('async');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Expose `assets`.
  */
 
-export default assets;
+exports.default = assets;
 
 /**
  * Default plugin options
  */
-const defaults = {
+
+var defaults = {
   source: './public',
-  destination: '.',
+  destination: '.'
 };
 
 /**
@@ -30,46 +51,47 @@ const defaults = {
  *   @property {String} destination Path to copy static assets to (relative to destination directory). Defaults to '.'
  * @return {function} a Metalsmith plugin
  */
-function assets(userOptions = {}) {
-  const options = {
-    ...defaults,
-    ...userOptions,
-  };
+function assets() {
+  var userOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  return (files, metalsmith, cb) => {
-    const src = metalsmith.path(options.source);
-    const dest = options.destination;
+  var options = _extends({}, defaults, userOptions);
+
+  return function (files, metalsmith, cb) {
+    var src = metalsmith.path(options.source);
+    var dest = options.destination;
 
     // copied almost line for line from https://github.com/segmentio/metalsmith/blob/master/lib/index.js
-    readdir(src, (readDirError, arr) => {
+    (0, _recursiveReaddir2.default)(src, function (readDirError, arr) {
       if (readDirError) {
         cb(readDirError);
         return;
       }
 
-      each(arr, read, err => cb(err, files));
+      (0, _async.each)(arr, read, function (err) {
+        return cb(err, files);
+      });
     });
 
     function read(file, done) {
-      const name = path.join(dest, path.relative(src, file));
-      fs.stat(file, (statError, stats) => {
+      var name = _path2.default.join(dest, _path2.default.relative(src, file));
+      _fs2.default.stat(file, function (statError, stats) {
         if (statError) {
           done(statError);
           return;
         }
 
-        fs.readFile(file, (err, buffer) => {
+        _fs2.default.readFile(file, function (err, buffer) {
           if (err) {
             done(err);
             return;
           }
 
-          const newFile = {};
+          var newFile = {};
 
           newFile.contents = buffer;
           newFile.stats = stats;
 
-          newFile.mode = mode(stats).toOctal();
+          newFile.mode = (0, _statMode2.default)(stats).toOctal();
           files[name] = newFile;
           done();
         });

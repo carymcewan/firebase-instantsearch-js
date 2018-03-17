@@ -1,12 +1,17 @@
-import isPlainObject from 'lodash/isPlainObject';
-const usage = `Usage:
-search.addWidget(
-  instantsearch.widgets.configure({
-    // any searchParameter
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/configure.html
-`;
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = configure;
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nsearch.addWidget(\n  instantsearch.widgets.configure({\n    // any searchParameter\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/configure.html\n';
 
 /**
  * The **configure** widget is a headless widget that let you configure the
@@ -29,23 +34,27 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function configure(searchParameters = {}) {
-  if (!isPlainObject(searchParameters)) {
+function configure() {
+  var searchParameters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  if (!(0, _isPlainObject2.default)(searchParameters)) {
     throw new Error(usage);
   }
   return {
-    getConfiguration() {
+    getConfiguration: function getConfiguration() {
       return searchParameters;
     },
-    init() {},
-    dispose({ state }) {
-      return state.mutateMe(mutableState => {
+    init: function init() {},
+    dispose: function dispose(_ref) {
+      var state = _ref.state;
+
+      return state.mutateMe(function (mutableState) {
         // widgetParams are assumed 'controlled',
         // so they override whatever other widgets give the state
-        Object.keys(searchParameters).forEach(key => {
+        Object.keys(searchParameters).forEach(function (key) {
           delete mutableState[key];
         });
       });
-    },
+    }
   };
 }

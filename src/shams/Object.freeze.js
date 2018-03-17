@@ -1,3 +1,5 @@
+'use strict';
+
 // https://github.com/es-shims/es5-shim/blob/bf48788c724f255275a801a371c4a3adc304b34c/es5-sham.js#L473
 // Object.freeze is used in various places in our code and is not polyfilled by
 // polyfill.io (because not doable): https://github.com/Financial-Times/polyfill-service/issues/232

@@ -1,69 +1,77 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import defaultTemplates from './defaultTemplates.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectToggle from '../../connectors/toggle/connectToggle.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = toggle;
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-toggle');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  autoHideContainer,
-  renderState,
-  templates,
-  transformData,
-}) => (
-  { value, createURL, refine, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  const shouldAutoHideContainer =
-    autoHideContainer && (value.count === 0 || value.count === null);
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={[value]}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={renderState.templateProps}
-      toggleRefinement={(name, isRefined) => refine({ isRefined })}
-    />,
-    containerNode
-  );
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _connectToggle = require('../../connectors/toggle/connectToggle.js');
+
+var _connectToggle2 = _interopRequireDefault(_connectToggle);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-toggle');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      collapsible = _ref.collapsible,
+      autoHideContainer = _ref.autoHideContainer,
+      renderState = _ref.renderState,
+      templates = _ref.templates,
+      transformData = _ref.transformData;
+  return function (_ref2, isFirstRendering) {
+    var value = _ref2.value,
+        createURL = _ref2.createURL,
+        refine = _ref2.refine,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
+      collapsible: collapsible,
+      createURL: createURL,
+      cssClasses: cssClasses,
+      facetValues: [value],
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      templateProps: renderState.templateProps,
+      toggleRefinement: function toggleRefinement(name, isRefined) {
+        return refine({ isRefined: isRefined });
+      }
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-toggle({
-  container,
-  attributeName,
-  label,
-  [ values={on: true, off: undefined} ],
-  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
+var usage = 'Usage:\ntoggle({\n  container,\n  attributeName,\n  label,\n  [ values={on: true, off: undefined} ],\n  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
 
 /**
  * @typedef {Object} ToggleWidgetCSSClasses
@@ -155,51 +163,57 @@ toggle({
  *   })
  * );
  */
-export default function toggle({
-  container,
-  attributeName,
-  label,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true,
-  collapsible = false,
-  values: userValues = { on: true, off: undefined },
-} = {}) {
+function toggle() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      attributeName = _ref3.attributeName,
+      label = _ref3.label,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      transformData = _ref3.transformData,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      _ref3$values = _ref3.values,
+      userValues = _ref3$values === undefined ? { on: true, off: undefined } : _ref3$values;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    label: cx(bem('label'), userCssClasses.label),
-    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    checkbox: (0, _classnames2.default)(bem('checkbox'), userCssClasses.checkbox),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    collapsible,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    collapsible: collapsible,
+    autoHideContainer: autoHideContainer,
     renderState: {},
-    templates,
-    transformData,
+    templates: templates,
+    transformData: transformData
   });
 
   try {
-    const makeWidget = connectToggle(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attributeName, label, values: userValues });
+    var makeWidget = (0, _connectToggle2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeWidget({ attributeName: attributeName, label: label, values: userValues });
   } catch (e) {
     throw new Error(usage);
   }

@@ -1,37 +1,44 @@
-import cx from 'classnames';
-import noop from 'lodash/noop';
-import { bemHelper, renderTemplate } from '../../lib/utils';
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import renderer from './GeoSearchRenderer';
-import defaultTemplates from './defaultTemplates';
-import createHTMLMarker from './createHTMLMarker';
+'use strict';
 
-const bem = bemHelper('ais-geo-search');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const usage = `Usage:
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-geoSearch({
-  container,
-  googleReference,
-  [ initialZoom = 1 ],
-  [ initialPosition = { lat: 0, lng: 0 } ],
-  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
-  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],
-  [ templates.{clear,toggle,redo} ],
-  [ mapOptions ],
-  [ builtInMarker ],
-  [ customHTMLMarker = false ],
-  [ enableClearMapRefinement = true ],
-  [ enableRefineControl = true ],
-  [ enableRefineOnMapMove = true ],
-  [ enableGeolocationWithIP = true ],
-  [ position ],
-  [ radius ],
-  [ precision ],
-})
+var _classnames = require('classnames');
 
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
-`;
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _noop = require('lodash/noop');
+
+var _noop2 = _interopRequireDefault(_noop);
+
+var _utils = require('../../lib/utils');
+
+var _connectGeoSearch = require('../../connectors/geo-search/connectGeoSearch');
+
+var _connectGeoSearch2 = _interopRequireDefault(_connectGeoSearch);
+
+var _GeoSearchRenderer = require('./GeoSearchRenderer');
+
+var _GeoSearchRenderer2 = _interopRequireDefault(_GeoSearchRenderer);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _createHTMLMarker = require('./createHTMLMarker');
+
+var _createHTMLMarker2 = _interopRequireDefault(_createHTMLMarker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var bem = (0, _utils.bemHelper)('ais-geo-search');
+
+var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initialZoom = 1 ],\n  [ initialPosition = { lat: 0, lng: 0 } ],\n  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],\n  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],\n  [ templates.{clear,toggle,redo} ],\n  [ mapOptions ],\n  [ builtInMarker ],\n  [ customHTMLMarker = false ],\n  [ enableClearMapRefinement = true ],\n  [ enableRefineControl = true ],\n  [ enableRefineOnMapMove = true ],\n  [ enableGeolocationWithIP = true ],\n  [ position ],\n  [ radius ],\n  [ precision ],\n})\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html\n';
 
 /**
  * @typedef {object} HTMLMarkerOptions
@@ -133,134 +140,129 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-const geoSearch = ({
-  initialZoom = 1,
-  initialPosition = { lat: 0, lng: 0 },
-  templates: userTemplates = {},
-  cssClasses: userCssClasses = {},
-  paddingBoundingBox: userPaddingBoundingBox = {},
-  builtInMarker: userBuiltInMarker = {},
-  customHTMLMarker: userCustomHTMLMarker = false,
-  enableClearMapRefinement = true,
-  enableRefineControl = true,
-  container,
-  googleReference,
-  ...widgetParams
-} = {}) => {
-  const defaultBuiltInMarker = {
-    createOptions: noop,
-    events: {},
+var geoSearch = function geoSearch() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var _ref$initialZoom = _ref.initialZoom,
+      initialZoom = _ref$initialZoom === undefined ? 1 : _ref$initialZoom,
+      _ref$initialPosition = _ref.initialPosition,
+      initialPosition = _ref$initialPosition === undefined ? { lat: 0, lng: 0 } : _ref$initialPosition,
+      _ref$templates = _ref.templates,
+      userTemplates = _ref$templates === undefined ? {} : _ref$templates,
+      _ref$cssClasses = _ref.cssClasses,
+      userCssClasses = _ref$cssClasses === undefined ? {} : _ref$cssClasses,
+      _ref$paddingBoundingB = _ref.paddingBoundingBox,
+      userPaddingBoundingBox = _ref$paddingBoundingB === undefined ? {} : _ref$paddingBoundingB,
+      _ref$builtInMarker = _ref.builtInMarker,
+      userBuiltInMarker = _ref$builtInMarker === undefined ? {} : _ref$builtInMarker,
+      _ref$customHTMLMarker = _ref.customHTMLMarker,
+      userCustomHTMLMarker = _ref$customHTMLMarker === undefined ? false : _ref$customHTMLMarker,
+      _ref$enableClearMapRe = _ref.enableClearMapRefinement,
+      enableClearMapRefinement = _ref$enableClearMapRe === undefined ? true : _ref$enableClearMapRe,
+      _ref$enableRefineCont = _ref.enableRefineControl,
+      enableRefineControl = _ref$enableRefineCont === undefined ? true : _ref$enableRefineCont,
+      container = _ref.container,
+      googleReference = _ref.googleReference,
+      widgetParams = _objectWithoutProperties(_ref, ['initialZoom', 'initialPosition', 'templates', 'cssClasses', 'paddingBoundingBox', 'builtInMarker', 'customHTMLMarker', 'enableClearMapRefinement', 'enableRefineControl', 'container', 'googleReference']);
+
+  var defaultBuiltInMarker = {
+    createOptions: _noop2.default,
+    events: {}
   };
 
-  const defaultCustomHTMLMarker = {
+  var defaultCustomHTMLMarker = {
     template: '<p>Your custom HTML Marker</p>',
-    createOptions: noop,
-    events: {},
+    createOptions: _noop2.default,
+    events: {}
   };
 
-  const defaultPaddingBoundingBox = {
+  var defaultPaddingBoundingBox = {
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0,
+    left: 0
   };
 
   if (!container) {
-    throw new Error(`Must provide a "container". ${usage}`);
+    throw new Error('Must provide a "container". ' + usage);
   }
 
   if (!googleReference) {
-    throw new Error(`Must provide a "googleReference". ${usage}`);
+    throw new Error('Must provide a "googleReference". ' + usage);
   }
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    map: cx(bem('map'), userCssClasses.map),
-    controls: cx(bem('controls'), userCssClasses.controls),
-    clear: cx(bem('clear'), userCssClasses.clear),
-    control: cx(bem('control'), userCssClasses.control),
-    toggleLabel: cx(bem('toggle-label'), userCssClasses.toggleLabel),
-    toggleLabelActive: cx(
-      bem('toggle-label-active'),
-      userCssClasses.toggleLabelActive
-    ),
-    toggleInput: cx(bem('toggle-input'), userCssClasses.toggleInput),
-    redo: cx(bem('redo'), userCssClasses.redo),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    map: (0, _classnames2.default)(bem('map'), userCssClasses.map),
+    controls: (0, _classnames2.default)(bem('controls'), userCssClasses.controls),
+    clear: (0, _classnames2.default)(bem('clear'), userCssClasses.clear),
+    control: (0, _classnames2.default)(bem('control'), userCssClasses.control),
+    toggleLabel: (0, _classnames2.default)(bem('toggle-label'), userCssClasses.toggleLabel),
+    toggleLabelActive: (0, _classnames2.default)(bem('toggle-label-active'), userCssClasses.toggleLabelActive),
+    toggleInput: (0, _classnames2.default)(bem('toggle-input'), userCssClasses.toggleInput),
+    redo: (0, _classnames2.default)(bem('redo'), userCssClasses.redo)
   };
 
-  const templates = {
-    ...defaultTemplates,
-    ...userTemplates,
+  var templates = _extends({}, _defaultTemplates2.default, userTemplates);
+
+  var builtInMarker = _extends({}, defaultBuiltInMarker, userBuiltInMarker);
+
+  var customHTMLMarker = Boolean(userCustomHTMLMarker) && _extends({}, defaultCustomHTMLMarker, userCustomHTMLMarker);
+
+  var paddingBoundingBox = _extends({}, defaultPaddingBoundingBox, userPaddingBoundingBox);
+
+  var createBuiltInMarker = function createBuiltInMarker(_ref2) {
+    var item = _ref2.item,
+        rest = _objectWithoutProperties(_ref2, ['item']);
+
+    return new googleReference.maps.Marker(_extends({}, builtInMarker.createOptions(item), rest, {
+      __id: item.objectID,
+      position: item._geoloc
+    }));
   };
 
-  const builtInMarker = {
-    ...defaultBuiltInMarker,
-    ...userBuiltInMarker,
-  };
+  var HTMLMarker = (0, _createHTMLMarker2.default)(googleReference);
+  var createCustomHTMLMarker = function createCustomHTMLMarker(_ref3) {
+    var item = _ref3.item,
+        rest = _objectWithoutProperties(_ref3, ['item']);
 
-  const customHTMLMarker = Boolean(userCustomHTMLMarker) && {
-    ...defaultCustomHTMLMarker,
-    ...userCustomHTMLMarker,
-  };
-
-  const paddingBoundingBox = {
-    ...defaultPaddingBoundingBox,
-    ...userPaddingBoundingBox,
-  };
-
-  const createBuiltInMarker = ({ item, ...rest }) =>
-    new googleReference.maps.Marker({
-      ...builtInMarker.createOptions(item),
-      ...rest,
+    return new HTMLMarker(_extends({}, customHTMLMarker.createOptions(item), rest, {
       __id: item.objectID,
       position: item._geoloc,
-    });
-
-  const HTMLMarker = createHTMLMarker(googleReference);
-  const createCustomHTMLMarker = ({ item, ...rest }) =>
-    new HTMLMarker({
-      ...customHTMLMarker.createOptions(item),
-      ...rest,
-      __id: item.objectID,
-      position: item._geoloc,
-      className: cx(bem('marker')),
-      template: renderTemplate({
+      className: (0, _classnames2.default)(bem('marker')),
+      template: (0, _utils.renderTemplate)({
         templateKey: 'template',
         templates: customHTMLMarker,
-        data: item,
-      }),
-    });
+        data: item
+      })
+    }));
+  };
 
-  const createMarker = !customHTMLMarker
-    ? createBuiltInMarker
-    : createCustomHTMLMarker;
+  var createMarker = !customHTMLMarker ? createBuiltInMarker : createCustomHTMLMarker;
 
   // prettier-ignore
-  const markerOptions = !customHTMLMarker
-    ? builtInMarker
-    : customHTMLMarker;
+  var markerOptions = !customHTMLMarker ? builtInMarker : customHTMLMarker;
 
   try {
-    const makeGeoSearch = connectGeoSearch(renderer);
+    var makeGeoSearch = (0, _connectGeoSearch2.default)(_GeoSearchRenderer2.default);
 
-    return makeGeoSearch({
-      ...widgetParams,
+    return makeGeoSearch(_extends({}, widgetParams, {
       renderState: {},
-      container,
-      googleReference,
-      initialZoom,
-      initialPosition,
-      templates,
-      cssClasses,
-      paddingBoundingBox,
-      createMarker,
-      markerOptions,
-      enableClearMapRefinement,
-      enableRefineControl,
-    });
+      container: container,
+      googleReference: googleReference,
+      initialZoom: initialZoom,
+      initialPosition: initialPosition,
+      templates: templates,
+      cssClasses: cssClasses,
+      paddingBoundingBox: paddingBoundingBox,
+      createMarker: createMarker,
+      markerOptions: markerOptions,
+      enableClearMapRefinement: enableClearMapRefinement,
+      enableRefineControl: enableRefineControl
+    }));
   } catch (e) {
-    throw new Error(`See usage. ${usage}`);
+    throw new Error('See usage. ' + usage);
   }
 };
 
-export default geoSearch;
+exports.default = geoSearch;

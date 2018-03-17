@@ -1,7 +1,9 @@
-beforeEach(function() {
+'use strict';
+
+beforeEach(function () {
   this.jsdom = require('jsdom-global')();
 });
 
-afterEach(function() {
+afterEach(function () {
   this.jsdom();
 });

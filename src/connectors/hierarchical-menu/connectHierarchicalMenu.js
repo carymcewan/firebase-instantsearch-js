@@ -1,30 +1,30 @@
-import find from 'lodash/find';
-import isEqual from 'lodash/isEqual';
+'use strict';
 
-import { checkRendering } from '../../lib/utils.js';
-
-const usage = `Usage:
-var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   items,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customHierarchicalMenu({
-    attributes,
-    [ separator = ' > ' ],
-    [ rootPath = null ],
-    [ showParentLevel = true ],
-    [ limit = 10 ],
-    [ sortBy = ['name:asc'] ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html
-`;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = connectHierarchicalMenu;
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+var _isEqual = require('lodash/isEqual');
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html\n';
 
 /**
  * @typedef {Object} HierarchicalMenuItem
@@ -71,18 +71,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
-export default function connectHierarchicalMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectHierarchicalMenu(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {
-      attributes,
-      separator = ' > ',
-      rootPath = null,
-      showParentLevel = true,
-      limit = 10,
-      sortBy = ['name:asc'],
-    } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var attributes = widgetParams.attributes,
+        _widgetParams$separat = widgetParams.separator,
+        separator = _widgetParams$separat === undefined ? ' > ' : _widgetParams$separat,
+        _widgetParams$rootPat = widgetParams.rootPath,
+        rootPath = _widgetParams$rootPat === undefined ? null : _widgetParams$rootPat,
+        _widgetParams$showPar = widgetParams.showParentLevel,
+        showParentLevel = _widgetParams$showPar === undefined ? true : _widgetParams$showPar,
+        _widgetParams$limit = widgetParams.limit,
+        limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
+        _widgetParams$sortBy = widgetParams.sortBy,
+        sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy;
+
 
     if (!attributes || !attributes.length) {
       throw new Error(usage);
@@ -91,118 +96,104 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
     // we need to provide a hierarchicalFacet name for the search state
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
-    const [hierarchicalFacetName] = attributes;
+
+    var _attributes = _slicedToArray(attributes, 1),
+        hierarchicalFacetName = _attributes[0];
 
     return {
-      getConfiguration: currentConfiguration => {
+      getConfiguration: function getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
-          );
-          if (
-            isFacetSet &&
-            !(
-              isEqual(isFacetSet.attributes, attributes) &&
-              isFacetSet.separator === separator
-            )
-          ) {
+          var isFacetSet = (0, _find2.default)(currentConfiguration.hierarchicalFacets, function (_ref) {
+            var name = _ref.name;
+            return name === hierarchicalFacetName;
+          });
+          if (isFacetSet && !((0, _isEqual2.default)(isFacetSet.attributes, attributes) && isFacetSet.separator === separator)) {
             // eslint-disable-next-line no-console
-            console.warn(
-              'using Breadcrumb & HierarchicalMenu on the same facet with different options'
-            );
+            console.warn('using Breadcrumb & HierarchicalMenu on the same facet with different options');
             return {};
           }
         }
 
         return {
-          hierarchicalFacets: [
-            {
-              name: hierarchicalFacetName,
-              attributes,
-              separator,
-              rootPath,
-              showParentLevel,
-            },
-          ],
-          maxValuesPerFacet:
-            currentConfiguration.maxValuesPerFacet !== undefined
-              ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-              : limit,
+          hierarchicalFacets: [{
+            name: hierarchicalFacetName,
+            attributes: attributes,
+            separator: separator,
+            rootPath: rootPath,
+            showParentLevel: showParentLevel
+          }],
+          maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ? Math.max(currentConfiguration.maxValuesPerFacet, limit) : limit
         };
       },
 
-      init({ helper, createURL, instantSearchInstance }) {
-        this._refine = function(facetValue) {
+      init: function init(_ref2) {
+        var helper = _ref2.helper,
+            createURL = _ref2.createURL,
+            instantSearchInstance = _ref2.instantSearchInstance;
+
+        this._refine = function (facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
-          return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
-          );
+          return createURL(helper.state.toggleRefinement(hierarchicalFacetName, facetValue));
         }
 
-        renderFn(
-          {
-            createURL: _createURL,
-            items: [],
-            refine: this._refine,
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        renderFn({
+          createURL: _createURL,
+          items: [],
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, true);
       },
+      _prepareFacetValues: function _prepareFacetValues(facetValues, state) {
+        var _this = this;
 
-      _prepareFacetValues(facetValues, state) {
-        return facetValues
-          .slice(0, limit)
-          .map(({ name: label, path: value, ...subValue }) => {
-            if (Array.isArray(subValue.data)) {
-              subValue.data = this._prepareFacetValues(subValue.data, state);
-            }
-            return { ...subValue, label, value };
-          });
+        return facetValues.slice(0, limit).map(function (_ref3) {
+          var label = _ref3.name,
+              value = _ref3.path,
+              subValue = _objectWithoutProperties(_ref3, ['name', 'path']);
+
+          if (Array.isArray(subValue.data)) {
+            subValue.data = _this._prepareFacetValues(subValue.data, state);
+          }
+          return _extends({}, subValue, { label: label, value: value });
+        });
       },
+      render: function render(_ref4) {
+        var results = _ref4.results,
+            state = _ref4.state,
+            createURL = _ref4.createURL,
+            instantSearchInstance = _ref4.instantSearchInstance;
 
-      render({ results, state, createURL, instantSearchInstance }) {
-        const items = this._prepareFacetValues(
-          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [],
-          state
-        );
+        var items = this._prepareFacetValues(results.getFacetValues(hierarchicalFacetName, { sortBy: sortBy }).data || [], state);
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
-          return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
-          );
+          return createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
         }
 
-        renderFn(
-          {
-            createURL: _createURL,
-            items,
-            refine: this._refine,
-            instantSearchInstance,
-            widgetParams,
-          },
-          false
-        );
+        renderFn({
+          createURL: _createURL,
+          items: items,
+          refine: this._refine,
+          instantSearchInstance: instantSearchInstance,
+          widgetParams: widgetParams
+        }, false);
       },
+      dispose: function dispose(_ref5) {
+        var state = _ref5.state;
 
-      dispose({ state }) {
         // unmount widget from DOM
         unmountFn();
 
         // compute nextState for the search
-        let nextState = state;
+        var nextState = state;
 
         if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
-          nextState = state.removeHierarchicalFacetRefinement(
-            hierarchicalFacetName
-          );
+          nextState = state.removeHierarchicalFacetRefinement(hierarchicalFacetName);
         }
 
         nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
@@ -212,7 +203,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         }
 
         return nextState;
-      },
+      }
     };
   };
 }

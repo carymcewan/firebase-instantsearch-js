@@ -1,43 +1,64 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import find from 'lodash/find';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hitsPerPageSelector;
 
-import Selector from '../../components/Selector.js';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+var _preactCompat = require('preact-compat');
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const bem = bemHelper('ais-hits-per-page-selector');
+var _classnames = require('classnames');
 
-const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
-  { items, refine, hasNoResults },
-  isFirstRendering
-) => {
-  if (isFirstRendering) return;
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  const { value: currentValue } =
-    find(items, ({ isRefined }) => isRefined) || {};
+var _find = require('lodash/find');
 
-  render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentValue}
-      options={items}
-      setValue={refine}
-      shouldAutoHideContainer={autoHideContainer && hasNoResults}
-    />,
-    containerNode
-  );
+var _find2 = _interopRequireDefault(_find);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectHitsPerPage = require('../../connectors/hits-per-page/connectHitsPerPage.js');
+
+var _connectHitsPerPage2 = _interopRequireDefault(_connectHitsPerPage);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hits-per-page-selector');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      autoHideContainer = _ref.autoHideContainer;
+  return function (_ref2, isFirstRendering) {
+    var items = _ref2.items,
+        refine = _ref2.refine,
+        hasNoResults = _ref2.hasNoResults;
+
+    if (isFirstRendering) return;
+
+    var _ref3 = (0, _find2.default)(items, function (_ref4) {
+      var isRefined = _ref4.isRefined;
+      return isRefined;
+    }) || {},
+        currentValue = _ref3.value;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
+      cssClasses: cssClasses,
+      currentValue: currentValue,
+      options: items,
+      setValue: refine,
+      shouldAutoHideContainer: autoHideContainer && hasNoResults
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-hitsPerPageSelector({
-  container,
-  items,
-  [ cssClasses.{root,select,item}={} ],
-  [ autoHideContainer=false ]
-})`;
+var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClasses.{root,select,item}={} ],\n  [ autoHideContainer=false ]\n})';
 
 /**
  * @typedef {Object} HitsPerPageSelectorCSSClasses
@@ -83,38 +104,40 @@ hitsPerPageSelector({
  *   })
  * );
  */
-export default function hitsPerPageSelector({
-  container,
-  items,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-} = {}) {
+function hitsPerPageSelector() {
+  var _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref5.container,
+      items = _ref5.items,
+      _ref5$cssClasses = _ref5.cssClasses,
+      userCssClasses = _ref5$cssClasses === undefined ? {} : _ref5$cssClasses,
+      _ref5$autoHideContain = _ref5.autoHideContainer,
+      autoHideContainer = _ref5$autoHideContain === undefined ? false : _ref5$autoHideContain;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    autoHideContainer: autoHideContainer
   });
 
   try {
-    const makeHitsPerPageSelector = connectHitsPerPage(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
-    );
-    return makeHitsPerPageSelector({ items });
+    var makeHitsPerPageSelector = (0, _connectHitsPerPage2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeHitsPerPageSelector({ items: items });
   } catch (e) {
     throw new Error(usage);
   }

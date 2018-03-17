@@ -1,55 +1,63 @@
-import React from 'preact-compat';
-import { shallow } from 'enzyme';
-import GeoSearchToggle from '../GeoSearchToggle';
+'use strict';
 
-describe('GeoSearchToggle', () => {
-  const defaultProps = {
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _enzyme = require('enzyme');
+
+var _GeoSearchToggle = require('../GeoSearchToggle');
+
+var _GeoSearchToggle2 = _interopRequireDefault(_GeoSearchToggle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+describe('GeoSearchToggle', function () {
+  var defaultProps = {
     classNameLabel: 'label',
     classNameInput: 'input',
     checked: false,
-    onToggle: () => {},
+    onToggle: function onToggle() {}
   };
 
-  it('expect to render', () => {
-    const props = {
-      ...defaultProps,
-    };
+  it('expect to render', function () {
+    var props = _extends({}, defaultProps);
 
-    const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchToggle2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('expect to render checked', () => {
-    const props = {
-      ...defaultProps,
-      checked: true,
-    };
+  it('expect to render checked', function () {
+    var props = _extends({}, defaultProps, {
+      checked: true
+    });
 
-    const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchToggle2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('expect to call onToggle when the input changed', () => {
-    const props = {
-      ...defaultProps,
-      onToggle: jest.fn(),
-    };
+  it('expect to call onToggle when the input changed', function () {
+    var props = _extends({}, defaultProps, {
+      onToggle: jest.fn()
+    });
 
-    const wrapper = shallow(
-      <GeoSearchToggle {...props}>
-        Clear the current map refinement
-      </GeoSearchToggle>
-    );
+    var wrapper = (0, _enzyme.shallow)(_preactCompat2.default.createElement(
+      _GeoSearchToggle2.default,
+      props,
+      'Clear the current map refinement'
+    ));
 
     expect(props.onToggle).not.toHaveBeenCalled();
 

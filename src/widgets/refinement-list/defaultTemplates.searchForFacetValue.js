@@ -1,3 +1,8 @@
-export default {
-  noResults: 'No results',
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  noResults: 'No results'
 };

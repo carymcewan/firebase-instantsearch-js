@@ -1,23 +1,32 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+'use strict';
 
-const renderFn = (
-  { refine, hasRefinements, widgetParams: { containerNode } },
-  isFirstRendering
-) => {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _index = require('../../../../index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var renderFn = function renderFn(_ref, isFirstRendering) {
+  var refine = _ref.refine,
+      hasRefinements = _ref.hasRefinements,
+      containerNode = _ref.widgetParams.containerNode;
+
   if (isFirstRendering) {
-    const markup = window.$('<button id="custom-clear-all">Clear All</button>');
+    var markup = window.$('<button id="custom-clear-all">Clear All</button>');
     containerNode.append(markup);
 
-    markup.on('click', e => {
+    markup.on('click', function (e) {
       e.preventDefault();
       refine();
     });
   }
-  const clearAllCTA = containerNode.find('#custom-clear-all');
+  var clearAllCTA = containerNode.find('#custom-clear-all');
 
   // disable button
   clearAllCTA.attr('disabled', !hasRefinements);
-};
-
-export default instantsearch.connectors.connectClearAll(renderFn);
+}; /* eslint-disable import/default */
+exports.default = _index2.default.connectors.connectClearAll(renderFn);

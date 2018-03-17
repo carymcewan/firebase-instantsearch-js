@@ -1,26 +1,24 @@
-import {forEach} from 'lodash';
+'use strict';
 
-// Injects search config from the frontmatter Markdown page to the `window` object.
-// This allows to run code snippets in any Algolia index.
-export default function() {
-  return function(files, metalsmith, done) {
-    forEach(files, (data, path) => {
-      const {appId, apiKey, indexName} = data;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  return function (files, metalsmith, done) {
+    (0, _lodash.forEach)(files, function (data, path) {
+      var appId = data.appId,
+          apiKey = data.apiKey,
+          indexName = data.indexName;
+
 
       if (appId || apiKey || indexName) {
-        data.contents =
-          data.contents +
-          `<script>
-            window.searchConfig = {
-              ${appId ? `appId: '${appId}',` : ''}
-              ${apiKey ? `apiKey: '${apiKey}',` : ''}
-              ${indexName ? `indexName: '${indexName}',` : ''}
-            };
-          </script>`
-          .replace(/\s/g, '');
+        data.contents = data.contents + ('<script>\n            window.searchConfig = {\n              ' + (appId ? 'appId: \'' + appId + '\',' : '') + '\n              ' + (apiKey ? 'apiKey: \'' + apiKey + '\',' : '') + '\n              ' + (indexName ? 'indexName: \'' + indexName + '\',' : '') + '\n            };\n          </script>').replace(/\s/g, '');
       }
     });
 
     done();
   };
-}
+};
+
+var _lodash = require('lodash');

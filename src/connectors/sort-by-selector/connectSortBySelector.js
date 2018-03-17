@@ -1,22 +1,19 @@
-import find from 'lodash/find';
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
 
-const usage = `Usage:
-var customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {
-  // params = {
-  //   currentRefinement,
-  //   options,
-  //   refine,
-  //   hasNoResults,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-search.addWidget(
-  customSortBySelector({ indices })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html
-`;
+exports.default = connectSortBySelector;
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({ indices })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html\n';
 
 /**
  * @typedef {Object} SortBySelectorIndices
@@ -94,69 +91,76 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectSortBySelector(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectSortBySelector(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const { indices } = widgetParams;
+  return function () {
+    var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var indices = widgetParams.indices;
+
 
     if (!indices) {
       throw new Error(usage);
     }
 
-    const selectorOptions = indices.map(({ label, name }) => ({
-      label,
-      value: name,
-    }));
+    var selectorOptions = indices.map(function (_ref) {
+      var label = _ref.label,
+          name = _ref.name;
+      return {
+        label: label,
+        value: name
+      };
+    });
 
     return {
-      init({ helper, instantSearchInstance }) {
-        const currentIndex = helper.getIndex();
-        const isIndexInList = find(
-          indices,
-          ({ name }) => name === currentIndex
-        );
+      init: function init(_ref2) {
+        var helper = _ref2.helper,
+            instantSearchInstance = _ref2.instantSearchInstance;
+
+        var currentIndex = helper.getIndex();
+        var isIndexInList = (0, _find2.default)(indices, function (_ref3) {
+          var name = _ref3.name;
+          return name === currentIndex;
+        });
 
         if (!isIndexInList) {
-          throw new Error(
-            `[sortBySelector]: Index ${currentIndex} not present in \`indices\``
-          );
+          throw new Error('[sortBySelector]: Index ' + currentIndex + ' not present in `indices`');
         }
 
         this.initialIndex = currentIndex;
-        this.setIndex = indexName => helper.setIndex(indexName).search();
+        this.setIndex = function (indexName) {
+          return helper.setIndex(indexName).search();
+        };
 
-        renderFn(
-          {
-            currentRefinement: currentIndex,
-            options: selectorOptions,
-            refine: this.setIndex,
-            hasNoResults: true,
-            widgetParams,
-            instantSearchInstance,
-          },
-          true
-        );
+        renderFn({
+          currentRefinement: currentIndex,
+          options: selectorOptions,
+          refine: this.setIndex,
+          hasNoResults: true,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, true);
       },
+      render: function render(_ref4) {
+        var helper = _ref4.helper,
+            results = _ref4.results,
+            instantSearchInstance = _ref4.instantSearchInstance;
 
-      render({ helper, results, instantSearchInstance }) {
-        renderFn(
-          {
-            currentRefinement: helper.getIndex(),
-            options: selectorOptions,
-            refine: this.setIndex,
-            hasNoResults: results.nbHits === 0,
-            widgetParams,
-            instantSearchInstance,
-          },
-          false
-        );
+        renderFn({
+          currentRefinement: helper.getIndex(),
+          options: selectorOptions,
+          refine: this.setIndex,
+          hasNoResults: results.nbHits === 0,
+          widgetParams: widgetParams,
+          instantSearchInstance: instantSearchInstance
+        }, false);
       },
+      dispose: function dispose(_ref5) {
+        var state = _ref5.state;
 
-      dispose({ state }) {
         unmountFn();
         return state.setIndex(this.initialIndex);
-      },
+      }
     };
   };
 }

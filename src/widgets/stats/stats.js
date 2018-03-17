@@ -1,75 +1,81 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Stats from '../../components/Stats/Stats.js';
-import connectStats from '../../connectors/stats/connectStats.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = stats;
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-stats');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  autoHideContainer,
-  renderState,
-  templates,
-  transformData,
-}) => (
-  {
-    hitsPerPage,
-    nbHits,
-    nbPages,
-    page,
-    processingTimeMS,
-    query,
-    instantSearchInstance,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  render(
-    <Stats
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      hitsPerPage={hitsPerPage}
-      nbHits={nbHits}
-      nbPages={nbPages}
-      page={page}
-      processingTimeMS={processingTimeMS}
-      query={query}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
+var _Stats = require('../../components/Stats/Stats.js');
+
+var _Stats2 = _interopRequireDefault(_Stats);
+
+var _connectStats = require('../../connectors/stats/connectStats.js');
+
+var _connectStats2 = _interopRequireDefault(_connectStats);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-stats');
+
+var renderer = function renderer(_ref) {
+  var containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      collapsible = _ref.collapsible,
+      autoHideContainer = _ref.autoHideContainer,
+      renderState = _ref.renderState,
+      templates = _ref.templates,
+      transformData = _ref.transformData;
+  return function (_ref2, isFirstRendering) {
+    var hitsPerPage = _ref2.hitsPerPage,
+        nbHits = _ref2.nbHits,
+        nbPages = _ref2.nbPages,
+        page = _ref2.page,
+        processingTimeMS = _ref2.processingTimeMS,
+        query = _ref2.query,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Stats2.default, {
+      collapsible: collapsible,
+      cssClasses: cssClasses,
+      hitsPerPage: hitsPerPage,
+      nbHits: nbHits,
+      nbPages: nbPages,
+      page: page,
+      processingTimeMS: processingTimeMS,
+      query: query,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      templateProps: renderState.templateProps
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-stats({
-  container,
-  [ templates.{header, body, footer} ],
-  [ transformData.{body} ],
-  [ autoHideContainer=true ],
-  [ cssClasses.{root, header, body, footer, time} ],
-})`;
+var usage = 'Usage:\nstats({\n  container,\n  [ templates.{header, body, footer} ],\n  [ transformData.{body} ],\n  [ autoHideContainer=true ],\n  [ cssClasses.{root, header, body, footer, time} ],\n})';
 
 /**
  * @typedef {Object} StatsWidgetTemplates
@@ -132,42 +138,47 @@ stats({
  *   })
  * );
  */
-export default function stats({
-  container,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = true,
-  collapsible = false,
-  transformData,
-  templates = defaultTemplates,
-} = {}) {
+function stats() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      transformData = _ref3.transformData,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates;
+
   if (!container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
-  const cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time),
+  var cssClasses = {
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    time: (0, _classnames2.default)(bem('time'), userCssClasses.time)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    collapsible,
-    autoHideContainer,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    collapsible: collapsible,
+    autoHideContainer: autoHideContainer,
     renderState: {},
-    templates,
-    transformData,
+    templates: templates,
+    transformData: transformData
   });
 
   try {
-    const makeWidget = connectStats(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
+    var makeWidget = (0, _connectStats2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
     return makeWidget();
   } catch (e) {
     throw new Error(usage);

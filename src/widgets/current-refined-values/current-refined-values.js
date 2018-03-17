@@ -1,99 +1,118 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import isUndefined from 'lodash/isUndefined';
-import isBoolean from 'lodash/isBoolean';
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
-import isPlainObject from 'lodash/isPlainObject';
-import isFunction from 'lodash/isFunction';
-import reduce from 'lodash/reduce';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = currentRefinedValues;
 
-import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
-import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
-import defaultTemplates from './defaultTemplates';
+var _preactCompat = require('preact-compat');
 
-import {
-  isDomElement,
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const bem = bemHelper('ais-current-refined-values');
+var _classnames = require('classnames');
 
-const renderer = ({
-  autoHideContainer,
-  clearAllPosition,
-  collapsible,
-  containerNode,
-  cssClasses,
-  renderState,
-  transformData,
-  templates,
-}) => (
-  {
-    attributes,
-    clearAllClick,
-    clearAllURL,
-    refine,
-    createURL,
-    refinements,
-    instantSearchInstance,
-  },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _isUndefined = require('lodash/isUndefined');
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _isBoolean = require('lodash/isBoolean');
+
+var _isBoolean2 = _interopRequireDefault(_isBoolean);
+
+var _isString = require('lodash/isString');
+
+var _isString2 = _interopRequireDefault(_isString);
+
+var _isArray = require('lodash/isArray');
+
+var _isArray2 = _interopRequireDefault(_isArray);
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+var _isFunction = require('lodash/isFunction');
+
+var _isFunction2 = _interopRequireDefault(_isFunction);
+
+var _reduce = require('lodash/reduce');
+
+var _reduce2 = _interopRequireDefault(_reduce);
+
+var _CurrentRefinedValues = require('../../components/CurrentRefinedValues/CurrentRefinedValues.js');
+
+var _CurrentRefinedValues2 = _interopRequireDefault(_CurrentRefinedValues);
+
+var _connectCurrentRefinedValues = require('../../connectors/current-refined-values/connectCurrentRefinedValues.js');
+
+var _connectCurrentRefinedValues2 = _interopRequireDefault(_connectCurrentRefinedValues);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-current-refined-values');
+
+var renderer = function renderer(_ref) {
+  var autoHideContainer = _ref.autoHideContainer,
+      clearAllPosition = _ref.clearAllPosition,
+      collapsible = _ref.collapsible,
+      containerNode = _ref.containerNode,
+      cssClasses = _ref.cssClasses,
+      renderState = _ref.renderState,
+      transformData = _ref.transformData,
+      templates = _ref.templates;
+  return function (_ref2, isFirstRendering) {
+    var attributes = _ref2.attributes,
+        clearAllClick = _ref2.clearAllClick,
+        clearAllURL = _ref2.clearAllURL,
+        refine = _ref2.refine,
+        createURL = _ref2.createURL,
+        refinements = _ref2.refinements,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    var shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+
+    var clearRefinementClicks = refinements.map(function (refinement) {
+      return refine.bind(null, refinement);
     });
-    return;
-  }
+    var clearRefinementURLs = refinements.map(function (refinement) {
+      return createURL(refinement);
+    });
 
-  const shouldAutoHideContainer =
-    autoHideContainer && refinements && refinements.length === 0;
-
-  const clearRefinementClicks = refinements.map(refinement =>
-    refine.bind(null, refinement)
-  );
-  const clearRefinementURLs = refinements.map(refinement =>
-    createURL(refinement)
-  );
-
-  render(
-    <CurrentRefinedValuesWithHOCs
-      attributes={attributes}
-      clearAllClick={clearAllClick}
-      clearAllPosition={clearAllPosition}
-      clearAllURL={clearAllURL}
-      clearRefinementClicks={clearRefinementClicks}
-      clearRefinementURLs={clearRefinementURLs}
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      refinements={refinements}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_CurrentRefinedValues2.default, {
+      attributes: attributes,
+      clearAllClick: clearAllClick,
+      clearAllPosition: clearAllPosition,
+      clearAllURL: clearAllURL,
+      clearRefinementClicks: clearRefinementClicks,
+      clearRefinementURLs: clearRefinementURLs,
+      collapsible: collapsible,
+      cssClasses: cssClasses,
+      refinements: refinements,
+      shouldAutoHideContainer: shouldAutoHideContainer,
+      templateProps: renderState.templateProps
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-currentRefinedValues({
-  container,
-  [ attributes: [{name[, label, template, transformData]}] ],
-  [ onlyListedAttributes = false ],
-  [ clearAll = 'before' ] // One of ['before', 'after', false]
-  [ templates.{header,item,clearAll,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer = true ],
-  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
-  [ collapsible = false ]
-  [ clearsQuery = false ]
-})`;
+var usage = 'Usage:\ncurrentRefinedValues({\n  container,\n  [ attributes: [{name[, label, template, transformData]}] ],\n  [ onlyListedAttributes = false ],\n  [ clearAll = \'before\' ] // One of [\'before\', \'after\', false]\n  [ templates.{header,item,clearAll,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer = true ],\n  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],\n  [ collapsible = false ]\n  [ clearsQuery = false ]\n})';
 
 /**
  * @typedef {Object} CurrentRefinedValuesCSSClasses
@@ -178,106 +197,77 @@ currentRefinedValues({
  *   })
  * );
  */
-export default function currentRefinedValues({
-  container,
-  attributes = [],
-  onlyListedAttributes = false,
-  clearAll = 'before',
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true,
-  cssClasses: userCssClasses = {},
-  collapsible = false,
-  clearsQuery = false,
-}) {
-  const transformDataOK =
-    isUndefined(transformData) ||
-    isFunction(transformData) ||
-    (isPlainObject(transformData) && isFunction(transformData.item));
+function currentRefinedValues(_ref3) {
+  var container = _ref3.container,
+      _ref3$attributes = _ref3.attributes,
+      attributes = _ref3$attributes === undefined ? [] : _ref3$attributes,
+      _ref3$onlyListedAttri = _ref3.onlyListedAttributes,
+      onlyListedAttributes = _ref3$onlyListedAttri === undefined ? false : _ref3$onlyListedAttri,
+      _ref3$clearAll = _ref3.clearAll,
+      clearAll = _ref3$clearAll === undefined ? 'before' : _ref3$clearAll,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      transformData = _ref3.transformData,
+      _ref3$autoHideContain = _ref3.autoHideContainer,
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
+      _ref3$clearsQuery = _ref3.clearsQuery,
+      clearsQuery = _ref3$clearsQuery === undefined ? false : _ref3$clearsQuery;
 
-  const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
-  const templatesOK =
-    isPlainObject(templates) &&
-    reduce(
-      templates,
-      (res, val, key) =>
-        res &&
-        templatesKeys.indexOf(key) !== -1 &&
-        (isString(val) || isFunction(val)),
-      true
-    );
+  var transformDataOK = (0, _isUndefined2.default)(transformData) || (0, _isFunction2.default)(transformData) || (0, _isPlainObject2.default)(transformData) && (0, _isFunction2.default)(transformData.item);
 
-  const userCssClassesKeys = [
-    'root',
-    'header',
-    'body',
-    'clearAll',
-    'list',
-    'item',
-    'link',
-    'count',
-    'footer',
-  ];
-  const userCssClassesOK =
-    isPlainObject(userCssClasses) &&
-    reduce(
-      userCssClasses,
-      (res, val, key) =>
-        (res && userCssClassesKeys.indexOf(key) !== -1 && isString(val)) ||
-        isArray(val),
-      true
-    );
+  var templatesKeys = ['header', 'item', 'clearAll', 'footer'];
+  var templatesOK = (0, _isPlainObject2.default)(templates) && (0, _reduce2.default)(templates, function (res, val, key) {
+    return res && templatesKeys.indexOf(key) !== -1 && ((0, _isString2.default)(val) || (0, _isFunction2.default)(val));
+  }, true);
 
-  const showUsage =
-    false ||
-    !(isString(container) || isDomElement(container)) ||
-    !isArray(attributes) ||
-    !isBoolean(onlyListedAttributes) ||
-    [false, 'before', 'after'].indexOf(clearAll) === -1 ||
-    !isPlainObject(templates) ||
-    !templatesOK ||
-    !transformDataOK ||
-    !isBoolean(autoHideContainer) ||
-    !userCssClassesOK;
+  var userCssClassesKeys = ['root', 'header', 'body', 'clearAll', 'list', 'item', 'link', 'count', 'footer'];
+  var userCssClassesOK = (0, _isPlainObject2.default)(userCssClasses) && (0, _reduce2.default)(userCssClasses, function (res, val, key) {
+    return res && userCssClassesKeys.indexOf(key) !== -1 && (0, _isString2.default)(val) || (0, _isArray2.default)(val);
+  }, true);
+
+  var showUsage = false || !((0, _isString2.default)(container) || (0, _utils.isDomElement)(container)) || !(0, _isArray2.default)(attributes) || !(0, _isBoolean2.default)(onlyListedAttributes) || [false, 'before', 'after'].indexOf(clearAll) === -1 || !(0, _isPlainObject2.default)(templates) || !templatesOK || !transformDataOK || !(0, _isBoolean2.default)(autoHideContainer) || !userCssClassesOK;
 
   if (showUsage) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
-    footer: cx(bem('footer'), userCssClasses.footer),
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    clearAll: (0, _classnames2.default)(bem('clear-all'), userCssClasses.clearAll),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
     clearAllPosition: clearAll,
-    collapsible,
-    cssClasses,
-    autoHideContainer,
+    collapsible: collapsible,
+    cssClasses: cssClasses,
+    autoHideContainer: autoHideContainer,
     renderState: {},
-    templates,
-    transformData,
+    templates: templates,
+    transformData: transformData
   });
 
   try {
-    const makeCurrentRefinedValues = connectCurrentRefinedValues(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
-    );
+    var makeCurrentRefinedValues = (0, _connectCurrentRefinedValues2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
     return makeCurrentRefinedValues({
-      attributes,
-      onlyListedAttributes,
-      clearAll,
-      clearsQuery,
+      attributes: attributes,
+      onlyListedAttributes: onlyListedAttributes,
+      clearAll: clearAll,
+      clearsQuery: clearsQuery
     });
   } catch (e) {
     throw new Error(usage);

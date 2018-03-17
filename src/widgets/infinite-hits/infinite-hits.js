@@ -1,63 +1,73 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import InfiniteHits from '../../components/InfiniteHits.js';
-import defaultTemplates from './defaultTemplates.js';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = infiniteHits;
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-infinite-hits');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  cssClasses,
-  containerNode,
-  renderState,
-  templates,
-  transformData,
-  showMoreLabel,
-}) => (
-  { hits, results, showMore, isLastPage, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  render(
-    <InfiniteHits
-      cssClasses={cssClasses}
-      hits={hits}
-      results={results}
-      showMore={showMore}
-      showMoreLabel={showMoreLabel}
-      templateProps={renderState.templateProps}
-      isLastPage={isLastPage}
-    />,
-    containerNode
-  );
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _InfiniteHits = require('../../components/InfiniteHits.js');
+
+var _InfiniteHits2 = _interopRequireDefault(_InfiniteHits);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _connectInfiniteHits = require('../../connectors/infinite-hits/connectInfiniteHits.js');
+
+var _connectInfiniteHits2 = _interopRequireDefault(_connectInfiniteHits);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-infinite-hits');
+
+var renderer = function renderer(_ref) {
+  var cssClasses = _ref.cssClasses,
+      containerNode = _ref.containerNode,
+      renderState = _ref.renderState,
+      templates = _ref.templates,
+      transformData = _ref.transformData,
+      showMoreLabel = _ref.showMoreLabel;
+  return function (_ref2, isFirstRendering) {
+    var hits = _ref2.hits,
+        results = _ref2.results,
+        showMore = _ref2.showMore,
+        isLastPage = _ref2.isLastPage,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_InfiniteHits2.default, {
+      cssClasses: cssClasses,
+      hits: hits,
+      results: results,
+      showMore: showMore,
+      showMoreLabel: showMoreLabel,
+      templateProps: renderState.templateProps,
+      isLastPage: isLastPage
+    }), containerNode);
+  };
 };
 
-const usage = `
-Usage:
-infiniteHits({
-  container,
-  [ escapeHits = false ],
-  [ showMoreLabel ],
-  [ cssClasses.{root,empty,item,showmore}={} ],
-  [ templates.{empty,item} | templates.{empty} ],
-  [ transformData.{empty,item} | transformData.{empty} ],
-})`;
+var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
@@ -112,40 +122,45 @@ infiniteHits({
  *   })
  * );
  */
-export default function infiniteHits({
-  container,
-  cssClasses: userCssClasses = {},
-  showMoreLabel = 'Show more results',
-  templates = defaultTemplates,
-  transformData,
-  escapeHits = false,
-} = {}) {
+function infiniteHits() {
+  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      container = _ref3.container,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$showMoreLabel = _ref3.showMoreLabel,
+      showMoreLabel = _ref3$showMoreLabel === undefined ? 'Show more results' : _ref3$showMoreLabel,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      transformData = _ref3.transformData,
+      _ref3$escapeHits = _ref3.escapeHits,
+      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits;
+
   if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
+    throw new Error('Must provide a container.' + usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
-    showmore: cx(bem('showmore'), userCssClasses.showmore),
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    empty: (0, _classnames2.default)(bem(null, 'empty'), userCssClasses.empty),
+    showmore: (0, _classnames2.default)(bem('showmore'), userCssClasses.showmore)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
-    transformData,
-    templates,
-    showMoreLabel,
-    renderState: {},
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
+    transformData: transformData,
+    templates: templates,
+    showMoreLabel: showMoreLabel,
+    renderState: {}
   });
 
   try {
-    const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeInfiniteHits({ escapeHits });
+    var makeInfiniteHits = (0, _connectInfiniteHits2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeInfiniteHits({ escapeHits: escapeHits });
   } catch (e) {
     throw new Error(usage);
   }

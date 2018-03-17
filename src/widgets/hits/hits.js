@@ -1,56 +1,67 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Hits from '../../components/Hits.js';
-import connectHits from '../../connectors/hits/connectHits.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hits;
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-const bem = bemHelper('ais-hits');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-const renderer = ({
-  renderState,
-  cssClasses,
-  containerNode,
-  transformData,
-  templates,
-}) => (
-  { hits: receivedHits, results, instantSearchInstance },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      transformData,
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-    return;
-  }
+var _classnames = require('classnames');
 
-  render(
-    <Hits
-      cssClasses={cssClasses}
-      hits={receivedHits}
-      results={results}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Hits = require('../../components/Hits.js');
+
+var _Hits2 = _interopRequireDefault(_Hits);
+
+var _connectHits = require('../../connectors/hits/connectHits.js');
+
+var _connectHits2 = _interopRequireDefault(_connectHits);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hits');
+
+var renderer = function renderer(_ref) {
+  var renderState = _ref.renderState,
+      cssClasses = _ref.cssClasses,
+      containerNode = _ref.containerNode,
+      transformData = _ref.transformData,
+      templates = _ref.templates;
+  return function (_ref2, isFirstRendering) {
+    var receivedHits = _ref2.hits,
+        results = _ref2.results,
+        instantSearchInstance = _ref2.instantSearchInstance;
+
+    if (isFirstRendering) {
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        transformData: transformData,
+        defaultTemplates: _defaultTemplates2.default,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: templates
+      });
+      return;
+    }
+
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Hits2.default, {
+      cssClasses: cssClasses,
+      hits: receivedHits,
+      results: results,
+      templateProps: renderState.templateProps
+    }), containerNode);
+  };
 };
 
-const usage = `Usage:
-hits({
-  container,
-  [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} | templates.{empty, allItems} ],
-  [ transformData.{empty,item} | transformData.{empty, allItems} ],
-})`;
+var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ],\n  [ templates.{empty,item} | templates.{empty, allItems} ],\n  [ transformData.{empty,item} | transformData.{empty, allItems} ],\n})';
 
 /**
  * @typedef {Object} HitsCSSClasses
@@ -105,41 +116,44 @@ hits({
  *   })
  * );
  */
-export default function hits({
-  container,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  escapeHits = false,
-}) {
+function hits(_ref3) {
+  var container = _ref3.container,
+      _ref3$cssClasses = _ref3.cssClasses,
+      userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
+      _ref3$templates = _ref3.templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
+      transformData = _ref3.transformData,
+      _ref3$escapeHits = _ref3.escapeHits,
+      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits;
+
   if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
+    throw new Error('Must provide a container.' + usage);
   }
 
   if (templates.item && templates.allItems) {
-    throw new Error(`Must contain only allItems OR item template.${usage}`);
+    throw new Error('Must contain only allItems OR item template.' + usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
+  var containerNode = (0, _utils.getContainerNode)(container);
+  var cssClasses = {
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    empty: (0, _classnames2.default)(bem(null, 'empty'), userCssClasses.empty)
   };
 
-  const specializedRenderer = renderer({
-    containerNode,
-    cssClasses,
+  var specializedRenderer = renderer({
+    containerNode: containerNode,
+    cssClasses: cssClasses,
     renderState: {},
-    transformData,
-    templates,
+    transformData: transformData,
+    templates: templates
   });
 
   try {
-    const makeHits = connectHits(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeHits({ escapeHits });
+    var makeHits = (0, _connectHits2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
+    });
+    return makeHits({ escapeHits: escapeHits });
   } catch (e) {
     throw new Error(usage);
   }
