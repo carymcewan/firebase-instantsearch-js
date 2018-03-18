@@ -1,4 +1,4 @@
-"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -104,7 +104,6 @@ exports.parseAroundLatLngFromString = parseAroundLatLngFromString;
  * @return {HTMLElement} The resolved HTMLElement
  * @throws Error when the type is not correct
  */
-
 function getContainerNode(selectorOrHTMLElement) {
   var isFromString = typeof selectorOrHTMLElement === 'string';
   var domElement = void 0;
@@ -195,9 +194,9 @@ function prepareTemplates() {
   var defaultTemplates = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var templates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  var allKeys = (0, _uniq2.default)([].concat(_toConsumableArray((0, _keys2.default)(defaultTemplates)), _toConsumableArray((0, _keys2.default)(templates))));
+  var allKeys = uniq([].concat(_toConsumableArray(keys(defaultTemplates)), _toConsumableArray(keys(templates))));
 
-  return (0, _reduce2.default)(allKeys, function (config, key) {
+  return reduce(allKeys, function (config, key) {
     var defaultTemplate = defaultTemplates[key];
     var customTemplate = templates[key];
     var isCustomTemplate = customTemplate !== undefined && customTemplate !== defaultTemplate;
@@ -231,7 +230,7 @@ function renderTemplate(_ref2) {
 
   var transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
 
-  return _hogan2.default.compile(template, compileOptions).render(_extends({}, data, {
+  return hogan.compile(template, compileOptions).render(_extends({}, data, {
     helpers: transformedHelpers
   }));
 }
@@ -241,12 +240,12 @@ function renderTemplate(_ref2) {
 // `render` to get the rendered value, not the literal `{{value}}`. But
 // this is currently broken (see https://github.com/twitter/hogan.js/issues/222).
 function transformHelpersToHogan(helpers, compileOptions, data) {
-  return (0, _mapValues2.default)(helpers, function (method) {
-    return (0, _curry2.default)(function (text) {
+  return mapValues(helpers, function (method) {
+    return curry(function (text) {
       var _this = this;
 
       var render = function render(value) {
-        return _hogan2.default.compile(value, compileOptions).render(_this);
+        return hogan.compile(value, compileOptions).render(_this);
       };
       return method.call(data, text, render);
     });
@@ -255,20 +254,20 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
 
 function getRefinement(state, type, attributeName, name, resultsFacets) {
   var res = { type: type, attributeName: attributeName, name: name };
-  var facet = (0, _find2.default)(resultsFacets, { name: attributeName });
+  var facet = find(resultsFacets, { name: attributeName });
   var count = void 0;
   if (type === 'hierarchical') {
     var facetDeclaration = state.getHierarchicalFacetByName(attributeName);
     var split = name.split(facetDeclaration.separator);
     res.name = split[split.length - 1];
     for (var i = 0; facet !== undefined && i < split.length; ++i) {
-      facet = (0, _find2.default)(facet.data, { name: split[i] });
+      facet = find(facet.data, { name: split[i] });
     }
-    count = (0, _get2.default)(facet, 'count');
+    count = get(facet, 'count');
   } else {
-    count = (0, _get2.default)(facet, 'data["' + res.name + '"]');
+    count = get(facet, 'data["' + res.name + '"]');
   }
-  var exhaustive = (0, _get2.default)(facet, 'exhaustive');
+  var exhaustive = get(facet, 'exhaustive');
   if (count !== undefined) {
     res.count = count;
   }
@@ -285,20 +284,20 @@ function getRefinements(results, state, clearsQuery) {
     query: state.query
   }] : [];
 
-  (0, _forEach2.default)(state.facetsRefinements, function (refinements, attributeName) {
-    (0, _forEach2.default)(refinements, function (name) {
+  forEach(state.facetsRefinements, function (refinements, attributeName) {
+    forEach(refinements, function (name) {
       res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
     });
   });
 
-  (0, _forEach2.default)(state.facetsExcludes, function (refinements, attributeName) {
-    (0, _forEach2.default)(refinements, function (name) {
+  forEach(state.facetsExcludes, function (refinements, attributeName) {
+    forEach(refinements, function (name) {
       res.push({ type: 'exclude', attributeName: attributeName, name: name, exclude: true });
     });
   });
 
-  (0, _forEach2.default)(state.disjunctiveFacetsRefinements, function (refinements, attributeName) {
-    (0, _forEach2.default)(refinements, function (name) {
+  forEach(state.disjunctiveFacetsRefinements, function (refinements, attributeName) {
+    forEach(refinements, function (name) {
       res.push(getRefinement(state, 'disjunctive', attributeName,
       // we unescapeRefinement any disjunctive refined value since they can be escaped
       // when negative numeric values search `escapeRefinement` usage in code
@@ -306,15 +305,15 @@ function getRefinements(results, state, clearsQuery) {
     });
   });
 
-  (0, _forEach2.default)(state.hierarchicalFacetsRefinements, function (refinements, attributeName) {
-    (0, _forEach2.default)(refinements, function (name) {
+  forEach(state.hierarchicalFacetsRefinements, function (refinements, attributeName) {
+    forEach(refinements, function (name) {
       res.push(getRefinement(state, 'hierarchical', attributeName, name, results.hierarchicalFacets));
     });
   });
 
-  (0, _forEach2.default)(state.numericRefinements, function (operators, attributeName) {
-    (0, _forEach2.default)(operators, function (values, operator) {
-      (0, _forEach2.default)(values, function (value) {
+  forEach(state.numericRefinements, function (operators, attributeName) {
+    forEach(operators, function (values, operator) {
+      forEach(values, function (value) {
         res.push({
           type: 'numeric',
           attributeName: attributeName,
@@ -326,7 +325,7 @@ function getRefinements(results, state, clearsQuery) {
     });
   });
 
-  (0, _forEach2.default)(state.tagRefinements, function (name) {
+  forEach(state.tagRefinements, function (name) {
     res.push({ type: 'tag', attributeName: '_tags', name: name });
   });
 
@@ -342,13 +341,13 @@ function clearRefinementsFromState(inputState, attributeNames) {
     state = state.setQuery('');
   }
 
-  if ((0, _isEmpty2.default)(attributeNames)) {
+  if (isEmpty(attributeNames)) {
     state = state.clearTags();
     state = state.clearRefinements();
     return state;
   }
 
-  (0, _forEach2.default)(attributeNames, function (attributeName) {
+  forEach(attributeNames, function (attributeName) {
     if (attributeName === '_tags') {
       state = state.clearTags();
     } else {
@@ -367,7 +366,7 @@ function clearRefinementsAndSearch(helper, attributeNames) {
 
 function prefixKeys(prefix, obj) {
   if (obj) {
-    return (0, _mapKeys2.default)(obj, function (v, k) {
+    return mapKeys(obj, function (v, k) {
       return prefix + k;
     });
   }

@@ -1,44 +1,13 @@
-"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _algoliasearchHelper = require("algoliasearch-helper");
+import algoliasearchHelper from 'algoliasearch-helper';
+import urlHelper from 'algoliasearch-helper/src/url';
+import isEqual from 'lodash/isEqual';
+import assign from 'lodash/assign';
 
-var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
-
-var _url = require("algoliasearch-helper/src/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-var _isEqual = require("lodash/isEqual");
-
-var _isEqual2 = _interopRequireDefault(_isEqual);
-
-var _assign = require("lodash/assign");
-
-var _assign2 = _interopRequireDefault(_assign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-var AlgoliaSearchHelper = _algoliasearchHelper2.default.AlgoliaSearchHelper;
+var AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 
 function timerMaker(t0) {
   var t = t0;
@@ -174,7 +143,7 @@ var URLSync = function () {
       // we need to create a REAL helper to then get its state. Because some parameters
       // like hierarchicalFacet.rootPath are then triggering a default refinement that would
       // be not present if it was not going trough the SearchParameters constructor
-      this.originalConfig = (0, _algoliasearchHelper2.default)({
+      this.originalConfig = algoliasearchHelper({
         addAlgoliaAgent: function addAlgoliaAgent() {}
       }, currentConfiguration.index, currentConfiguration).state;
       return this.searchParametersFromUrl;
@@ -219,9 +188,9 @@ var URLSync = function () {
       clearTimeout(this.urlUpdateTimeout);
       // compare with helper.state
       var partialHelperState = helper.getState(this.trackedParameters);
-      var fullHelperState = (0, _assign2.default)({}, this.originalConfig, partialHelperState);
+      var fullHelperState = assign({}, this.originalConfig, partialHelperState);
 
-      if ((0, _isEqual2.default)(fullHelperState, fullState)) return;
+      if (isEqual(fullHelperState, fullState)) return;
 
       helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
     }
@@ -242,7 +211,7 @@ var URLSync = function () {
       var currentQueryString = this.urlUtils.readUrl();
       var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
 
-      return _url2.default.getQueryStringFromState(state.filter(this.trackedParameters), {
+      return urlHelper.getQueryStringFromState(state.filter(this.trackedParameters), {
         moreAttributes: foreignConfig,
         mapping: this.mapping,
         safe: true
@@ -258,7 +227,7 @@ var URLSync = function () {
 
       var filteredState = state.filter(this.trackedParameters);
 
-      var relative = this.urlUtils.createURL(_algoliasearchHelper2.default.url.getQueryStringFromState(filteredState, {
+      var relative = this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {
         mapping: this.mapping
       }));
 
@@ -272,7 +241,7 @@ var URLSync = function () {
       this.urlUtils.onpopstate(function () {
         var qs = _this4.urlUtils.readUrl();
         var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, { mapping: _this4.mapping });
-        var fullState = (0, _assign2.default)({}, _this4.originalConfig, partialState);
+        var fullState = assign({}, _this4.originalConfig, partialState);
         fn(fullState);
       });
     }
@@ -298,6 +267,7 @@ var URLSync = function () {
  * it'll use the query parameters using the modern history API.
  * @return {object} the widget instance
  */
+
 
 function urlSync() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};

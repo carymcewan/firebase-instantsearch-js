@@ -1,11 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectClearAll;
-
-var _utils = require('../../lib/utils.js');
+import { checkRendering, getRefinements, clearRefinementsFromState, clearRefinementsAndSearch } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   hasRefinements,\n  //   createURL,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customClearAll({\n    [ excludeAttributes = [] ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html\n';
 
@@ -16,7 +9,7 @@ var refine = function refine(_ref) {
       clearsQuery = _ref.clearsQuery;
   return function () {
     if (hasRefinements) {
-      (0, _utils.clearRefinementsAndSearch)(helper, clearAttributes, clearsQuery);
+      clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
     }
   };
 };
@@ -77,8 +70,8 @@ var refine = function refine(_ref) {
  *   })
  * );
  */
-function connectClearAll(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectClearAll(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -86,6 +79,7 @@ function connectClearAll(renderFn, unmountFn) {
         excludeAttributes = _widgetParams$exclude === undefined ? [] : _widgetParams$exclude,
         _widgetParams$clearsQ = widgetParams.clearsQuery,
         clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ;
+
 
     return {
       // Provide the same function to the `renderFn` so that way the user
@@ -101,7 +95,7 @@ function connectClearAll(renderFn, unmountFn) {
 
         this._cachedRefine = this._cachedRefine.bind(this);
 
-        var clearAttributes = (0, _utils.getRefinements)({}, helper.state).map(function (one) {
+        var clearAttributes = getRefinements({}, helper.state).map(function (one) {
           return one.attributeName;
         }).filter(function (one) {
           return excludeAttributes.indexOf(one) === -1;
@@ -109,7 +103,7 @@ function connectClearAll(renderFn, unmountFn) {
 
         var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
         var preparedCreateURL = function preparedCreateURL() {
-          return createURL((0, _utils.clearRefinementsFromState)(helper.state, [], clearsQuery));
+          return createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
         };
 
         this._refine = refine({
@@ -134,7 +128,7 @@ function connectClearAll(renderFn, unmountFn) {
             helper = _ref3.helper,
             instantSearchInstance = _ref3.instantSearchInstance;
 
-        var clearAttributes = (0, _utils.getRefinements)(results, state).map(function (one) {
+        var clearAttributes = getRefinements(results, state).map(function (one) {
           return one.attributeName;
         }).filter(function (one) {
           return excludeAttributes.indexOf(one) === -1;
@@ -142,7 +136,7 @@ function connectClearAll(renderFn, unmountFn) {
 
         var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
         var preparedCreateURL = function preparedCreateURL() {
-          return createURL((0, _utils.clearRefinementsFromState)(state, [], clearsQuery));
+          return createURL(clearRefinementsFromState(state, [], clearsQuery));
         };
 
         this._refine = refine({

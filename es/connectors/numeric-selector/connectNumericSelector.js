@@ -1,19 +1,6 @@
-'use strict';
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectNumericSelector;
-
-var _utils = require('../../lib/utils.js');
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-  } else {
-    obj[key] = value;
-  }return obj;
-}
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html\n';
 
@@ -90,8 +77,8 @@ var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function
  *   })
  * );
  */
-function connectNumericSelector(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectNumericSelector(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -99,6 +86,7 @@ function connectNumericSelector(renderFn, unmountFn) {
         options = widgetParams.options,
         _widgetParams$operato = widgetParams.operator,
         operator = _widgetParams$operato === undefined ? '=' : _widgetParams$operato;
+
 
     if (!attributeName || !options) {
       throw new Error(usage);

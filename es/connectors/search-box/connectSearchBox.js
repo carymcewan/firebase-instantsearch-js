@@ -1,11 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectSearchBox;
-
-var _utils = require('../../lib/utils.js');
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //   clear,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html\n';
 
@@ -65,12 +58,13 @@ var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(para
  *   })
  * );
  */
-function connectSearchBox(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectSearchBox(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var queryHook = widgetParams.queryHook;
+
 
     function clear(helper) {
       return function () {

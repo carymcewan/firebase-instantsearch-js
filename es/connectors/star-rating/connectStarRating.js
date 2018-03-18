@@ -1,11 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectStarRating;
-
-var _utils = require('../../lib/utils.js');
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   hasNoResults,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customStarRatingI({\n    attributeName,\n    [ max=5 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html\n';
 
@@ -93,14 +86,15 @@ var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(pa
  *   })
  * );
  */
-function connectStarRating(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectStarRating(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var attributeName = widgetParams.attributeName,
         _widgetParams$max = widgetParams.max,
         max = _widgetParams$max === undefined ? 5 : _widgetParams$max;
+
 
     if (!attributeName) {
       throw new Error(usage);
