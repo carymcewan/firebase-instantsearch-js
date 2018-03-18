@@ -1,13 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import defaultTemplates from './defaultTemplates.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectToggle from '../../connectors/toggle/connectToggle.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = toggle;
 
-import { bemHelper, getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-toggle');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _connectToggle = require('../../connectors/toggle/connectToggle.js');
+
+var _connectToggle2 = _interopRequireDefault(_connectToggle);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-toggle');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -24,9 +46,9 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
@@ -35,7 +57,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
 
-    render(React.createElement(RefinementList, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
       collapsible: collapsible,
       createURL: createURL,
       cssClasses: cssClasses,
@@ -141,7 +163,7 @@ var usage = 'Usage:\ntoggle({\n  container,\n  attributeName,\n  label,\n  [ val
  *   })
  * );
  */
-export default function toggle() {
+function toggle() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributeName = _ref3.attributeName,
@@ -149,7 +171,7 @@ export default function toggle() {
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData,
       _ref3$autoHideContain = _ref3.autoHideContainer,
       autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
@@ -162,19 +184,19 @@ export default function toggle() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    label: cx(bem('label'), userCssClasses.label),
-    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    checkbox: (0, _classnames2.default)(bem('checkbox'), userCssClasses.checkbox),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
   var specializedRenderer = renderer({
@@ -188,8 +210,8 @@ export default function toggle() {
   });
 
   try {
-    var makeWidget = connectToggle(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectToggle2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ attributeName: attributeName, label: label, values: userValues });
   } catch (e) {

@@ -1,4 +1,16 @@
-import isPlainObject from 'lodash/isPlainObject';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = configure;
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var usage = 'Usage:\nsearch.addWidget(\n  instantsearch.widgets.configure({\n    // any searchParameter\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/configure.html\n';
 
 /**
@@ -22,10 +34,10 @@ var usage = 'Usage:\nsearch.addWidget(\n  instantsearch.widgets.configure({\n   
  *   })
  * );
  */
-export default function configure() {
+function configure() {
   var searchParameters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  if (!isPlainObject(searchParameters)) {
+  if (!(0, _isPlainObject2.default)(searchParameters)) {
     throw new Error(usage);
   }
   return {

@@ -1,30 +1,99 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RawRefinementList = undefined;
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _propTypes = require("prop-types");
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _preactCompat = require("preact-compat");
 
-import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-import cx from 'classnames';
-import { isSpecialClick } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-import Template from '../Template.js';
-import RefinementListItem from './RefinementListItem.js';
-import isEqual from 'lodash/isEqual';
+var _classnames = require("classnames");
 
-import SearchBox from '../SearchBox';
+var _classnames2 = _interopRequireDefault(_classnames);
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+var _utils = require("../../lib/utils.js");
 
-export var RawRefinementList = function (_Component) {
+var _Template = require("../Template.js");
+
+var _Template2 = _interopRequireDefault(_Template);
+
+var _RefinementListItem = require("./RefinementListItem.js");
+
+var _RefinementListItem2 = _interopRequireDefault(_RefinementListItem);
+
+var _isEqual = require("lodash/isEqual");
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+var _SearchBox = require("../SearchBox");
+
+var _SearchBox2 = _interopRequireDefault(_SearchBox);
+
+var _autoHideContainer = require("../../decorators/autoHideContainer.js");
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+var _headerFooter = require("../../decorators/headerFooter.js");
+
+var _headerFooter2 = _interopRequireDefault(_headerFooter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var RawRefinementList = exports.RawRefinementList = function (_Component) {
   _inherits(RawRefinementList, _Component);
 
   function RawRefinementList(props) {
@@ -40,7 +109,7 @@ export var RawRefinementList = function (_Component) {
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
       var isStateDifferent = nextState !== this.state;
-      var isFacetValuesDifferent = !isEqual(this.props.facetValues, nextProps.facetValues);
+      var isFacetValuesDifferent = !(0, _isEqual2.default)(this.props.facetValues, nextProps.facetValues);
       var shouldUpdate = isStateDifferent || isFacetValuesDifferent;
       return shouldUpdate;
     }
@@ -55,7 +124,7 @@ export var RawRefinementList = function (_Component) {
       var subItems = void 0;
       var hasChildren = facetValue.data && facetValue.data.length > 0;
       if (hasChildren) {
-        subItems = React.createElement(RawRefinementList, _extends({}, this.props, {
+        subItems = _preactCompat2.default.createElement(RawRefinementList, _extends({}, this.props, {
           depth: this.props.depth + 1,
           facetValues: facetValue.data
         }));
@@ -67,7 +136,7 @@ export var RawRefinementList = function (_Component) {
         cssClasses: this.props.cssClasses
       });
 
-      var cssClassItem = cx(this.props.cssClasses.item, _defineProperty({}, this.props.cssClasses.active, facetValue.isRefined));
+      var cssClassItem = (0, _classnames2.default)(this.props.cssClasses.item, _defineProperty({}, this.props.cssClasses.active, facetValue.isRefined));
 
       var key = facetValue.value;
 
@@ -79,7 +148,7 @@ export var RawRefinementList = function (_Component) {
         key += '/' + facetValue.count;
       }
 
-      return React.createElement(RefinementListItem, {
+      return _preactCompat2.default.createElement(_RefinementListItem2.default, {
         facetValueToRefine: facetValue.value,
         handleClick: this.handleItemClick,
         isRefined: facetValue.isRefined,
@@ -115,7 +184,7 @@ export var RawRefinementList = function (_Component) {
           originalEvent = _ref.originalEvent,
           isRefined = _ref.isRefined;
 
-      if (isSpecialClick(originalEvent)) {
+      if ((0, _utils.isSpecialClick)(originalEvent)) {
         // do not alter the default browser behavior
         // if one special key is down
         return;
@@ -171,13 +240,13 @@ export var RawRefinementList = function (_Component) {
         cssClassList.push('' + this.props.cssClasses.depth + this.props.depth);
       }
 
-      var showMoreBtn = this.props.showMore === true && this.props.canToggleShowMore ? React.createElement(Template, _extends({
+      var showMoreBtn = this.props.showMore === true && this.props.canToggleShowMore ? _preactCompat2.default.createElement(_Template2.default, _extends({
         rootProps: { onClick: this.props.toggleShowMore },
         templateKey: 'show-more-' + (this.props.isShowingMore ? 'active' : 'inactive')
       }, this.props.templateProps)) : undefined;
 
       var shouldDisableSearchInput = this.props.searchIsAlwaysActive !== true && !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-      var searchInput = this.props.searchFacetValues ? React.createElement(SearchBox, {
+      var searchInput = this.props.searchFacetValues ? _preactCompat2.default.createElement(_SearchBox2.default, {
         ref: function ref(i) {
           _this2.searchbox = i;
         },
@@ -189,25 +258,18 @@ export var RawRefinementList = function (_Component) {
         disabled: shouldDisableSearchInput
       }) : null;
 
-      var noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ? React.createElement(Template, _extends({ templateKey: 'noResults' }, this.props.templateProps)) : null;
+      var noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ? _preactCompat2.default.createElement(_Template2.default, _extends({ templateKey: 'noResults' }, this.props.templateProps)) : null;
 
-      return React.createElement(
-        'div',
-        { className: cx(cssClassList) },
-        searchInput,
-        this.props.facetValues.map(this._generateFacetItem, this),
-        noResults,
-        showMoreBtn
-      );
+      return _preactCompat2.default.createElement('div', { className: (0, _classnames2.default)(cssClassList) }, searchInput, this.props.facetValues.map(this._generateFacetItem, this), noResults, showMoreBtn);
     }
   }]);
 
   return RawRefinementList;
-}(Component);
+}(_preactCompat.Component);
 
 RawRefinementList.defaultProps = {
   cssClasses: {},
   depth: 0
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));
+exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(RawRefinementList));

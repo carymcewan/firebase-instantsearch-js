@@ -1,19 +1,74 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _propTypes = require("prop-types");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-import map from 'lodash/map';
-import Template from './Template.js';
-import hasKey from 'lodash/has';
-import cx from 'classnames';
+var _preactCompat = require("preact-compat");
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _map = require("lodash/map");
+
+var _map2 = _interopRequireDefault(_map);
+
+var _Template = require("./Template.js");
+
+var _Template2 = _interopRequireDefault(_Template);
+
+var _has = require("lodash/has");
+
+var _has2 = _interopRequireDefault(_has);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
 var Hits = function (_Component) {
   _inherits(Hits, _Component);
@@ -29,11 +84,11 @@ var Hits = function (_Component) {
     value: function renderWithResults() {
       var _this2 = this;
 
-      var renderedHits = map(this.props.hits, function (hit, position) {
+      var renderedHits = (0, _map2.default)(this.props.hits, function (hit, position) {
         var data = _extends({}, hit, {
           __hitIndex: position
         });
-        return React.createElement(Template, _extends({
+        return _preactCompat2.default.createElement(_Template2.default, _extends({
           data: data,
           key: data.objectID,
           rootProps: { className: _this2.props.cssClasses.item },
@@ -41,18 +96,14 @@ var Hits = function (_Component) {
         }, _this2.props.templateProps));
       });
 
-      return React.createElement(
-        'div',
-        { className: this.props.cssClasses.root },
-        renderedHits
-      );
+      return _preactCompat2.default.createElement('div', { className: this.props.cssClasses.root }, renderedHits);
     }
   }, {
     key: 'renderAllResults',
     value: function renderAllResults() {
-      var className = cx(this.props.cssClasses.root, this.props.cssClasses.allItems);
+      var className = (0, _classnames2.default)(this.props.cssClasses.root, this.props.cssClasses.allItems);
 
-      return React.createElement(Template, _extends({
+      return _preactCompat2.default.createElement(_Template2.default, _extends({
         data: this.props.results,
         rootProps: { className: className },
         templateKey: 'allItems'
@@ -61,8 +112,8 @@ var Hits = function (_Component) {
   }, {
     key: 'renderNoResults',
     value: function renderNoResults() {
-      var className = cx(this.props.cssClasses.root, this.props.cssClasses.empty);
-      return React.createElement(Template, _extends({
+      var className = (0, _classnames2.default)(this.props.cssClasses.root, this.props.cssClasses.empty);
+      return _preactCompat2.default.createElement(_Template2.default, _extends({
         data: this.props.results,
         rootProps: { className: className },
         templateKey: 'empty'
@@ -72,7 +123,7 @@ var Hits = function (_Component) {
     key: 'render',
     value: function render() {
       var hasResults = this.props.results.hits.length > 0;
-      var hasAllItemsTemplate = hasKey(this.props, 'templateProps.templates.allItems');
+      var hasAllItemsTemplate = (0, _has2.default)(this.props, 'templateProps.templates.allItems');
 
       if (!hasResults) {
         return this.renderNoResults();
@@ -89,10 +140,10 @@ var Hits = function (_Component) {
   }]);
 
   return Hits;
-}(Component);
+}(_preactCompat.Component);
 
 Hits.defaultProps = {
   results: { hits: [] }
 };
 
-export default Hits;
+exports.default = Hits;

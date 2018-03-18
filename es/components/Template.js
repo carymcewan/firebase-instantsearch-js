@@ -1,22 +1,77 @@
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+"use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PureTemplate = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _preactCompat = require("preact-compat");
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _propTypes = require("prop-types");
 
-import React, { Component } from 'preact-compat';
-import PropTypes from 'prop-types';
-import cloneDeep from 'lodash/cloneDeep';
-import isEqual from 'lodash/isEqual';
-import { isReactElement, renderTemplate } from '../lib/utils';
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-export var PureTemplate = function (_Component) {
+var _cloneDeep = require("lodash/cloneDeep");
+
+var _cloneDeep2 = _interopRequireDefault(_cloneDeep);
+
+var _isEqual = require("lodash/isEqual");
+
+var _isEqual2 = _interopRequireDefault(_isEqual);
+
+var _utils = require("../lib/utils");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var PureTemplate = exports.PureTemplate = function (_Component) {
   _inherits(PureTemplate, _Component);
 
   function PureTemplate() {
@@ -28,7 +83,7 @@ export var PureTemplate = function (_Component) {
   _createClass(PureTemplate, [{
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps) {
-      return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey || !isEqual(this.props.rootProps, nextProps.rootProps);
+      return !(0, _isEqual2.default)(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey || !(0, _isEqual2.default)(this.props.rootProps, nextProps.rootProps);
     }
   }, {
     key: 'render',
@@ -37,7 +92,7 @@ export var PureTemplate = function (_Component) {
       var useCustomCompileOptions = this.props.useCustomCompileOptions[this.props.templateKey];
       var compileOptions = useCustomCompileOptions ? this.props.templatesConfig.compileOptions : {};
 
-      var content = renderTemplate({
+      var content = (0, _utils.renderTemplate)({
         templates: this.props.templates,
         templateKey: this.props.templateKey,
         compileOptions: compileOptions,
@@ -51,18 +106,18 @@ export var PureTemplate = function (_Component) {
         return null;
       }
 
-      if (isReactElement(content)) {
+      if ((0, _utils.isReactElement)(content)) {
         throw new Error('Support for templates as React elements has been removed, please use react-instantsearch');
       }
 
-      return React.createElement(RootTagName, _extends({}, this.props.rootProps, {
+      return _preactCompat2.default.createElement(RootTagName, _extends({}, this.props.rootProps, {
         dangerouslySetInnerHTML: { __html: content }
       }));
     }
   }]);
 
   return PureTemplate;
-}(Component);
+}(_preactCompat.Component);
 
 PureTemplate.defaultProps = {
   data: {},
@@ -77,7 +132,7 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
-  var clonedData = cloneDeep(originalData);
+  var clonedData = (0, _cloneDeep2.default)(originalData);
 
   var data = void 0;
   var typeFn = typeof fn === 'undefined' ? 'undefined' : _typeof(fn);
@@ -110,10 +165,10 @@ function transformData(fn, templateKey, originalData) {
 var withTransformData = function withTransformData(TemplateToWrap) {
   return function (props) {
     var data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
-    return React.createElement(TemplateToWrap, _extends({}, props, {
+    return _preactCompat2.default.createElement(TemplateToWrap, _extends({}, props, {
       data: transformData(props.transformData, props.templateKey, data) // eslint-disable-line react/prop-types
     }));
   };
 };
 
-export default withTransformData(PureTemplate);
+exports.default = withTransformData(PureTemplate);

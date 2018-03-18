@@ -11,7 +11,9 @@ var _find = require('lodash/find');
 
 var _find2 = _interopRequireDefault(_find);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   value,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customToggle({\n    attributeName,\n    label,\n    [ values = {on: true, off: undefined} ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html\n';
 
@@ -101,7 +103,6 @@ function connectToggle(renderFn, unmountFn) {
         label = widgetParams.label,
         _widgetParams$values = widgetParams.values,
         userValues = _widgetParams$values === undefined ? { on: true, off: undefined } : _widgetParams$values;
-
 
     if (!attributeName || !label) {
       throw new Error(usage);

@@ -10,7 +10,6 @@ exports.default = {
   footer: ''
 };
 
-
 function itemTemplate(_ref) {
   var label = _ref.label,
       operator = _ref.operator,

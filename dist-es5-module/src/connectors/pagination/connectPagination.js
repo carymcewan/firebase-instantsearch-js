@@ -11,7 +11,9 @@ var _Paginator = require('./Paginator');
 
 var _Paginator2 = _interopRequireDefault(_Paginator);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var usage = 'Usage:\nvar customPagination = connectPagination(function render(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   currentRefinement,\n  //   nbHits,\n  //   nbPages,\n  //   pages,\n  //   refine,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPagination({\n    [ maxPages ]\n    [ padding ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html\n';
 
@@ -98,7 +100,6 @@ function connectPagination(renderFn, unmountFn) {
     var maxPages = widgetParams.maxPages,
         _widgetParams$padding = widgetParams.padding,
         padding = _widgetParams$padding === undefined ? 3 : _widgetParams$padding;
-
 
     var pager = new _Paginator2.default({
       currentPage: 0,

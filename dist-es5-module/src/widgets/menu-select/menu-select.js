@@ -27,7 +27,9 @@ var _MenuSelect2 = _interopRequireDefault(_MenuSelect);
 
 var _utils = require('../../lib/utils');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var bem = (0, _utils.bemHelper)('ais-menu-select');
 

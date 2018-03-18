@@ -1,13 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hierarchicalMenu;
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-hierarchical-menu');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _connectHierarchicalMenu = require('../../connectors/hierarchical-menu/connectHierarchicalMenu');
+
+var _connectHierarchicalMenu2 = _interopRequireDefault(_connectHierarchicalMenu);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hierarchical-menu');
 
 var renderer = function renderer(_ref) {
   var autoHideContainer = _ref.autoHideContainer,
@@ -24,9 +46,9 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
@@ -35,7 +57,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-    render(React.createElement(RefinementList, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
       collapsible: collapsible,
       createURL: createURL,
       cssClasses: cssClasses,
@@ -169,7 +191,7 @@ var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separa
  *   })
  * );
  */
-export default function hierarchicalMenu() {
+function hierarchicalMenu() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributes = _ref3.attributes,
@@ -188,7 +210,7 @@ export default function hierarchicalMenu() {
       _ref3$autoHideContain = _ref3.autoHideContainer,
       autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       transformData = _ref3.transformData;
@@ -197,19 +219,19 @@ export default function hierarchicalMenu() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
     depth: bem('list', 'lvl'),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count)
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count)
   };
 
   var specializedRenderer = renderer({
@@ -223,8 +245,8 @@ export default function hierarchicalMenu() {
   });
 
   try {
-    var makeHierarchicalMenu = connectHierarchicalMenu(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeHierarchicalMenu = (0, _connectHierarchicalMenu2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeHierarchicalMenu({
       attributes: attributes,

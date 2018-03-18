@@ -1,32 +1,103 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RawSlider = undefined;
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _times = require("lodash/times");
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _times2 = _interopRequireDefault(_times);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _range = require("lodash/range");
 
-import times from 'lodash/times';
-import range from 'lodash/range';
-import has from 'lodash/has';
+var _range2 = _interopRequireDefault(_range);
 
-import PropTypes from 'prop-types';
+var _has = require("lodash/has");
 
-import React, { Component } from 'preact-compat';
+var _has2 = _interopRequireDefault(_has);
 
-import Rheostat from 'preact-rheostat';
-import cx from 'classnames';
+var _propTypes = require("prop-types");
 
-import Pit from './Pit.js';
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+var _preactCompat = require("preact-compat");
 
-export var RawSlider = function (_Component) {
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _preactRheostat = require("preact-rheostat");
+
+var _preactRheostat2 = _interopRequireDefault(_preactRheostat);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Pit = require("./Pit.js");
+
+var _Pit2 = _interopRequireDefault(_Pit);
+
+var _autoHideContainer = require("../../decorators/autoHideContainer.js");
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+var _headerFooter = require("../../decorators/headerFooter.js");
+
+var _headerFooter2 = _interopRequireDefault(_headerFooter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var RawSlider = exports.RawSlider = function (_Component) {
   _inherits(RawSlider, _Component);
 
   function RawSlider() {
@@ -51,29 +122,20 @@ export var RawSlider = function (_Component) {
         // display only two decimals after comma,
         // and apply `tooltips.format()` if any`
         var roundedValue = Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
-        var value = has(tooltips, 'format') ? tooltips.format(roundedValue) : roundedValue;
+        var value = (0, _has2.default)(tooltips, 'format') ? tooltips.format(roundedValue) : roundedValue;
 
-        var className = cx('ais-range-slider--handle', props.className, {
+        var className = (0, _classnames2.default)('ais-range-slider--handle', props.className, {
           'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
           'ais-range-slider--handle-upper': props['data-handle-key'] === 1
         });
 
-        return React.createElement(
-          'div',
-          _extends({}, props, { className: className }),
-          tooltips ? React.createElement(
-            'div',
-            { className: 'ais-range-slider--tooltip' },
-            value
-          ) : null
-        );
+        return _preactCompat2.default.createElement('div', _extends({}, props, { className: className }), tooltips ? _preactCompat2.default.createElement('div', { className: 'ais-range-slider--tooltip' }, value) : null);
       };
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(RawSlider, [{
     key: 'computeDefaultPitPoints',
-
 
     // creates an array number where to display a pit point on the slider
     value: function computeDefaultPitPoints(_ref3) {
@@ -84,7 +146,7 @@ export var RawSlider = function (_Component) {
       var steps = 34;
       var stepsLength = totalLength / steps;
 
-      var pitPoints = [min].concat(_toConsumableArray(times(steps - 1, function (step) {
+      var pitPoints = [min].concat(_toConsumableArray((0, _times2.default)(steps - 1, function (step) {
         return min + stepsLength * (step + 1);
       })), [max]);
 
@@ -101,7 +163,7 @@ export var RawSlider = function (_Component) {
           step = _ref4.step;
 
       if (!step) return undefined;
-      return [].concat(_toConsumableArray(range(min, max, step)), [max]);
+      return [].concat(_toConsumableArray((0, _range2.default)(min, max, step)), [max]);
     }
   }, {
     key: 'render',
@@ -119,22 +181,18 @@ export var RawSlider = function (_Component) {
       var snapPoints = this.computeSnapPoints({ min: min, max: max, step: step });
       var pitPoints = pips === false ? [] : this.computeDefaultPitPoints({ min: min, max: max });
 
-      return React.createElement(
-        'div',
-        { className: this.isDisabled ? 'ais-range-slider--disabled' : '' },
-        React.createElement(Rheostat, {
-          handle: this.createHandleComponent(tooltips),
-          onChange: this.handleChange,
-          min: min,
-          max: max,
-          pitComponent: Pit,
-          pitPoints: pitPoints,
-          snap: true,
-          snapPoints: snapPoints,
-          values: this.isDisabled ? [min, max] : values,
-          disabled: this.isDisabled
-        })
-      );
+      return _preactCompat2.default.createElement('div', { className: this.isDisabled ? 'ais-range-slider--disabled' : '' }, _preactCompat2.default.createElement(_preactRheostat2.default, {
+        handle: this.createHandleComponent(tooltips),
+        onChange: this.handleChange,
+        min: min,
+        max: max,
+        pitComponent: _Pit2.default,
+        pitPoints: pitPoints,
+        snap: true,
+        snapPoints: snapPoints,
+        values: this.isDisabled ? [min, max] : values,
+        disabled: this.isDisabled
+      }));
     }
   }, {
     key: 'isDisabled',
@@ -144,6 +202,6 @@ export var RawSlider = function (_Component) {
   }]);
 
   return RawSlider;
-}(Component);
+}(_preactCompat.Component);
 
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(RawSlider));

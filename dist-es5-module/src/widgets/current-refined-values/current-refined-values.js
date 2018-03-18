@@ -55,7 +55,9 @@ var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 
 var _utils = require('../../lib/utils.js');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var bem = (0, _utils.bemHelper)('ais-current-refined-values');
 

@@ -1,10 +1,56 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import React, { render } from 'preact-compat';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
-import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
+var _preactCompat = require("preact-compat");
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _utils = require("../../lib/utils");
+
+var _GeoSearchControls = require("../../components/GeoSearchControls/GeoSearchControls");
+
+var _GeoSearchControls2 = _interopRequireDefault(_GeoSearchControls);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;_e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }return _arr;
+  }return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
 
 var refineWithMap = function refineWithMap(_ref) {
   var refine = _ref.refine,
@@ -74,8 +120,7 @@ var renderer = function renderer(_ref4, isFirstRendering) {
       markerOptions = widgetParams.markerOptions,
       renderState = widgetParams.renderState;
 
-
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   if (isFirstRendering) {
     renderState.isUserInteraction = true;
@@ -139,7 +184,7 @@ var renderer = function renderer(_ref4, isFirstRendering) {
 
     googleReference.maps.event.addListenerOnce(renderState.mapInstance, 'idle', setupListenersWhenMapIsReady);
 
-    renderState.templateProps = prepareTemplateProps({
+    renderState.templateProps = (0, _utils.prepareTemplateProps)({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates
     });
@@ -219,7 +264,7 @@ var renderer = function renderer(_ref4, isFirstRendering) {
     renderState.isUserInteraction = true;
   }
 
-  render(React.createElement(GeoSearchControls, {
+  (0, _preactCompat.render)(_preactCompat2.default.createElement(_GeoSearchControls2.default, {
     cssClasses: cssClasses,
     enableRefineControl: enableRefineControl,
     enableClearMapRefinement: enableClearMapRefinement,
@@ -239,4 +284,4 @@ var renderer = function renderer(_ref4, isFirstRendering) {
   }), containerNode.querySelector('.' + cssClasses.controls));
 };
 
-export default renderer;
+exports.default = renderer;

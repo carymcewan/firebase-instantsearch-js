@@ -1,13 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Hits from '../../components/Hits.js';
-import connectHits from '../../connectors/hits/connectHits.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hits;
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-hits');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Hits = require('../../components/Hits.js');
+
+var _Hits2 = _interopRequireDefault(_Hits);
+
+var _connectHits = require('../../connectors/hits/connectHits.js');
+
+var _connectHits2 = _interopRequireDefault(_connectHits);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hits');
 
 var renderer = function renderer(_ref) {
   var renderState = _ref.renderState,
@@ -21,16 +43,16 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
       return;
     }
 
-    render(React.createElement(Hits, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Hits2.default, {
       cssClasses: cssClasses,
       hits: receivedHits,
       results: results,
@@ -94,12 +116,12 @@ var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ]
  *   })
  * );
  */
-export default function hits(_ref3) {
+function hits(_ref3) {
   var container = _ref3.container,
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData,
       _ref3$escapeHits = _ref3.escapeHits,
       escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits;
@@ -112,11 +134,11 @@ export default function hits(_ref3) {
     throw new Error('Must contain only allItems OR item template.' + usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    empty: (0, _classnames2.default)(bem(null, 'empty'), userCssClasses.empty)
   };
 
   var specializedRenderer = renderer({
@@ -128,8 +150,8 @@ export default function hits(_ref3) {
   });
 
   try {
-    var makeHits = connectHits(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeHits = (0, _connectHits2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeHits({ escapeHits: escapeHits });
   } catch (e) {

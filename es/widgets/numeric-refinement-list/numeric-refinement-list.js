@@ -1,13 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = numericRefinementList;
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-refinement-list');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _connectNumericRefinementList = require('../../connectors/numeric-refinement-list/connectNumericRefinementList.js');
+
+var _connectNumericRefinementList2 = _interopRequireDefault(_connectNumericRefinementList);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-refinement-list');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -25,16 +47,16 @@ var renderer = function renderer(_ref) {
         hasNoResults = _ref2.hasNoResults;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
       return;
     }
 
-    render(React.createElement(RefinementList, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
       collapsible: collapsible,
       createURL: createURL,
       cssClasses: cssClasses,
@@ -124,7 +146,7 @@ var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  
  *   })
  * );
  */
-export default function numericRefinementList() {
+function numericRefinementList() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributeName = _ref3.attributeName,
@@ -132,7 +154,7 @@ export default function numericRefinementList() {
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       transformData = _ref3.transformData,
@@ -143,18 +165,18 @@ export default function numericRefinementList() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    radio: cx(bem('radio'), userCssClasses.radio),
-    active: cx(bem('item', 'active'), userCssClasses.active)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    radio: (0, _classnames2.default)(bem('radio'), userCssClasses.radio),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active)
   };
 
   var specializedRenderer = renderer({
@@ -167,8 +189,8 @@ export default function numericRefinementList() {
     templates: templates
   });
   try {
-    var makeNumericRefinementList = connectNumericRefinementList(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeNumericRefinementList = (0, _connectNumericRefinementList2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeNumericRefinementList({ attributeName: attributeName, options: options });
   } catch (e) {

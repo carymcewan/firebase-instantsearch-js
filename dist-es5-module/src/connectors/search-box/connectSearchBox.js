@@ -72,7 +72,6 @@ function connectSearchBox(renderFn, unmountFn) {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var queryHook = widgetParams.queryHook;
 
-
     function clear(helper) {
       return function () {
         helper.setQuery('');

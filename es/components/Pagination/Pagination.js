@@ -1,21 +1,67 @@
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RawPagination = undefined;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _propTypes = require("prop-types");
 
-import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-import defaultsDeep from 'lodash/defaultsDeep';
-import { isSpecialClick } from '../../lib/utils.js';
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+var _preactCompat = require("preact-compat");
 
-import PaginationLink from './PaginationLink.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-import cx from 'classnames';
+var _defaultsDeep = require("lodash/defaultsDeep");
+
+var _defaultsDeep2 = _interopRequireDefault(_defaultsDeep);
+
+var _utils = require("../../lib/utils.js");
+
+var _autoHideContainer = require("../../decorators/autoHideContainer.js");
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+var _PaginationLink = require("./PaginationLink.js");
+
+var _PaginationLink2 = _interopRequireDefault(_PaginationLink);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
 var RawPagination = function (_Component) {
   _inherits(RawPagination, _Component);
@@ -23,7 +69,7 @@ var RawPagination = function (_Component) {
   function RawPagination(props) {
     _classCallCheck(this, RawPagination);
 
-    var _this = _possibleConstructorReturn(this, (RawPagination.__proto__ || Object.getPrototypeOf(RawPagination)).call(this, defaultsDeep(props, RawPagination.defaultProps)));
+    var _this = _possibleConstructorReturn(this, (RawPagination.__proto__ || Object.getPrototypeOf(RawPagination)).call(this, (0, _defaultsDeep2.default)(props, RawPagination.defaultProps)));
 
     _this.handleClick = _this.handleClick.bind(_this);
     return _this;
@@ -44,18 +90,18 @@ var RawPagination = function (_Component) {
           createURL = _ref.createURL;
 
       var cssClasses = {
-        item: cx(this.props.cssClasses.item, additionalClassName),
-        link: cx(this.props.cssClasses.link)
+        item: (0, _classnames2.default)(this.props.cssClasses.item, additionalClassName),
+        link: (0, _classnames2.default)(this.props.cssClasses.link)
       };
       if (isDisabled) {
-        cssClasses.item = cx(cssClasses.item, this.props.cssClasses.disabled);
+        cssClasses.item = (0, _classnames2.default)(cssClasses.item, this.props.cssClasses.disabled);
       } else if (isActive) {
-        cssClasses.item = cx(cssClasses.item, this.props.cssClasses.active);
+        cssClasses.item = (0, _classnames2.default)(cssClasses.item, this.props.cssClasses.active);
       }
 
       var url = createURL && !isDisabled ? createURL(pageNumber) : '#';
 
-      return React.createElement(PaginationLink, {
+      return _preactCompat2.default.createElement(_PaginationLink2.default, {
         ariaLabel: ariaLabel,
         cssClasses: cssClasses,
         handleClick: this.handleClick,
@@ -152,7 +198,7 @@ var RawPagination = function (_Component) {
   }, {
     key: 'handleClick',
     value: function handleClick(pageNumber, event) {
-      if (isSpecialClick(event)) {
+      if ((0, _utils.isSpecialClick)(event)) {
         // do not alter the default browser behavior
         // if one special key is down
         return;
@@ -163,22 +209,14 @@ var RawPagination = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement(
-        'ul',
-        { className: this.props.cssClasses.root },
-        this.props.showFirstLast && this.firstPageLink(this.props),
-        this.previousPageLink(this.props),
-        this.pages(this.props),
-        this.nextPageLink(this.props),
-        this.props.showFirstLast && this.lastPageLink(this.props)
-      );
+      return _preactCompat2.default.createElement('ul', { className: this.props.cssClasses.root }, this.props.showFirstLast && this.firstPageLink(this.props), this.previousPageLink(this.props), this.pages(this.props), this.nextPageLink(this.props), this.props.showFirstLast && this.lastPageLink(this.props));
     }
   }]);
 
   return RawPagination;
-}(Component);
+}(_preactCompat.Component);
 
-export { RawPagination };
+exports.RawPagination = RawPagination;
 
 
 RawPagination.defaultProps = {
@@ -187,4 +225,4 @@ RawPagination.defaultProps = {
   nbPages: 0
 };
 
-export default autoHideContainerHOC(RawPagination);
+exports.default = (0, _autoHideContainer2.default)(RawPagination);

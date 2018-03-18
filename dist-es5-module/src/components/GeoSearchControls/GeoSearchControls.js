@@ -4,7 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
 
 var _preactCompat = require('preact-compat');
 
@@ -30,7 +38,9 @@ var _GeoSearchToggle = require('./GeoSearchToggle');
 
 var _GeoSearchToggle2 = _interopRequireDefault(_GeoSearchToggle);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var GeoSearchControls = function GeoSearchControls(_ref) {
   var cssClasses = _ref.cssClasses,
@@ -43,59 +53,29 @@ var GeoSearchControls = function GeoSearchControls(_ref) {
       onRefineClick = _ref.onRefineClick,
       onClearClick = _ref.onClearClick,
       templateProps = _ref.templateProps;
-  return _preactCompat2.default.createElement(
-    'div',
-    null,
-    enableRefineControl && _preactCompat2.default.createElement(
-      'div',
-      { className: cssClasses.control },
-      isRefineOnMapMove || !hasMapMoveSinceLastRefine ? _preactCompat2.default.createElement(
-        _GeoSearchToggle2.default,
-        {
-          classNameLabel: (0, _classnames2.default)(cssClasses.toggleLabel, isRefineOnMapMove && cssClasses.toggleLabelActive),
-          classNameInput: cssClasses.toggleInput,
-          checked: isRefineOnMapMove,
-          onToggle: onRefineToggle
-        },
-        _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
-          templateKey: 'toggle',
-          rootTagName: 'span'
-        }))
-      ) : _preactCompat2.default.createElement(
-        _GeoSearchButton2.default,
-        {
-          className: cssClasses.redo,
-          disabled: !hasMapMoveSinceLastRefine,
-          onClick: onRefineClick
-        },
-        _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
-          templateKey: 'redo',
-          rootTagName: 'span'
-        }))
-      )
-    ),
-    !enableRefineControl && !isRefineOnMapMove && _preactCompat2.default.createElement(
-      'div',
-      { className: cssClasses.control },
-      _preactCompat2.default.createElement(
-        _GeoSearchButton2.default,
-        {
-          className: cssClasses.redo,
-          disabled: !hasMapMoveSinceLastRefine,
-          onClick: onRefineClick
-        },
-        _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
-          templateKey: 'redo',
-          rootTagName: 'span'
-        }))
-      )
-    ),
-    enableClearMapRefinement && isRefinedWithMap && _preactCompat2.default.createElement(
-      _GeoSearchButton2.default,
-      { className: cssClasses.clear, onClick: onClearClick },
-      _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, { templateKey: 'clear', rootTagName: 'span' }))
-    )
-  );
+  return _preactCompat2.default.createElement('div', null, enableRefineControl && _preactCompat2.default.createElement('div', { className: cssClasses.control }, isRefineOnMapMove || !hasMapMoveSinceLastRefine ? _preactCompat2.default.createElement(_GeoSearchToggle2.default, {
+    classNameLabel: (0, _classnames2.default)(cssClasses.toggleLabel, isRefineOnMapMove && cssClasses.toggleLabelActive),
+    classNameInput: cssClasses.toggleInput,
+    checked: isRefineOnMapMove,
+    onToggle: onRefineToggle
+  }, _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
+    templateKey: 'toggle',
+    rootTagName: 'span'
+  }))) : _preactCompat2.default.createElement(_GeoSearchButton2.default, {
+    className: cssClasses.redo,
+    disabled: !hasMapMoveSinceLastRefine,
+    onClick: onRefineClick
+  }, _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
+    templateKey: 'redo',
+    rootTagName: 'span'
+  })))), !enableRefineControl && !isRefineOnMapMove && _preactCompat2.default.createElement('div', { className: cssClasses.control }, _preactCompat2.default.createElement(_GeoSearchButton2.default, {
+    className: cssClasses.redo,
+    disabled: !hasMapMoveSinceLastRefine,
+    onClick: onRefineClick
+  }, _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, {
+    templateKey: 'redo',
+    rootTagName: 'span'
+  })))), enableClearMapRefinement && isRefinedWithMap && _preactCompat2.default.createElement(_GeoSearchButton2.default, { className: cssClasses.clear, onClick: onClearClick }, _preactCompat2.default.createElement(_Template2.default, _extends({}, templateProps, { templateKey: 'clear', rootTagName: 'span' }))));
 };
 
 var CSSClassesPropTypes = _propTypes2.default.shape({

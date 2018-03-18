@@ -1,16 +1,49 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = starRating;
 
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
-import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
+var _preactCompat = require('preact-compat');
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-var bem = bemHelper('ais-star-rating');
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _RefinementList = require('../../components/RefinementList/RefinementList.js');
+
+var _RefinementList2 = _interopRequireDefault(_RefinementList);
+
+var _connectStarRating = require('../../connectors/star-rating/connectStarRating.js');
+
+var _connectStarRating2 = _interopRequireDefault(_connectStarRating);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _defaultLabels = require('./defaultLabels.js');
+
+var _defaultLabels2 = _interopRequireDefault(_defaultLabels);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var bem = (0, _utils.bemHelper)('ais-star-rating');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -29,9 +62,9 @@ var renderer = function renderer(_ref) {
         hasNoResults = _ref2.hasNoResults;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
@@ -40,7 +73,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
-    render(React.createElement(RefinementList, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RefinementList2.default, {
       collapsible: collapsible,
       createURL: createURL,
       cssClasses: cssClasses,
@@ -136,7 +169,7 @@ var usage = 'Usage:\nstarRating({\n  container,\n  attributeName,\n  [ max=5 ],\
  *   })
  * );
  */
-export default function starRating() {
+function starRating() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributeName = _ref3.attributeName,
@@ -145,9 +178,9 @@ export default function starRating() {
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$labels = _ref3.labels,
-      labels = _ref3$labels === undefined ? defaultLabels : _ref3$labels,
+      labels = _ref3$labels === undefined ? _defaultLabels2.default : _ref3$labels,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       transformData = _ref3.transformData,
@@ -158,21 +191,21 @@ export default function starRating() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
-    count: cx(bem('count'), userCssClasses.count),
-    star: cx(bem('star'), userCssClasses.star),
-    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-    active: cx(bem('item', 'active'), userCssClasses.active)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    disabledLink: (0, _classnames2.default)(bem('link', 'disabled'), userCssClasses.disabledLink),
+    count: (0, _classnames2.default)(bem('count'), userCssClasses.count),
+    star: (0, _classnames2.default)(bem('star'), userCssClasses.star),
+    emptyStar: (0, _classnames2.default)(bem('star', 'empty'), userCssClasses.emptyStar),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active)
   };
 
   var specializedRenderer = renderer({
@@ -187,8 +220,8 @@ export default function starRating() {
   });
 
   try {
-    var makeWidget = connectStarRating(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectStarRating2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ attributeName: attributeName, max: max });
   } catch (e) {

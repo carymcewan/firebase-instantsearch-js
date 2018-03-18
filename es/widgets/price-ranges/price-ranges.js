@@ -1,15 +1,45 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = priceRanges;
 
-import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
-import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges.js';
-import defaultTemplates from './defaultTemplates.js';
+var _preactCompat = require('preact-compat');
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-var bem = bemHelper('ais-price-ranges');
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _PriceRanges = require('../../components/PriceRanges/PriceRanges.js');
+
+var _PriceRanges2 = _interopRequireDefault(_PriceRanges);
+
+var _connectPriceRanges = require('../../connectors/price-ranges/connectPriceRanges.js');
+
+var _connectPriceRanges2 = _interopRequireDefault(_connectPriceRanges);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var bem = (0, _utils.bemHelper)('ais-price-ranges');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -26,8 +56,8 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: defaultTemplates,
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
@@ -36,7 +66,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-    render(React.createElement(PriceRanges, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_PriceRanges2.default, {
       collapsible: collapsible,
       cssClasses: cssClasses,
       currency: currency,
@@ -123,14 +153,14 @@ var usage = 'Usage:\npriceRanges({\n  container,\n  attributeName,\n  [ currency
  *   })
  * );
  */
-export default function priceRanges() {
+function priceRanges() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributeName = _ref3.attributeName,
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       _ref3$labels = _ref3.labels,
@@ -144,7 +174,7 @@ export default function priceRanges() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var labels = _extends({
     button: 'Go',
@@ -152,20 +182,20 @@ export default function priceRanges() {
   }, userLabels);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    list: cx(bem('list'), userCssClasses.list),
-    link: cx(bem('link'), userCssClasses.link),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    form: cx(bem('form'), userCssClasses.form),
-    label: cx(bem('label'), userCssClasses.label),
-    input: cx(bem('input'), userCssClasses.input),
-    currency: cx(bem('currency'), userCssClasses.currency),
-    button: cx(bem('button'), userCssClasses.button),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    footer: cx(bem('footer'), userCssClasses.footer)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    list: (0, _classnames2.default)(bem('list'), userCssClasses.list),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    form: (0, _classnames2.default)(bem('form'), userCssClasses.form),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    input: (0, _classnames2.default)(bem('input'), userCssClasses.input),
+    currency: (0, _classnames2.default)(bem('currency'), userCssClasses.currency),
+    button: (0, _classnames2.default)(bem('button'), userCssClasses.button),
+    separator: (0, _classnames2.default)(bem('separator'), userCssClasses.separator),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer)
   };
 
   // before we had opts.currency, you had to pass labels.currency
@@ -183,8 +213,8 @@ export default function priceRanges() {
   });
 
   try {
-    var makeWidget = connectPriceRanges(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectPriceRanges2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ attributeName: attributeName });
   } catch (e) {

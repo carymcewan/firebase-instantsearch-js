@@ -87,7 +87,6 @@ function connectClearAll(renderFn, unmountFn) {
         _widgetParams$clearsQ = widgetParams.clearsQuery,
         clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ;
 
-
     return {
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance

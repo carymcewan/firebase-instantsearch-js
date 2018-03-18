@@ -1,16 +1,54 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import cx from 'classnames';
-import noop from 'lodash/noop';
-import { bemHelper, renderTemplate } from '../../lib/utils';
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import renderer from './GeoSearchRenderer';
-import defaultTemplates from './defaultTemplates';
-import createHTMLMarker from './createHTMLMarker';
+var _classnames = require('classnames');
 
-var bem = bemHelper('ais-geo-search');
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _noop = require('lodash/noop');
+
+var _noop2 = _interopRequireDefault(_noop);
+
+var _utils = require('../../lib/utils');
+
+var _connectGeoSearch = require('../../connectors/geo-search/connectGeoSearch');
+
+var _connectGeoSearch2 = _interopRequireDefault(_connectGeoSearch);
+
+var _GeoSearchRenderer = require('./GeoSearchRenderer');
+
+var _GeoSearchRenderer2 = _interopRequireDefault(_GeoSearchRenderer);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _createHTMLMarker = require('./createHTMLMarker');
+
+var _createHTMLMarker2 = _interopRequireDefault(_createHTMLMarker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+  }return target;
+}
+
+var bem = (0, _utils.bemHelper)('ais-geo-search');
 
 var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initialZoom = 1 ],\n  [ initialPosition = { lat: 0, lng: 0 } ],\n  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],\n  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],\n  [ templates.{clear,toggle,redo} ],\n  [ mapOptions ],\n  [ builtInMarker ],\n  [ customHTMLMarker = false ],\n  [ enableClearMapRefinement = true ],\n  [ enableRefineControl = true ],\n  [ enableRefineOnMapMove = true ],\n  [ enableGeolocationWithIP = true ],\n  [ position ],\n  [ radius ],\n  [ precision ],\n})\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html\n';
 
@@ -140,13 +178,13 @@ var geoSearch = function geoSearch() {
       widgetParams = _objectWithoutProperties(_ref, ['initialZoom', 'initialPosition', 'templates', 'cssClasses', 'paddingBoundingBox', 'builtInMarker', 'customHTMLMarker', 'enableClearMapRefinement', 'enableRefineControl', 'container', 'googleReference']);
 
   var defaultBuiltInMarker = {
-    createOptions: noop,
+    createOptions: _noop2.default,
     events: {}
   };
 
   var defaultCustomHTMLMarker = {
     template: '<p>Your custom HTML Marker</p>',
-    createOptions: noop,
+    createOptions: _noop2.default,
     events: {}
   };
 
@@ -166,18 +204,18 @@ var geoSearch = function geoSearch() {
   }
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    map: cx(bem('map'), userCssClasses.map),
-    controls: cx(bem('controls'), userCssClasses.controls),
-    clear: cx(bem('clear'), userCssClasses.clear),
-    control: cx(bem('control'), userCssClasses.control),
-    toggleLabel: cx(bem('toggle-label'), userCssClasses.toggleLabel),
-    toggleLabelActive: cx(bem('toggle-label-active'), userCssClasses.toggleLabelActive),
-    toggleInput: cx(bem('toggle-input'), userCssClasses.toggleInput),
-    redo: cx(bem('redo'), userCssClasses.redo)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    map: (0, _classnames2.default)(bem('map'), userCssClasses.map),
+    controls: (0, _classnames2.default)(bem('controls'), userCssClasses.controls),
+    clear: (0, _classnames2.default)(bem('clear'), userCssClasses.clear),
+    control: (0, _classnames2.default)(bem('control'), userCssClasses.control),
+    toggleLabel: (0, _classnames2.default)(bem('toggle-label'), userCssClasses.toggleLabel),
+    toggleLabelActive: (0, _classnames2.default)(bem('toggle-label-active'), userCssClasses.toggleLabelActive),
+    toggleInput: (0, _classnames2.default)(bem('toggle-input'), userCssClasses.toggleInput),
+    redo: (0, _classnames2.default)(bem('redo'), userCssClasses.redo)
   };
 
-  var templates = _extends({}, defaultTemplates, userTemplates);
+  var templates = _extends({}, _defaultTemplates2.default, userTemplates);
 
   var builtInMarker = _extends({}, defaultBuiltInMarker, userBuiltInMarker);
 
@@ -195,7 +233,7 @@ var geoSearch = function geoSearch() {
     }));
   };
 
-  var HTMLMarker = createHTMLMarker(googleReference);
+  var HTMLMarker = (0, _createHTMLMarker2.default)(googleReference);
   var createCustomHTMLMarker = function createCustomHTMLMarker(_ref3) {
     var item = _ref3.item,
         rest = _objectWithoutProperties(_ref3, ['item']);
@@ -203,8 +241,8 @@ var geoSearch = function geoSearch() {
     return new HTMLMarker(_extends({}, customHTMLMarker.createOptions(item), rest, {
       __id: item.objectID,
       position: item._geoloc,
-      className: cx(bem('marker')),
-      template: renderTemplate({
+      className: (0, _classnames2.default)(bem('marker')),
+      template: (0, _utils.renderTemplate)({
         templateKey: 'template',
         templates: customHTMLMarker,
         data: item
@@ -218,7 +256,7 @@ var geoSearch = function geoSearch() {
   var markerOptions = !customHTMLMarker ? builtInMarker : customHTMLMarker;
 
   try {
-    var makeGeoSearch = connectGeoSearch(renderer);
+    var makeGeoSearch = (0, _connectGeoSearch2.default)(_GeoSearchRenderer2.default);
 
     return makeGeoSearch(_extends({}, widgetParams, {
       renderState: {},
@@ -239,4 +277,4 @@ var geoSearch = function geoSearch() {
   }
 };
 
-export default geoSearch;
+exports.default = geoSearch;

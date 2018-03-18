@@ -23,7 +23,9 @@ var _connectSortBySelector2 = _interopRequireDefault(_connectSortBySelector);
 
 var _utils = require('../../lib/utils.js');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var bem = (0, _utils.bemHelper)('ais-sort-by-selector');
 

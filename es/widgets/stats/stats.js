@@ -1,13 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Stats from '../../components/Stats/Stats.js';
-import connectStats from '../../connectors/stats/connectStats.js';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = stats;
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-stats');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Stats = require('../../components/Stats/Stats.js');
+
+var _Stats2 = _interopRequireDefault(_Stats);
+
+var _connectStats = require('../../connectors/stats/connectStats.js');
+
+var _connectStats2 = _interopRequireDefault(_connectStats);
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-stats');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -27,9 +49,9 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         transformData: transformData,
-        defaultTemplates: defaultTemplates,
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
       });
@@ -38,7 +60,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && nbHits === 0;
 
-    render(React.createElement(Stats, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Stats2.default, {
       collapsible: collapsible,
       cssClasses: cssClasses,
       hitsPerPage: hitsPerPage,
@@ -116,7 +138,7 @@ var usage = 'Usage:\nstats({\n  container,\n  [ templates.{header, body, footer}
  *   })
  * );
  */
-export default function stats() {
+function stats() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       _ref3$cssClasses = _ref3.cssClasses,
@@ -127,20 +149,20 @@ export default function stats() {
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       transformData = _ref3.transformData,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates;
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates;
 
   if (!container) {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time)
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    time: (0, _classnames2.default)(bem('time'), userCssClasses.time)
   };
 
   var specializedRenderer = renderer({
@@ -154,8 +176,8 @@ export default function stats() {
   });
 
   try {
-    var makeWidget = connectStats(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectStats2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget();
   } catch (e) {

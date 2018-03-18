@@ -23,7 +23,9 @@ var _connectNumericSelector2 = _interopRequireDefault(_connectNumericSelector);
 
 var _utils = require('../../lib/utils.js');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var bem = (0, _utils.bemHelper)('ais-numeric-selector');
 

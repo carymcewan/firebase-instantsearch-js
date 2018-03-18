@@ -1,13 +1,32 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-import templates from './defaultShowMoreTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getShowMoreConfig;
+
+var _defaultShowMoreTemplates = require('./defaultShowMoreTemplates.js');
+
+var _defaultShowMoreTemplates2 = _interopRequireDefault(_defaultShowMoreTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
 
 var defaultShowMoreConfig = {
-  templates: templates,
+  templates: _defaultShowMoreTemplates2.default,
   limit: 100
 };
 
-export default function getShowMoreConfig(showMoreOptions) {
+function getShowMoreConfig(showMoreOptions) {
   if (!showMoreOptions) return null;
 
   if (showMoreOptions === true) {

@@ -1,11 +1,31 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Selector from '../../components/Selector.js';
-import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = sortBySelector;
 
-var bem = bemHelper('ais-sort-by-selector');
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectSortBySelector = require('../../connectors/sort-by-selector/connectSortBySelector.js');
+
+var _connectSortBySelector2 = _interopRequireDefault(_connectSortBySelector);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-sort-by-selector');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -21,7 +41,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
-    render(React.createElement(Selector, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
       cssClasses: cssClasses,
       currentValue: currentRefinement,
       options: options,
@@ -76,7 +96,7 @@ var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{
  *   })
  * );
  */
-export default function sortBySelector() {
+function sortBySelector() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       indices = _ref3.indices,
@@ -89,14 +109,14 @@ export default function sortBySelector() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item)
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
   var specializedRenderer = renderer({
@@ -106,8 +126,8 @@ export default function sortBySelector() {
   });
 
   try {
-    var makeWidget = connectSortBySelector(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectSortBySelector2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ indices: indices });
   } catch (e) {

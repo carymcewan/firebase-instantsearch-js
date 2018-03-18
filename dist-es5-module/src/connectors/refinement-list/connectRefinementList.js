@@ -5,7 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.checkUsage = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
 
 exports.default = connectRefinementList;
 
@@ -13,9 +21,19 @@ var _utils = require('../../lib/utils.js');
 
 var _escapeHighlight = require('../../lib/escape-highlight.js');
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+function _objectWithoutProperties(obj, keys) {
+  var target = {};for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+  }return target;
+}
 
 var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
 
@@ -148,7 +166,6 @@ function connectRefinementList(renderFn, unmountFn) {
         _widgetParams$escapeF = widgetParams.escapeFacetValues,
         escapeFacetValues = _widgetParams$escapeF === undefined ? false : _widgetParams$escapeF;
 
-
     checkUsage({ attributeName: attributeName, operator: operator, usage: usage, limit: limit, showMoreLimit: showMoreLimit });
 
     var formatItems = function formatItems(_ref2) {
@@ -277,7 +294,6 @@ function connectRefinementList(renderFn, unmountFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-
       getConfiguration: function getConfiguration() {
         var configuration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -327,7 +343,6 @@ function connectRefinementList(renderFn, unmountFn) {
             state = renderOptions.state,
             createURL = renderOptions.createURL,
             instantSearchInstance = renderOptions.instantSearchInstance;
-
 
         var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
         var items = facetValues.slice(0, this.getLimit()).map(formatItems);

@@ -27,7 +27,9 @@ var _defaultTemplates = require('./defaultTemplates.js');
 
 var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var bem = (0, _utils.bemHelper)('ais-clear-all');
 

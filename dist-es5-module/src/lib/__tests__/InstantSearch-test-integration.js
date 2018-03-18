@@ -4,7 +4,9 @@ var _InstantSearch = require('../InstantSearch');
 
 var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 describe('InstantSearch lifecycle', function () {
   it('emits an error if the API returns an error', function () {

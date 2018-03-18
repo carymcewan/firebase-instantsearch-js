@@ -1,19 +1,62 @@
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+"use strict";
 
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rangeSlider;
 
-import Slider from '../../components/Slider/Slider.js';
-import connectRange from '../../connectors/range/connectRange.js';
+var _preactCompat = require("preact-compat");
 
-import { bemHelper, prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Slider = require("../../components/Slider/Slider.js");
+
+var _Slider2 = _interopRequireDefault(_Slider);
+
+var _connectRange = require("../../connectors/range/connectRange.js");
+
+var _connectRange2 = _interopRequireDefault(_connectRange);
+
+var _utils = require("../../lib/utils.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;_e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }return _arr;
+  }return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
 
 var defaultTemplates = {
   header: '',
   footer: ''
 };
 
-var bem = bemHelper('ais-range-slider');
+var bem = (0, _utils.bemHelper)('ais-range-slider');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -32,7 +75,7 @@ var renderer = function renderer(_ref) {
         instantSearchInstance = _ref2.instantSearchInstance;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
         defaultTemplates: defaultTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates
@@ -57,7 +100,7 @@ var renderer = function renderer(_ref) {
     // backward compatible so we still need to pass [-Infinity, Infinity]
     var values = [minFinite > maxRange ? maxRange : minFinite, maxFinite < minRange ? minRange : maxFinite];
 
-    render(React.createElement(Slider, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Slider2.default, {
       cssClasses: cssClasses,
       refine: refine,
       min: minRange,
@@ -152,7 +195,7 @@ var usage = 'Usage:\nrangeSlider({\n  container,\n  attributeName,\n  [ min ],\n
  *   })
  * );
  */
-export default function rangeSlider() {
+function rangeSlider() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       attributeName = _ref3.attributeName,
@@ -178,12 +221,12 @@ export default function rangeSlider() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
+    body: (0, _classnames2.default)(bem('body'), userCssClasses.body),
+    footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer)
   };
 
   var specializedRenderer = renderer({
@@ -199,8 +242,8 @@ export default function rangeSlider() {
   });
 
   try {
-    var makeWidget = connectRange(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectRange2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ attributeName: attributeName, min: min, max: max, precision: precision });
   } catch (e) {

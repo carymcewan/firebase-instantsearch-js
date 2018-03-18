@@ -1,14 +1,35 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import find from 'lodash/find';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hitsPerPageSelector;
 
-import Selector from '../../components/Selector.js';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+var _preactCompat = require('preact-compat');
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-var bem = bemHelper('ais-hits-per-page-selector');
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectHitsPerPage = require('../../connectors/hits-per-page/connectHitsPerPage.js');
+
+var _connectHitsPerPage2 = _interopRequireDefault(_connectHitsPerPage);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-hits-per-page-selector');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -21,13 +42,13 @@ var renderer = function renderer(_ref) {
 
     if (isFirstRendering) return;
 
-    var _ref3 = find(items, function (_ref4) {
+    var _ref3 = (0, _find2.default)(items, function (_ref4) {
       var isRefined = _ref4.isRefined;
       return isRefined;
     }) || {},
         currentValue = _ref3.value;
 
-    render(React.createElement(Selector, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
       cssClasses: cssClasses,
       currentValue: currentValue,
       options: items,
@@ -83,7 +104,7 @@ var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClass
  *   })
  * );
  */
-export default function hitsPerPageSelector() {
+function hitsPerPageSelector() {
   var _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref5.container,
       items = _ref5.items,
@@ -96,14 +117,14 @@ export default function hitsPerPageSelector() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item)
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
   var specializedRenderer = renderer({
@@ -113,8 +134,8 @@ export default function hitsPerPageSelector() {
   });
 
   try {
-    var makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeHitsPerPageSelector = (0, _connectHitsPerPage2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeHitsPerPageSelector({ items: items });
   } catch (e) {

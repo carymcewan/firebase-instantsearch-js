@@ -1,23 +1,72 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _propTypes = require("prop-types");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-import PropTypes from 'prop-types';
+var _preactCompat = require("preact-compat");
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _get = require("lodash/get");
+
+var _get2 = _interopRequireDefault(_get);
+
+var _Template = require("../components/Template.js");
+
+var _Template2 = _interopRequireDefault(_Template);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
-
-import React, { Component } from 'preact-compat';
-
-import cx from 'classnames';
-import getKey from 'lodash/get';
-
-import Template from '../components/Template.js';
 
 function headerFooter(ComposedComponent) {
   var HeaderFooter = function (_Component) {
@@ -34,8 +83,8 @@ function headerFooter(ComposedComponent) {
       };
 
       _this._cssClasses = {
-        root: cx('ais-root', _this.props.cssClasses.root),
-        body: cx('ais-body', _this.props.cssClasses.body)
+        root: (0, _classnames2.default)('ais-root', _this.props.cssClasses.root),
+        body: (0, _classnames2.default)('ais-body', _this.props.cssClasses.body)
       };
 
       _this._footerElement = _this._getElement({ type: 'footer' });
@@ -53,11 +102,11 @@ function headerFooter(ComposedComponent) {
         if (!templates || !templates[type]) {
           return null;
         }
-        var className = cx(this.props.cssClasses[type], 'ais-' + type);
+        var className = (0, _classnames2.default)(this.props.cssClasses[type], 'ais-' + type);
 
-        var templateData = getKey(this.props, 'headerFooterData.' + type);
+        var templateData = (0, _get2.default)(this.props, 'headerFooterData.' + type);
 
-        return React.createElement(Template, _extends({}, this.props.templateProps, {
+        return _preactCompat2.default.createElement(_Template2.default, _extends({}, this.props.templateProps, {
           data: templateData,
           rootProps: { className: className, onClick: handleClick },
           templateKey: type,
@@ -85,7 +134,7 @@ function headerFooter(ComposedComponent) {
         }
 
         var cssClasses = _extends({}, this._cssClasses, {
-          root: cx(rootCssClasses)
+          root: (0, _classnames2.default)(rootCssClasses)
         });
 
         var headerElement = this._getElement({
@@ -93,22 +142,12 @@ function headerFooter(ComposedComponent) {
           handleClick: this.props.collapsible ? this.handleHeaderClick : null
         });
 
-        return React.createElement(
-          'div',
-          { className: cssClasses.root },
-          headerElement,
-          React.createElement(
-            'div',
-            { className: cssClasses.body },
-            React.createElement(ComposedComponent, this.props)
-          ),
-          this._footerElement
-        );
+        return _preactCompat2.default.createElement('div', { className: cssClasses.root }, headerElement, _preactCompat2.default.createElement('div', { className: cssClasses.body }, _preactCompat2.default.createElement(ComposedComponent, this.props)), this._footerElement);
       }
     }]);
 
     return HeaderFooter;
-  }(Component);
+  }(_preactCompat.Component);
 
   HeaderFooter.defaultProps = {
     cssClasses: {},
@@ -121,4 +160,4 @@ function headerFooter(ComposedComponent) {
   return HeaderFooter;
 }
 
-export default headerFooter;
+exports.default = headerFooter;

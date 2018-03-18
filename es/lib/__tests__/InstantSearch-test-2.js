@@ -1,7 +1,13 @@
-// import algoliaSearchHelper from 'algoliasearch-helper';
-import InstantSearch from '../InstantSearch';
+'use strict';
 
-jest.useFakeTimers();
+var _InstantSearch = require('../InstantSearch');
+
+var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+jest.useFakeTimers(); // import algoliaSearchHelper from 'algoliasearch-helper';
+
 
 var appId = 'appId';
 var apiKey = 'apiKey';
@@ -18,7 +24,7 @@ describe('InstantSearch life cycle', function () {
       addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    var search = new InstantSearch({
+    var search = new _InstantSearch2.default({
       appId: appId,
       apiKey: apiKey,
       indexName: indexName,
@@ -70,7 +76,7 @@ describe('InstantSearch life cycle', function () {
       addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    var search = new InstantSearch({
+    var search = new _InstantSearch2.default({
       appId: appId,
       apiKey: apiKey,
       indexName: indexName,
@@ -152,7 +158,7 @@ describe('InstantSearch life cycle', function () {
       addAlgoliaAgent: function addAlgoliaAgent() {}
     };
 
-    var search = new InstantSearch({
+    var search = new _InstantSearch2.default({
       appId: appId,
       apiKey: apiKey,
       indexName: indexName,

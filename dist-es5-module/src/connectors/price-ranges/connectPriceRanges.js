@@ -11,7 +11,9 @@ var _generateRanges2 = require('./generate-ranges.js');
 
 var _generateRanges3 = _interopRequireDefault(_generateRanges2);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var usage = 'Usage:\nvar customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPriceRanges({\n    attributeName,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html\n';
 
@@ -101,7 +103,6 @@ function connectPriceRanges(renderFn, unmountFn) {
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var attributeName = widgetParams.attributeName;
-
 
     if (!attributeName) {
       throw new Error(usage);

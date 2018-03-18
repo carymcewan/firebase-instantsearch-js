@@ -1,19 +1,67 @@
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RawRangeInput = undefined;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _preactCompat = require("preact-compat");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-import React, { Component } from 'preact-compat';
-import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+var _propTypes = require("prop-types");
 
-export var RawRangeInput = function (_Component) {
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _autoHideContainer = require("../../decorators/autoHideContainer.js");
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+var _headerFooter = require("../../decorators/headerFooter.js");
+
+var _headerFooter2 = _interopRequireDefault(_headerFooter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var RawRangeInput = exports.RawRangeInput = function (_Component) {
   _inherits(RawRangeInput, _Component);
 
   function RawRangeInput(props) {
@@ -63,62 +111,35 @@ export var RawRangeInput = function (_Component) {
 
       var isDisabled = min >= max;
 
-      return React.createElement(
-        'form',
-        { className: cssClasses.form, onSubmit: this.onSubmit },
-        React.createElement(
-          'fieldset',
-          { className: cssClasses.fieldset },
-          React.createElement(
-            'label',
-            { className: cssClasses.labelMin },
-            React.createElement('input', {
-              className: cssClasses.inputMin,
-              type: 'number',
-              min: min,
-              max: max,
-              step: step,
-              value: minValue,
-              onChange: this.onChange('min'),
-              placeholder: min,
-              disabled: isDisabled
-            })
-          ),
-          React.createElement(
-            'span',
-            { className: cssClasses.separator },
-            labels.separator
-          ),
-          React.createElement(
-            'label',
-            { className: cssClasses.labelMax },
-            React.createElement('input', {
-              className: cssClasses.inputMax,
-              type: 'number',
-              min: min,
-              max: max,
-              step: step,
-              value: maxValue,
-              onChange: this.onChange('max'),
-              placeholder: max,
-              disabled: isDisabled
-            })
-          ),
-          React.createElement(
-            'button',
-            {
-              role: 'button',
-              className: cssClasses.submit,
-              disabled: isDisabled
-            },
-            labels.submit
-          )
-        )
-      );
+      return _preactCompat2.default.createElement('form', { className: cssClasses.form, onSubmit: this.onSubmit }, _preactCompat2.default.createElement('fieldset', { className: cssClasses.fieldset }, _preactCompat2.default.createElement('label', { className: cssClasses.labelMin }, _preactCompat2.default.createElement('input', {
+        className: cssClasses.inputMin,
+        type: 'number',
+        min: min,
+        max: max,
+        step: step,
+        value: minValue,
+        onChange: this.onChange('min'),
+        placeholder: min,
+        disabled: isDisabled
+      })), _preactCompat2.default.createElement('span', { className: cssClasses.separator }, labels.separator), _preactCompat2.default.createElement('label', { className: cssClasses.labelMax }, _preactCompat2.default.createElement('input', {
+        className: cssClasses.inputMax,
+        type: 'number',
+        min: min,
+        max: max,
+        step: step,
+        value: maxValue,
+        onChange: this.onChange('max'),
+        placeholder: max,
+        disabled: isDisabled
+      })), _preactCompat2.default.createElement('button', {
+        role: 'button',
+        className: cssClasses.submit,
+        disabled: isDisabled
+      }, labels.submit)));
     }
   }]);
 
   return RawRangeInput;
-}(Component);
+}(_preactCompat.Component);
 
-export default autoHideContainerHOC(headerFooterHOC(RawRangeInput));
+exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(RawRangeInput));

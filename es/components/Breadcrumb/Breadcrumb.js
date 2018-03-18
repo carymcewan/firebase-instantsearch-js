@@ -1,21 +1,70 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _preactCompat = require("preact-compat");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-import React, { PureComponent } from 'preact-compat';
-import PropTypes from 'prop-types';
-import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+var _propTypes = require("prop-types");
 
-var itemsPropType = PropTypes.arrayOf(PropTypes.shape({
-  name: PropTypes.string,
-  value: PropTypes.string
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _Template = require("../Template.js");
+
+var _Template2 = _interopRequireDefault(_Template);
+
+var _autoHideContainer = require("../../decorators/autoHideContainer.js");
+
+var _autoHideContainer2 = _interopRequireDefault(_autoHideContainer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var itemsPropType = _propTypes2.default.arrayOf(_propTypes2.default.shape({
+  name: _propTypes2.default.string,
+  value: _propTypes2.default.string
 }));
 
 var Breadcrumb = function (_PureComponent) {
@@ -38,27 +87,18 @@ var Breadcrumb = function (_PureComponent) {
           refine = _props.refine,
           cssClasses = _props.cssClasses;
 
-
       var breadcrumb = items.map(function (item, idx) {
         var isLast = idx === items.length - 1;
-        var label = isLast ? React.createElement(
-          'a',
-          { className: cssClasses.disabledLabel + ' ' + cssClasses.label },
-          item.name
-        ) : React.createElement(
-          'a',
-          {
-            className: cssClasses.label,
-            href: createURL(item.value),
-            onClick: function onClick(e) {
-              e.preventDefault();
-              refine(item.value);
-            }
-          },
-          item.name
-        );
+        var label = isLast ? _preactCompat2.default.createElement('a', { className: cssClasses.disabledLabel + ' ' + cssClasses.label }, item.name) : _preactCompat2.default.createElement('a', {
+          className: cssClasses.label,
+          href: createURL(item.value),
+          onClick: function onClick(e) {
+            e.preventDefault();
+            refine(item.value);
+          }
+        }, item.name);
 
-        return [React.createElement(Template, _extends({
+        return [_preactCompat2.default.createElement(_Template2.default, _extends({
           key: item.name + idx,
           rootProps: { className: cssClasses.separator },
           templateKey: 'separator'
@@ -74,24 +114,15 @@ var Breadcrumb = function (_PureComponent) {
 
       var homeUrl = createURL(null);
 
-      return React.createElement(
-        'div',
-        { className: cssClasses.root },
-        React.createElement(
-          'a',
-          {
-            className: homeClassNames.join(' '),
-            href: homeUrl,
-            onClick: homeOnClickHandler
-          },
-          React.createElement(Template, _extends({ templateKey: 'home' }, this.props.templateProps))
-        ),
-        breadcrumb
-      );
+      return _preactCompat2.default.createElement('div', { className: cssClasses.root }, _preactCompat2.default.createElement('a', {
+        className: homeClassNames.join(' '),
+        href: homeUrl,
+        onClick: homeOnClickHandler
+      }, _preactCompat2.default.createElement(_Template2.default, _extends({ templateKey: 'home' }, this.props.templateProps))), breadcrumb);
     }
   }]);
 
   return Breadcrumb;
-}(PureComponent);
+}(_preactCompat.PureComponent);
 
-export default autoHideContainerHOC(Breadcrumb);
+exports.default = (0, _autoHideContainer2.default)(Breadcrumb);

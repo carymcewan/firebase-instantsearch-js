@@ -102,7 +102,6 @@ function connectStarRating(renderFn, unmountFn) {
         _widgetParams$max = widgetParams.max,
         max = _widgetParams$max === undefined ? 5 : _widgetParams$max;
 
-
     if (!attributeName) {
       throw new Error(usage);
     }

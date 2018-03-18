@@ -1,12 +1,31 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Selector from '../../components/Selector.js';
-import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = numericSelector;
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-numeric-selector');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Selector = require('../../components/Selector.js');
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _connectNumericSelector = require('../../connectors/numeric-selector/connectNumericSelector.js');
+
+var _connectNumericSelector2 = _interopRequireDefault(_connectNumericSelector);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-numeric-selector');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -20,7 +39,7 @@ var renderer = function renderer(_ref) {
 
     if (isFirstRendering) return;
 
-    render(React.createElement(Selector, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Selector2.default, {
       cssClasses: cssClasses,
       currentValue: currentRefinement,
       options: options,
@@ -87,7 +106,7 @@ var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options
  *   })
  * );
  */
-export default function numericSelector(_ref3) {
+function numericSelector(_ref3) {
   var container = _ref3.container,
       _ref3$operator = _ref3.operator,
       operator = _ref3$operator === undefined ? '=' : _ref3$operator,
@@ -98,17 +117,17 @@ export default function numericSelector(_ref3) {
       _ref3$autoHideContain = _ref3.autoHideContainer,
       autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain;
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
   if (!container || !options || options.length === 0 || !attributeName) {
     throw new Error(usage);
   }
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     // We use the same class to avoid regression on existing website. It needs to be replaced
     // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item)
+    select: (0, _classnames2.default)(bem(null), userCssClasses.select),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item)
   };
 
   var specializedRenderer = renderer({
@@ -118,8 +137,8 @@ export default function numericSelector(_ref3) {
   });
 
   try {
-    var makeNumericSelector = connectNumericSelector(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeNumericSelector = (0, _connectNumericSelector2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeNumericSelector({ operator: operator, attributeName: attributeName, options: options });
   } catch (e) {

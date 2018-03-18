@@ -1,9 +1,14 @@
-// import algoliaSearchHelper from 'algoliasearch-helper';
-import InstantSearch from '../InstantSearch';
+'use strict';
+
+var _InstantSearch = require('../InstantSearch');
+
+var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('InstantSearch lifecycle', function () {
   it('emits an error if the API returns an error', function () {
-    var search = new InstantSearch({
+    var search = new _InstantSearch2.default({
       // correct credentials so that the client does not retry
       appId: 'latency',
       apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
@@ -35,4 +40,4 @@ describe('InstantSearch lifecycle', function () {
 
     return waitForError;
   });
-});
+}); // import algoliaSearchHelper from 'algoliasearch-helper';

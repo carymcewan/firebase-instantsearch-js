@@ -1,9 +1,15 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   header: '',
   item: itemTemplate,
   clearAll: 'Clear all',
   footer: ''
 };
+
 
 function itemTemplate(_ref) {
   var label = _ref.label,

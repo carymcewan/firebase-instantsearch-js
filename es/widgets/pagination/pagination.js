@@ -1,12 +1,33 @@
-import defaults from 'lodash/defaults';
+'use strict';
 
-import React, { render, unmountComponentAtNode } from 'preact-compat';
-import cx from 'classnames';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = pagination;
 
-import Pagination from '../../components/Pagination/Pagination.js';
-import connectPagination from '../../connectors/pagination/connectPagination.js';
+var _defaults = require('lodash/defaults');
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+var _defaults2 = _interopRequireDefault(_defaults);
+
+var _preactCompat = require('preact-compat');
+
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Pagination = require('../../components/Pagination/Pagination.js');
+
+var _Pagination2 = _interopRequireDefault(_Pagination);
+
+var _connectPagination = require('../../connectors/pagination/connectPagination.js');
+
+var _connectPagination2 = _interopRequireDefault(_connectPagination);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaultLabels = {
   previous: '‹',
@@ -15,7 +36,7 @@ var defaultLabels = {
   last: '»'
 };
 
-var bem = bemHelper('ais-pagination');
+var bem = (0, _utils.bemHelper)('ais-pagination');
 
 var renderer = function renderer(_ref) {
   var containerNode = _ref.containerNode,
@@ -46,7 +67,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && nbHits === 0;
 
-    render(React.createElement(Pagination, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Pagination2.default, {
       createURL: createURL,
       cssClasses: cssClasses,
       currentPage: currentRefinement,
@@ -126,7 +147,7 @@ var usage = 'Usage:\npagination({\n  container,\n  [ cssClasses.{root,item,page,
  *   })
  * );
  */
-export default function pagination() {
+function pagination() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref3.container,
       _ref3$labels = _ref3.labels,
@@ -147,25 +168,25 @@ export default function pagination() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var scrollTo = userScrollTo === true ? 'body' : userScrollTo;
-  var scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
+  var scrollToNode = scrollTo !== false ? (0, _utils.getContainerNode)(scrollTo) : false;
 
   var cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    page: cx(bem('item', 'page'), userCssClasses.page),
-    previous: cx(bem('item', 'previous'), userCssClasses.previous),
-    next: cx(bem('item', 'next'), userCssClasses.next),
-    first: cx(bem('item', 'first'), userCssClasses.first),
-    last: cx(bem('item', 'last'), userCssClasses.last),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
+    root: (0, _classnames2.default)(bem(null), userCssClasses.root),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    link: (0, _classnames2.default)(bem('link'), userCssClasses.link),
+    page: (0, _classnames2.default)(bem('item', 'page'), userCssClasses.page),
+    previous: (0, _classnames2.default)(bem('item', 'previous'), userCssClasses.previous),
+    next: (0, _classnames2.default)(bem('item', 'next'), userCssClasses.next),
+    first: (0, _classnames2.default)(bem('item', 'first'), userCssClasses.first),
+    last: (0, _classnames2.default)(bem('item', 'last'), userCssClasses.last),
+    active: (0, _classnames2.default)(bem('item', 'active'), userCssClasses.active),
+    disabled: (0, _classnames2.default)(bem('item', 'disabled'), userCssClasses.disabled)
   };
 
-  var labels = defaults(userLabels, defaultLabels);
+  var labels = (0, _defaults2.default)(userLabels, defaultLabels);
 
   var specializedRenderer = renderer({
     containerNode: containerNode,
@@ -178,8 +199,8 @@ export default function pagination() {
   });
 
   try {
-    var makeWidget = connectPagination(specializedRenderer, function () {
-      return unmountComponentAtNode(containerNode);
+    var makeWidget = (0, _connectPagination2.default)(specializedRenderer, function () {
+      return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
     return makeWidget({ maxPages: maxPages });
   } catch (e) {

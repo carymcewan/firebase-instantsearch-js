@@ -1,13 +1,33 @@
-import React, { render } from 'preact-compat';
-import cx from 'classnames';
+'use strict';
 
-import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
-import { connectBreadcrumb } from '../../connectors';
-import defaultTemplates from './defaultTemplates.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = breadcrumb;
 
-import { bemHelper, getContainerNode, prepareTemplateProps } from '../../lib/utils';
+var _preactCompat = require('preact-compat');
 
-var bem = bemHelper('ais-breadcrumb');
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _Breadcrumb = require('../../components/Breadcrumb/Breadcrumb');
+
+var _Breadcrumb2 = _interopRequireDefault(_Breadcrumb);
+
+var _connectors = require('../../connectors');
+
+var _defaultTemplates = require('./defaultTemplates.js');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+var _utils = require('../../lib/utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var bem = (0, _utils.bemHelper)('ais-breadcrumb');
 
 var renderer = function renderer(_ref) {
   var autoHideContainer = _ref.autoHideContainer,
@@ -25,8 +45,8 @@ var renderer = function renderer(_ref) {
         refine = _ref2.refine;
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: defaultTemplates,
+      renderState.templateProps = (0, _utils.prepareTemplateProps)({
+        defaultTemplates: _defaultTemplates2.default,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: templates,
         transformData: transformData
@@ -36,7 +56,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-    render(React.createElement(Breadcrumb, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Breadcrumb2.default, {
       canRefine: canRefine,
       cssClasses: cssClasses,
       createURL: createURL,
@@ -136,7 +156,7 @@ var usage = 'Usage:\nbreadcrumb({\n  container,\n  attributes,\n  [ autoHideCont
  * );
  */
 
-export default function breadcrumb() {
+function breadcrumb() {
   var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       attributes = _ref3.attributes,
       _ref3$autoHideContain = _ref3.autoHideContainer,
@@ -149,22 +169,22 @@ export default function breadcrumb() {
       _ref3$separator = _ref3.separator,
       separator = _ref3$separator === undefined ? ' > ' : _ref3$separator,
       _ref3$templates = _ref3.templates,
-      templates = _ref3$templates === undefined ? defaultTemplates : _ref3$templates,
+      templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData;
 
   if (!container) {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   var cssClasses = {
-    disabledLabel: cx(bem('disabledLabel'), userCssClasses.disabledLabel),
-    home: cx(bem('home'), userCssClasses.home),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    root: cx(bem('root'), userCssClasses.root),
-    separator: cx(bem('separator'), userCssClasses.separator)
+    disabledLabel: (0, _classnames2.default)(bem('disabledLabel'), userCssClasses.disabledLabel),
+    home: (0, _classnames2.default)(bem('home'), userCssClasses.home),
+    item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
+    label: (0, _classnames2.default)(bem('label'), userCssClasses.label),
+    root: (0, _classnames2.default)(bem('root'), userCssClasses.root),
+    separator: (0, _classnames2.default)(bem('separator'), userCssClasses.separator)
   };
 
   var specializedRenderer = renderer({
@@ -178,7 +198,7 @@ export default function breadcrumb() {
   });
 
   try {
-    var makeBreadcrumb = connectBreadcrumb(specializedRenderer);
+    var makeBreadcrumb = (0, _connectors.connectBreadcrumb)(specializedRenderer);
     return makeBreadcrumb({ attributes: attributes, rootPath: rootPath });
   } catch (e) {
     throw new Error(usage);

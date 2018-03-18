@@ -1,12 +1,41 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-import forEach from 'lodash/forEach';
-import cx from 'classnames';
-import { bemHelper, getContainerNode, renderTemplate } from '../../lib/utils';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import defaultTemplates from './defaultTemplates';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = searchBox;
 
-var bem = bemHelper('ais-search-box');
+var _forEach = require('lodash/forEach');
+
+var _forEach2 = _interopRequireDefault(_forEach);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _utils = require('../../lib/utils');
+
+var _connectSearchBox = require('../../connectors/search-box/connectSearchBox');
+
+var _connectSearchBox2 = _interopRequireDefault(_connectSearchBox);
+
+var _defaultTemplates = require('./defaultTemplates');
+
+var _defaultTemplates2 = _interopRequireDefault(_defaultTemplates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var bem = (0, _utils.bemHelper)('ais-search-box');
 var KEY_ENTER = 13;
 var KEY_SUPPRESS = 8;
 
@@ -116,7 +145,7 @@ var renderer = function renderer(_ref) {
     }
 
     if (reset) {
-      var resetBtnSelector = '.' + cx(bem('reset-wrapper'));
+      var resetBtnSelector = '.' + (0, _classnames2.default)(bem('reset-wrapper'));
       // hide reset button when there is no query
       var resetButton = containerNode.tagName === 'INPUT' ? containerNode.parentNode.querySelector(resetBtnSelector) : containerNode.querySelector(resetBtnSelector);
       resetButton.style.display = query && query.trim() ? 'block' : 'none';
@@ -235,7 +264,7 @@ var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClass
  *   })
  * );
  */
-export default function searchBox() {
+function searchBox() {
   var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       container = _ref4.container,
       _ref4$placeholder = _ref4.placeholder,
@@ -262,7 +291,7 @@ export default function searchBox() {
     throw new Error(usage);
   }
 
-  var containerNode = getContainerNode(container);
+  var containerNode = (0, _utils.getContainerNode)(container);
 
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
@@ -279,7 +308,7 @@ export default function searchBox() {
     cssClasses: cssClasses,
     placeholder: placeholder,
     poweredBy: poweredBy,
-    templates: defaultTemplates,
+    templates: _defaultTemplates2.default,
     autofocus: autofocus,
     searchOnEnterKeyPressOnly: searchOnEnterKeyPressOnly,
     wrapInput: wrapInput,
@@ -289,7 +318,7 @@ export default function searchBox() {
   });
 
   try {
-    var makeWidget = connectSearchBox(specializedRenderer, disposer(containerNode));
+    var makeWidget = (0, _connectSearchBox2.default)(specializedRenderer, disposer(containerNode));
     return makeWidget({ queryHook: queryHook });
   } catch (e) {
     throw new Error(usage);
@@ -320,7 +349,7 @@ function getInput(containerNode) {
 function wrapInputFn(input, cssClasses) {
   // Wrap input in a .ais-search-box div
   var wrapper = document.createElement('div');
-  var CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
+  var CSSClassesToAdd = (0, _classnames2.default)(bem(null), cssClasses.root).split(' ');
   CSSClassesToAdd.forEach(function (cssClass) {
     return wrapper.classList.add(cssClass);
   });
@@ -365,7 +394,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   };
 
   // Overrides attributes if not already set
-  forEach(defaultAttributes, function (value, key) {
+  (0, _forEach2.default)(defaultAttributes, function (value, key) {
     if (input.hasAttribute(key)) {
       return;
     }
@@ -373,7 +402,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   });
 
   // Add classes
-  var CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
+  var CSSClassesToAdd = (0, _classnames2.default)(bem('input'), cssClasses.input).split(' ');
   CSSClassesToAdd.forEach(function (cssClass) {
     return input.classList.add(cssClass);
   });
@@ -398,10 +427,10 @@ function addReset(input, reset, _ref5, clearFunction) {
   }, reset);
 
   var resetCSSClasses = {
-    root: cx(bem('reset'), reset.cssClasses.root)
+    root: (0, _classnames2.default)(bem('reset'), reset.cssClasses.root)
   };
 
-  var stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: reset,
     data: {
@@ -409,7 +438,7 @@ function addReset(input, reset, _ref5, clearFunction) {
     }
   });
 
-  var htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('reset-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 
@@ -436,10 +465,10 @@ function addMagnifier(input, magnifier, _ref6) {
   }, magnifier);
 
   var magnifierCSSClasses = {
-    root: cx(bem('magnifier'), magnifier.cssClasses.root)
+    root: (0, _classnames2.default)(bem('magnifier'), magnifier.cssClasses.root)
   };
 
-  var stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: magnifier,
     data: {
@@ -447,7 +476,7 @@ function addMagnifier(input, magnifier, _ref6) {
     }
   });
 
-  var htmlNode = createNodeFromString(stringNode, cx(bem('magnifier-wrapper')));
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('magnifier-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 }
@@ -461,10 +490,10 @@ function addLoadingIndicator(input, loadingIndicator, _ref7) {
   }, loadingIndicator);
 
   var loadingIndicatorCSSClasses = {
-    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root)
+    root: (0, _classnames2.default)(bem('loading-indicator'), loadingIndicator.cssClasses.root)
   };
 
-  var stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: loadingIndicator,
     data: {
@@ -472,7 +501,7 @@ function addLoadingIndicator(input, loadingIndicator, _ref7) {
     }
   });
 
-  var htmlNode = createNodeFromString(stringNode, cx(bem('loading-indicator-wrapper')));
+  var htmlNode = createNodeFromString(stringNode, (0, _classnames2.default)(bem('loading-indicator-wrapper')));
 
   input.parentNode.appendChild(htmlNode);
 }
@@ -495,13 +524,13 @@ function addPoweredBy(input, poweredBy, _ref8) {
   }, poweredBy);
 
   var poweredByCSSClasses = {
-    root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-    link: cx(bem('powered-by-link'), poweredBy.cssClasses.link)
+    root: (0, _classnames2.default)(bem('powered-by'), poweredBy.cssClasses.root),
+    link: (0, _classnames2.default)(bem('powered-by-link'), poweredBy.cssClasses.link)
   };
 
   var url = 'https://www.algolia.com/?' + 'utm_source=instantsearch.js&' + 'utm_medium=website&' + ('utm_content=' + location.hostname + '&') + 'utm_campaign=poweredby';
 
-  var stringNode = renderTemplate({
+  var stringNode = (0, _utils.renderTemplate)({
     templateKey: 'template',
     templates: poweredBy,
     data: {
