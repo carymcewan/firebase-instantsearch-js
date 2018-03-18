@@ -1,3 +1,8 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 function round(v, precision) {
   var res = Math.round(v / precision) * precision;
   if (res < 1) {

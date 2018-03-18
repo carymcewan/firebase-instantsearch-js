@@ -1,6 +1,17 @@
-import { checkRendering, escapeRefinement, unescapeRefinement } from '../../lib/utils.js';
+'use strict';
 
-import find from 'lodash/find';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = connectToggle;
+
+var _utils = require('../../lib/utils.js');
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   value,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customToggle({\n    attributeName,\n    label,\n    [ values = {on: true, off: undefined} ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html\n';
 
@@ -81,8 +92,8 @@ var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, is
  *   })
  * );
  */
-export default function connectToggle(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectToggle(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -91,14 +102,13 @@ export default function connectToggle(renderFn, unmountFn) {
         _widgetParams$values = widgetParams.values,
         userValues = _widgetParams$values === undefined ? { on: true, off: undefined } : _widgetParams$values;
 
-
     if (!attributeName || !label) {
       throw new Error(usage);
     }
 
     var hasAnOffValue = userValues.off !== undefined;
-    var on = userValues ? escapeRefinement(userValues.on) : undefined;
-    var off = userValues ? escapeRefinement(userValues.off) : undefined;
+    var on = userValues ? (0, _utils.escapeRefinement)(userValues.on) : undefined;
+    var off = userValues ? (0, _utils.escapeRefinement)(userValues.off) : undefined;
 
     return {
       getConfiguration: function getConfiguration() {
@@ -192,9 +202,9 @@ export default function connectToggle(renderFn, unmountFn) {
         var offValue = off === undefined ? false : off;
         var allFacetValues = results.getFacetValues(attributeName);
 
-        var onData = find(allFacetValues, function (_ref4) {
+        var onData = (0, _find2.default)(allFacetValues, function (_ref4) {
           var name = _ref4.name;
-          return name === unescapeRefinement(on);
+          return name === (0, _utils.unescapeRefinement)(on);
         });
         var onFacetValue = {
           name: label,
@@ -202,9 +212,9 @@ export default function connectToggle(renderFn, unmountFn) {
           count: onData === undefined ? null : onData.count
         };
 
-        var offData = hasAnOffValue ? find(allFacetValues, function (_ref5) {
+        var offData = hasAnOffValue ? (0, _find2.default)(allFacetValues, function (_ref5) {
           var name = _ref5.name;
-          return name === unescapeRefinement(offValue);
+          return name === (0, _utils.unescapeRefinement)(offValue);
         }) : undefined;
         var offFacetValue = {
           name: label,

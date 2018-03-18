@@ -1,5 +1,17 @@
-import find from 'lodash/find';
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = connectSortBySelector;
+
+var _find = require('lodash/find');
+
+var _find2 = _interopRequireDefault(_find);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({ indices })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html\n';
 
@@ -79,13 +91,12 @@ var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function r
  *   })
  * );
  */
-export default function connectSortBySelector(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectSortBySelector(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var indices = widgetParams.indices;
-
 
     if (!indices) {
       throw new Error(usage);
@@ -106,7 +117,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
             instantSearchInstance = _ref2.instantSearchInstance;
 
         var currentIndex = helper.getIndex();
-        var isIndexInList = find(indices, function (_ref3) {
+        var isIndexInList = (0, _find2.default)(indices, function (_ref3) {
           var name = _ref3.name;
           return name === currentIndex;
         });

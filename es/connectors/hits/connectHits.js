@@ -1,5 +1,17 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
-import { checkRendering } from '../../lib/utils.js';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = connectHits;
+
+var _escapeHighlight = require('../../lib/escape-highlight.js');
+
+var _escapeHighlight2 = _interopRequireDefault(_escapeHighlight);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html\n';
 
@@ -41,14 +53,14 @@ var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirs
  *   })
  * );
  */
-export default function connectHits(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectHits(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     return {
       getConfiguration: function getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+        return widgetParams.escapeHits ? _escapeHighlight.tagConfig : undefined;
       },
       init: function init(_ref) {
         var instantSearchInstance = _ref.instantSearchInstance;
@@ -65,7 +77,7 @@ export default function connectHits(renderFn, unmountFn) {
             instantSearchInstance = _ref2.instantSearchInstance;
 
         if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
+          results.hits = (0, _escapeHighlight2.default)(results.hits);
         }
 
         renderFn({

@@ -1,5 +1,4 @@
-import { deprecate } from '../../lib/utils';
-import connectRange from '../range/connectRange';
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true

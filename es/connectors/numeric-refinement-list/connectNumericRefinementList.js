@@ -1,6 +1,17 @@
-import includes from 'lodash/includes';
+'use strict';
 
-import { checkRendering } from '../../lib/utils.js';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = connectNumericRefinementList;
+
+var _includes = require('lodash/includes');
+
+var _includes2 = _interopRequireDefault(_includes);
+
+var _utils = require('../../lib/utils.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
 
@@ -93,14 +104,13 @@ var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementL
  *   })
  * );
  */
-export default function connectNumericRefinementList(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectNumericRefinementList(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var attributeName = widgetParams.attributeName,
         options = widgetParams.options;
-
 
     if (!attributeName || !options) {
       throw new Error(usage);
@@ -245,7 +255,7 @@ function refine(state, attributeName, options, facetValue) {
 
 function hasNumericRefinement(currentRefinements, operator, value) {
   var hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  var includesValue = includes(currentRefinements[operator], value);
+  var includesValue = (0, _includes2.default)(currentRefinements[operator], value);
 
   return hasOperatorRefinements && includesValue;
 }

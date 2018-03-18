@@ -1,15 +1,42 @@
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+'use strict';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.checkUsage = undefined;
+exports.default = connectRefinementList;
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+var _utils = require('../../lib/utils.js');
 
-import { checkRendering } from '../../lib/utils.js';
-import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+var _escapeHighlight = require('../../lib/escape-highlight.js');
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+  }return target;
+}
 
 var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
 
-export var checkUsage = function checkUsage(_ref) {
+var checkUsage = exports.checkUsage = function checkUsage(_ref) {
   var attributeName = _ref.attributeName,
       operator = _ref.operator,
       usageMessage = _ref.usageMessage,
@@ -122,8 +149,8 @@ export var checkUsage = function checkUsage(_ref) {
  *   })
  * );
  */
-export default function connectRefinementList(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+function connectRefinementList(renderFn, unmountFn) {
+  (0, _utils.checkRendering)(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -137,7 +164,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
         sortBy = _widgetParams$sortBy === undefined ? ['isRefined', 'count:desc', 'name:asc'] : _widgetParams$sortBy,
         _widgetParams$escapeF = widgetParams.escapeFacetValues,
         escapeFacetValues = _widgetParams$escapeF === undefined ? false : _widgetParams$escapeF;
-
 
     checkUsage({ attributeName: attributeName, operator: operator, usage: usage, limit: limit, showMoreLimit: showMoreLimit });
 
@@ -212,12 +238,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
             });
           } else {
             var tags = {
-              highlightPreTag: escapeFacetValues ? tagConfig.highlightPreTag : undefined,
-              highlightPostTag: escapeFacetValues ? tagConfig.highlightPostTag : undefined
+              highlightPreTag: escapeFacetValues ? _escapeHighlight.tagConfig.highlightPreTag : undefined,
+              highlightPostTag: escapeFacetValues ? _escapeHighlight.tagConfig.highlightPostTag : undefined
             };
 
             helper.searchForFacetValues(attributeName, query, limit, tags).then(function (results) {
-              var facetValues = escapeFacetValues ? escapeFacets(results.facetHits) : results.facetHits;
+              var facetValues = escapeFacetValues ? (0, _escapeHighlight.escapeFacets)(results.facetHits) : results.facetHits;
 
               var normalizedFacetValues = facetValues.map(function (_ref4) {
                 var value = _ref4.value,
@@ -266,7 +292,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
       getLimit: function getLimit() {
         return this.isShowingMore ? showMoreLimit : limit;
       },
-
 
       getConfiguration: function getConfiguration() {
         var configuration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -317,7 +342,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
             state = renderOptions.state,
             createURL = renderOptions.createURL,
             instantSearchInstance = renderOptions.instantSearchInstance;
-
 
         var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
         var items = facetValues.slice(0, this.getLimit()).map(formatItems);
