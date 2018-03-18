@@ -1,65 +1,13 @@
-"use strict";
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectRange;
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _find = require("lodash/find");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _find2 = _interopRequireDefault(_find);
+import find from 'lodash/find';
+import _isFinite from 'lodash/isFinite';
 
-var _isFinite2 = require("lodash/isFinite");
-
-var _isFinite3 = _interopRequireDefault(_isFinite2);
-
-var _utils = require("../../lib/utils.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }return target;
-};
-
-var _slicedToArray = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;_e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }return _arr;
-  }return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-  } else {
-    obj[key] = value;
-  }return obj;
-}
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customRange = connectRange(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   range,\n  //   start,\n  //   format,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRange({\n    attributeName,\n    [ min ],\n    [ max ],\n    [ precision = 2 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRange.html\n';
 
@@ -94,8 +42,8 @@ var usage = 'Usage:\nvar customRange = connectRange(function render(params, isFi
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.
  */
-function connectRange(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectRange(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -105,12 +53,13 @@ function connectRange(renderFn, unmountFn) {
         _widgetParams$precisi = widgetParams.precision,
         precision = _widgetParams$precisi === undefined ? 2 : _widgetParams$precisi;
 
+
     if (!attributeName) {
       throw new Error(usage);
     }
 
-    var hasMinBound = (0, _isFinite3.default)(minBound);
-    var hasMaxBound = (0, _isFinite3.default)(maxBound);
+    var hasMinBound = _isFinite(minBound);
+    var hasMaxBound = _isFinite(maxBound);
 
     var formatToNumber = function formatToNumber(v) {
       return Number(Number(v).toFixed(precision));
@@ -132,7 +81,7 @@ function connectRange(renderFn, unmountFn) {
         var min = void 0;
         if (hasMinBound) {
           min = minBound;
-        } else if ((0, _isFinite3.default)(stats.min)) {
+        } else if (_isFinite(stats.min)) {
           min = stats.min;
         } else {
           min = 0;
@@ -141,7 +90,7 @@ function connectRange(renderFn, unmountFn) {
         var max = void 0;
         if (hasMaxBound) {
           max = maxBound;
-        } else if ((0, _isFinite3.default)(stats.max)) {
+        } else if (_isFinite(stats.max)) {
           max = stats.max;
         } else {
           max = 0;
@@ -161,8 +110,8 @@ function connectRange(renderFn, unmountFn) {
             _ref4 = _slicedToArray(_ref3, 1),
             maxValue = _ref4[0];
 
-        var min = (0, _isFinite3.default)(minValue) ? minValue : -Infinity;
-        var max = (0, _isFinite3.default)(maxValue) ? maxValue : Infinity;
+        var min = _isFinite(minValue) ? minValue : -Infinity;
+        var max = _isFinite(maxValue) ? maxValue : Infinity;
 
         return [min, max];
       },
@@ -209,14 +158,14 @@ function connectRange(renderFn, unmountFn) {
           }
 
           var isResetNewNextMin = newNextMin === undefined;
-          var isValidNewNextMin = (0, _isFinite3.default)(newNextMin);
-          var isValidMinCurrentRange = (0, _isFinite3.default)(currentRangeMin);
+          var isValidNewNextMin = _isFinite(newNextMin);
+          var isValidMinCurrentRange = _isFinite(currentRangeMin);
           var isGreaterThanCurrentRange = isValidMinCurrentRange && currentRangeMin <= newNextMin;
           var isMinValid = isResetNewNextMin || isValidNewNextMin && (!isValidMinCurrentRange || isGreaterThanCurrentRange);
 
           var isResetNewNextMax = newNextMax === undefined;
-          var isValidNewNextMax = (0, _isFinite3.default)(newNextMax);
-          var isValidMaxCurrentRange = (0, _isFinite3.default)(currentRangeMax);
+          var isValidNewNextMax = _isFinite(newNextMax);
+          var isValidMaxCurrentRange = _isFinite(currentRangeMax);
           var isLowerThanRange = isValidMaxCurrentRange && currentRangeMax >= newNextMax;
           var isMaxValid = isResetNewNextMax || isValidNewNextMax && (!isValidMaxCurrentRange || isLowerThanRange);
 
@@ -247,8 +196,8 @@ function connectRange(renderFn, unmountFn) {
 
         var boundsAlreadyDefined = currentConfiguration && currentConfiguration.numericRefinements && currentConfiguration.numericRefinements[attributeName] !== undefined;
 
-        var isMinBoundValid = (0, _isFinite3.default)(minBound);
-        var isMaxBoundValid = (0, _isFinite3.default)(maxBound);
+        var isMinBoundValid = _isFinite(minBound);
+        var isMaxBoundValid = _isFinite(maxBound);
         var isAbleToRefine = isMinBoundValid && isMaxBoundValid ? minBound < maxBound : isMinBoundValid || isMaxBoundValid;
 
         if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
@@ -293,7 +242,7 @@ function connectRange(renderFn, unmountFn) {
             instantSearchInstance = _ref12.instantSearchInstance;
 
         var facetsFromResults = results.disjunctiveFacets || [];
-        var facet = (0, _find2.default)(facetsFromResults, { name: attributeName });
+        var facet = find(facetsFromResults, { name: attributeName });
         var stats = facet && facet.stats || {};
 
         var currentRange = this._getCurrentRange(stats);

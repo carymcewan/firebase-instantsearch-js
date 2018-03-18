@@ -1,92 +1,25 @@
-"use strict";
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _algoliasearchLite = require("algoliasearch/src/browser/builds/algoliasearchLite.js");
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var _algoliasearchLite2 = _interopRequireDefault(_algoliasearchLite);
-
-var _algoliasearchHelper = require("algoliasearch-helper");
-
-var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
-
-var _forEach = require("lodash/forEach");
-
-var _forEach2 = _interopRequireDefault(_forEach);
-
-var _mergeWith = require("lodash/mergeWith");
-
-var _mergeWith2 = _interopRequireDefault(_mergeWith);
-
-var _union = require("lodash/union");
-
-var _union2 = _interopRequireDefault(_union);
-
-var _isPlainObject = require("lodash/isPlainObject");
-
-var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-
-var _events = require("events");
-
-var _urlSync = require("./url-sync.js");
-
-var _urlSync2 = _interopRequireDefault(_urlSync);
-
-var _version = require("./version.js");
-
-var _version2 = _interopRequireDefault(_version);
-
-var _createHelpers = require("./createHelpers.js");
-
-var _createHelpers2 = _interopRequireDefault(_createHelpers);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }return target;
-};
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // we use the full path to the lite build to solve a meteor.js issue:
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
-
+import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
+import algoliasearchHelper from 'algoliasearch-helper';
+import forEach from 'lodash/forEach';
+import mergeWith from 'lodash/mergeWith';
+import union from 'lodash/union';
+import isPlainObject from 'lodash/isPlainObject';
+import { EventEmitter } from 'events';
+import urlSyncWidget from './url-sync.js';
+import version from './version.js';
+import createHelpers from './createHelpers.js';
 
 function defaultCreateURL() {
   return '#';
@@ -141,8 +74,8 @@ var InstantSearch = function (_EventEmitter) {
       throw new Error(usage);
     }
 
-    var client = createAlgoliaClient(_algoliasearchLite2.default, appId, apiKey);
-    client.addAlgoliaAgent('instantsearch.js ' + _version2.default);
+    var client = createAlgoliaClient(algoliasearch, appId, apiKey);
+    client.addAlgoliaAgent('instantsearch.js ' + version);
 
     _this.client = client;
     _this.helper = null;
@@ -150,7 +83,7 @@ var InstantSearch = function (_EventEmitter) {
     _this.searchParameters = _extends({}, searchParameters, { index: indexName });
     _this.widgets = [];
     _this.templatesConfig = {
-      helpers: (0, _createHelpers2.default)({ numberLocale: numberLocale }),
+      helpers: createHelpers({ numberLocale: numberLocale }),
       compileOptions: {}
     };
     _this._stalledSearchDelay = stalledSearchDelay;
@@ -173,6 +106,7 @@ var InstantSearch = function (_EventEmitter) {
    * created by [widget factories](widgets.html) like the one provided with InstantSearch.js.
    * @return {undefined} This method does not return anything
    */
+
 
   _createClass(InstantSearch, [{
     key: 'addWidget',
@@ -328,7 +262,7 @@ var InstantSearch = function (_EventEmitter) {
       var searchParametersFromUrl = void 0;
 
       if (this.urlSync) {
-        var syncWidget = (0, _urlSync2.default)(this.urlSync);
+        var syncWidget = urlSyncWidget(this.urlSync);
         this._createURL = syncWidget.createURL.bind(syncWidget);
         this._createAbsoluteURL = function (relative) {
           return _this4._createURL(relative, { absolute: true });
@@ -344,12 +278,12 @@ var InstantSearch = function (_EventEmitter) {
 
       this.searchParameters = this.widgets.reduce(enhanceConfiguration(searchParametersFromUrl), this.searchParameters);
 
-      var helper = (0, _algoliasearchHelper2.default)(this.client, this.searchParameters.index || this.indexName, this.searchParameters);
+      var helper = algoliasearchHelper(this.client, this.searchParameters.index || this.indexName, this.searchParameters);
 
       if (this._searchFunction) {
         this._mainHelperSearch = helper.search.bind(helper);
         helper.search = function () {
-          var helperSearchFunction = (0, _algoliasearchHelper2.default)({
+          var helperSearchFunction = algoliasearchHelper({
             addAlgoliaAgent: function addAlgoliaAgent() {},
             search: function search() {}
           }, helper.state.index, helper.state);
@@ -418,7 +352,7 @@ var InstantSearch = function (_EventEmitter) {
         this._isSearchStalled = false;
       }
 
-      (0, _forEach2.default)(this.widgets, function (widget) {
+      forEach(this.widgets, function (widget) {
         if (!widget.render) {
           return;
         }
@@ -447,7 +381,7 @@ var InstantSearch = function (_EventEmitter) {
     value: function _init(state, helper) {
       var _this6 = this;
 
-      (0, _forEach2.default)(this.widgets, function (widget) {
+      forEach(this.widgets, function (widget) {
         if (widget.init) {
           widget.init({
             state: state,
@@ -463,7 +397,7 @@ var InstantSearch = function (_EventEmitter) {
   }]);
 
   return InstantSearch;
-}(_events.EventEmitter);
+}(EventEmitter);
 
 function enhanceConfiguration(searchParametersFromUrl) {
   return function (configuration, widgetDefinition) {
@@ -475,19 +409,19 @@ function enhanceConfiguration(searchParametersFromUrl) {
     var customizer = function customizer(a, b) {
       // always create a unified array for facets refinements
       if (Array.isArray(a)) {
-        return (0, _union2.default)(a, b);
+        return union(a, b);
       }
 
       // avoid mutating objects
-      if ((0, _isPlainObject2.default)(a)) {
-        return (0, _mergeWith2.default)({}, a, b, customizer);
+      if (isPlainObject(a)) {
+        return mergeWith({}, a, b, customizer);
       }
 
       return undefined;
     };
 
-    return (0, _mergeWith2.default)({}, configuration, partialConfiguration, customizer);
+    return mergeWith({}, configuration, partialConfiguration, customizer);
   };
 }
 
-exports.default = InstantSearch;
+export default InstantSearch;

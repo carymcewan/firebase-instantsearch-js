@@ -1,17 +1,5 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectPriceRanges;
-
-var _utils = require('../../lib/utils.js');
-
-var _generateRanges2 = require('./generate-ranges.js');
-
-var _generateRanges3 = _interopRequireDefault(_generateRanges2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import { checkRendering } from '../../lib/utils.js';
+import generateRanges from './generate-ranges.js';
 
 var usage = 'Usage:\nvar customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPriceRanges({\n    attributeName,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html\n';
 
@@ -95,12 +83,13 @@ var usage = 'Usage:\nvar customPriceRanges = connectPriceRanges(function render(
  *   })
  * );
  */
-function connectPriceRanges(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectPriceRanges(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var attributeName = widgetParams.attributeName;
+
 
     if (!attributeName) {
       throw new Error(usage);
@@ -112,7 +101,7 @@ function connectPriceRanges(renderFn, unmountFn) {
       },
       _generateRanges: function _generateRanges(results) {
         var stats = results.getFacetStats(attributeName);
-        return (0, _generateRanges3.default)(stats);
+        return generateRanges(stats);
       },
       _extractRefinedRange: function _extractRefinedRange(helper) {
         var refinements = helper.getRefinements(attributeName);

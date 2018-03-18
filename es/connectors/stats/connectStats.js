@@ -1,11 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectStats;
-
-var _utils = require('../../lib/utils.js');
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customStats = connectStats(function render(params, isFirstRendering) {\n  // params = {\n  //   instantSearchInstance,\n  //   hitsPerPage,\n  //   nbHits,\n  //   nbPages,\n  //   page,\n  //   processingTimeMS,\n  //   query,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(customStats());\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html';
 
@@ -47,8 +40,8 @@ var usage = 'Usage:\nvar customStats = connectStats(function render(params, isFi
  *   })
  * );
  */
-function connectStats(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectStats(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};

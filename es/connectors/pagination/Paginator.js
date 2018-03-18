@@ -1,30 +1,8 @@
-"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _range = require("lodash/range");
-
-var _range2 = _interopRequireDefault(_range);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
+import range from 'lodash/range';
 
 var Paginator = function () {
   function Paginator(params) {
@@ -42,10 +20,11 @@ var Paginator = function () {
           currentPage = this.currentPage,
           padding = this.padding;
 
+
       if (total === 0) return [0];
 
       var totalDisplayedPages = this.nbPagesDisplayed(padding, total);
-      if (totalDisplayedPages === total) return (0, _range2.default)(0, total);
+      if (totalDisplayedPages === total) return range(0, total);
 
       var paddingLeft = this.calculatePaddingLeft(currentPage, padding, total, totalDisplayedPages);
       var paddingRight = totalDisplayedPages - paddingLeft;
@@ -53,7 +32,7 @@ var Paginator = function () {
       var first = currentPage - paddingLeft;
       var last = currentPage + paddingRight;
 
-      return (0, _range2.default)(first, last);
+      return range(first, last);
     }
   }, {
     key: 'nbPagesDisplayed',
@@ -88,4 +67,4 @@ var Paginator = function () {
   return Paginator;
 }();
 
-exports.default = Paginator;
+export default Paginator;

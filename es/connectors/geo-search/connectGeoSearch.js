@@ -1,16 +1,5 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _noop = require('lodash/noop');
-
-var _noop2 = _interopRequireDefault(_noop);
-
-var _utils = require('../../lib/utils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import noop from 'lodash/noop';
+import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
 
 var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   position,\n  //   refine,\n  //   clearMapRefinement,\n  //   isRefinedWithMap,\n  //   toggleRefineOnMapMove,\n  //   isRefineOnMapMove,\n  //   setMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   widgetParams,\n  //   instantSearchInstance,\n  // }\n});\n\nsearch.addWidget(\n  customGeoSearch({\n    [ enableRefineOnMapMove = true ],\n    [ enableGeolocationWithIP = true ],\n    [ position ],\n    [ radius ],\n    [ precision ],\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html\n';
 
@@ -105,7 +94,7 @@ var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(pa
  * );
  */
 var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -117,17 +106,18 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
         radius = widgetParams.radius,
         precision = widgetParams.precision;
 
+
     var widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       lastRefinePosition: '',
       lastRefineBoundingBox: '',
-      internalToggleRefineOnMapMove: _noop2.default,
-      internalSetMapMoveSinceLastRefine: _noop2.default
+      internalToggleRefineOnMapMove: noop,
+      internalSetMapMoveSinceLastRefine: noop
     };
 
     var getPositionFromState = function getPositionFromState(state) {
-      return state.aroundLatLng && (0, _utils.parseAroundLatLngFromString)(state.aroundLatLng);
+      return state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
     };
 
     var refine = function refine(helper) {
@@ -197,9 +187,9 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
 
       var isFirstRendering = true;
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(_noop2.default, initArgs);
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(noop, initArgs);
 
-      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(_noop2.default, initArgs);
+      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(noop, initArgs);
 
       renderFn({
         items: [],
@@ -312,4 +302,4 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
   };
 };
 
-exports.default = connectGeoSearch;
+export default connectGeoSearch;

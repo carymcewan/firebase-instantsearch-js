@@ -1,27 +1,7 @@
-'use strict';
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectInfiniteHits;
-
-var _escapeHighlight = require('../../lib/escape-highlight.js');
-
-var _escapeHighlight2 = _interopRequireDefault(_escapeHighlight);
-
-var _utils = require('../../lib/utils.js');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }return arr2;
-  } else {
-    return Array.from(arr);
-  }
-}
+import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    escapeHits: true,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html\n';
 
@@ -79,8 +59,8 @@ var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function rende
  *   })
  * );
  */
-function connectInfiniteHits(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectInfiniteHits(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -94,7 +74,7 @@ function connectInfiniteHits(renderFn, unmountFn) {
 
     return {
       getConfiguration: function getConfiguration() {
-        return widgetParams.escapeHits ? _escapeHighlight.tagConfig : undefined;
+        return widgetParams.escapeHits ? tagConfig : undefined;
       },
       init: function init(_ref) {
         var instantSearchInstance = _ref.instantSearchInstance,
@@ -121,7 +101,7 @@ function connectInfiniteHits(renderFn, unmountFn) {
         }
 
         if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
-          results.hits = (0, _escapeHighlight2.default)(results.hits);
+          results.hits = escapeHits(results.hits);
         }
 
         hitsCache = [].concat(_toConsumableArray(hitsCache), _toConsumableArray(results.hits));

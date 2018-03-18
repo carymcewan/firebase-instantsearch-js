@@ -1,38 +1,17 @@
-'use strict';
+/* eslint max-len: 0 */
+import algoliasearchHelper from 'algoliasearch-helper';
+import toFactory from 'to-factory';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _algoliasearchHelper = require('algoliasearch-helper');
-
-var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
-
-var _toFactory = require('to-factory');
-
-var _toFactory2 = _interopRequireDefault(_toFactory);
-
-var _InstantSearch = require('./lib/InstantSearch.js');
-
-var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
-
-var _version = require('./lib/version.js');
-
-var _version2 = _interopRequireDefault(_version);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+/* eslint-disable import/no-unresolved */
+import InstantSearch from './lib/InstantSearch.js';
+import version from './lib/version.js';
 /* eslint-enable import/no-unresolved */
 
 // import instantsearch from 'instantsearch.js';
 // -> provides instantsearch object without connectors and widgets
-
-
-/* eslint-disable import/no-unresolved */
-/* eslint max-len: 0 */
-var instantSearchFactory = Object.assign((0, _toFactory2.default)(_InstantSearch2.default), {
-  version: _version2.default,
-  createQueryString: _algoliasearchHelper2.default.url.getQueryStringFromState
+var instantSearchFactory = Object.assign(toFactory(InstantSearch), {
+  version: version,
+  createQueryString: algoliasearchHelper.url.getQueryStringFromState
 });
 
 Object.defineProperty(instantSearchFactory, 'widgets', {
@@ -47,4 +26,4 @@ Object.defineProperty(instantSearchFactory, 'connectors', {
   }
 });
 
-exports.default = instantSearchFactory;
+export default instantSearchFactory;

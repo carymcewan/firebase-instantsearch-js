@@ -1,53 +1,16 @@
-'use strict';
+import isUndefined from 'lodash/isUndefined';
+import isBoolean from 'lodash/isBoolean';
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
+import isFunction from 'lodash/isFunction';
+import isEmpty from 'lodash/isEmpty';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectCurrentRefinedValues;
+import map from 'lodash/map';
+import reduce from 'lodash/reduce';
+import filter from 'lodash/filter';
 
-var _isUndefined = require('lodash/isUndefined');
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _isBoolean = require('lodash/isBoolean');
-
-var _isBoolean2 = _interopRequireDefault(_isBoolean);
-
-var _isString = require('lodash/isString');
-
-var _isString2 = _interopRequireDefault(_isString);
-
-var _isArray = require('lodash/isArray');
-
-var _isArray2 = _interopRequireDefault(_isArray);
-
-var _isPlainObject = require('lodash/isPlainObject');
-
-var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-
-var _isFunction = require('lodash/isFunction');
-
-var _isFunction2 = _interopRequireDefault(_isFunction);
-
-var _isEmpty = require('lodash/isEmpty');
-
-var _isEmpty2 = _interopRequireDefault(_isEmpty);
-
-var _map = require('lodash/map');
-
-var _map2 = _interopRequireDefault(_map);
-
-var _reduce = require('lodash/reduce');
-
-var _reduce2 = _interopRequireDefault(_reduce);
-
-var _filter = require('lodash/filter');
-
-var _filter2 = _interopRequireDefault(_filter);
-
-var _utils = require('../../lib/utils.js');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import { getRefinements, clearRefinementsFromState, clearRefinementsAndSearch, checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   attributes,\n  //   clearAllClick,\n  //   clearAllPosition,\n  //   clearAllURL,\n  //   refine,\n  //   createURL,\n  //   refinements,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customCurrentRefinedValues({\n    [ attributes = [] ],\n    [ onlyListedAttributes = false ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html\n';
 
@@ -160,8 +123,8 @@ var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValue
  *   })
  * );
  */
-function connectCurrentRefinedValues(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectCurrentRefinedValues(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -172,22 +135,23 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
         _widgetParams$clearsQ = widgetParams.clearsQuery,
         clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ;
 
-    var attributesOK = (0, _isArray2.default)(attributes) && (0, _reduce2.default)(attributes, function (res, val) {
-      return res && (0, _isPlainObject2.default)(val) && (0, _isString2.default)(val.name) && ((0, _isUndefined2.default)(val.label) || (0, _isString2.default)(val.label)) && ((0, _isUndefined2.default)(val.template) || (0, _isString2.default)(val.template) || (0, _isFunction2.default)(val.template)) && ((0, _isUndefined2.default)(val.transformData) || (0, _isFunction2.default)(val.transformData));
+
+    var attributesOK = isArray(attributes) && reduce(attributes, function (res, val) {
+      return res && isPlainObject(val) && isString(val.name) && (isUndefined(val.label) || isString(val.label)) && (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) && (isUndefined(val.transformData) || isFunction(val.transformData));
     }, true);
 
-    var showUsage = false || !(0, _isArray2.default)(attributes) || !attributesOK || !(0, _isBoolean2.default)(onlyListedAttributes);
+    var showUsage = false || !isArray(attributes) || !attributesOK || !isBoolean(onlyListedAttributes);
 
     if (showUsage) {
       throw new Error(usage);
     }
 
-    var attributeNames = (0, _map2.default)(attributes, function (attribute) {
+    var attributeNames = map(attributes, function (attribute) {
       return attribute.name;
     });
     var restrictedTo = onlyListedAttributes ? attributeNames : [];
 
-    var attributesObj = (0, _reduce2.default)(attributes, function (res, attribute) {
+    var attributesObj = reduce(attributes, function (res, attribute) {
       res[attribute.name] = attribute;
       return res;
     }, {});
@@ -198,9 +162,9 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
             createURL = _ref.createURL,
             instantSearchInstance = _ref.instantSearchInstance;
 
-        this._clearRefinementsAndSearch = _utils.clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
+        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
 
-        var clearAllURL = createURL((0, _utils.clearRefinementsFromState)(helper.state, restrictedTo, clearsQuery));
+        var clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo, clearsQuery));
 
         var refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes, clearsQuery);
 
@@ -229,7 +193,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
             createURL = _ref2.createURL,
             instantSearchInstance = _ref2.instantSearchInstance;
 
-        var clearAllURL = createURL((0, _utils.clearRefinementsFromState)(state, restrictedTo, clearsQuery));
+        var clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo, clearsQuery));
 
         var refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes, clearsQuery);
 
@@ -279,16 +243,16 @@ function compareRefinements(attributeNames, otherAttributeNames, a, b) {
 }
 
 function getFilteredRefinements(results, state, attributeNames, onlyListedAttributes, clearsQuery) {
-  var refinements = (0, _utils.getRefinements)(results, state, clearsQuery);
-  var otherAttributeNames = (0, _reduce2.default)(refinements, function (res, refinement) {
+  var refinements = getRefinements(results, state, clearsQuery);
+  var otherAttributeNames = reduce(refinements, function (res, refinement) {
     if (attributeNames.indexOf(refinement.attributeName) === -1 && res.indexOf(refinement.attributeName === -1)) {
       res.push(refinement.attributeName);
     }
     return res;
   }, []);
   refinements = refinements.sort(compareRefinements.bind(null, attributeNames, otherAttributeNames));
-  if (onlyListedAttributes && !(0, _isEmpty2.default)(attributeNames)) {
-    refinements = (0, _filter2.default)(refinements, function (refinement) {
+  if (onlyListedAttributes && !isEmpty(attributeNames)) {
+    refinements = filter(refinements, function (refinement) {
       return attributeNames.indexOf(refinement.attributeName) !== -1;
     });
   }

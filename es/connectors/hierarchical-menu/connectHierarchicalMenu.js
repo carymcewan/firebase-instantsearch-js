@@ -1,63 +1,13 @@
-"use strict";
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectHierarchicalMenu;
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _find = require("lodash/find");
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var _find2 = _interopRequireDefault(_find);
+import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
 
-var _isEqual = require("lodash/isEqual");
-
-var _isEqual2 = _interopRequireDefault(_isEqual);
-
-var _utils = require("../../lib/utils.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }return target;
-};
-
-var _slicedToArray = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;_e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }return _arr;
-  }return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
-function _objectWithoutProperties(obj, keys) {
-  var target = {};for (var i in obj) {
-    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
-  }return target;
-}
+import { checkRendering } from '../../lib/utils.js';
 
 var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html\n';
 
@@ -106,8 +56,8 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
   * @param {function} unmountFn Unmount function called when the widget is disposed.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
   */
-function connectHierarchicalMenu(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectHierarchicalMenu(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -123,6 +73,7 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
         _widgetParams$sortBy = widgetParams.sortBy,
         sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy;
 
+
     if (!attributes || !attributes.length) {
       throw new Error(usage);
     }
@@ -137,11 +88,11 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
     return {
       getConfiguration: function getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
-          var isFacetSet = (0, _find2.default)(currentConfiguration.hierarchicalFacets, function (_ref) {
+          var isFacetSet = find(currentConfiguration.hierarchicalFacets, function (_ref) {
             var name = _ref.name;
             return name === hierarchicalFacetName;
           });
-          if (isFacetSet && !((0, _isEqual2.default)(isFacetSet.attributes, attributes) && isFacetSet.separator === separator)) {
+          if (isFacetSet && !(isEqual(isFacetSet.attributes, attributes) && isFacetSet.separator === separator)) {
             // eslint-disable-next-line no-console
             console.warn('using Breadcrumb & HierarchicalMenu on the same facet with different options');
             return {};

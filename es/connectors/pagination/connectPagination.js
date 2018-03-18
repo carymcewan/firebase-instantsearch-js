@@ -1,17 +1,5 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = connectPagination;
-
-var _utils = require('../../lib/utils.js');
-
-var _Paginator = require('./Paginator');
-
-var _Paginator2 = _interopRequireDefault(_Paginator);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import { checkRendering } from '../../lib/utils.js';
+import Paginator from './Paginator';
 
 var usage = 'Usage:\nvar customPagination = connectPagination(function render(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   currentRefinement,\n  //   nbHits,\n  //   nbPages,\n  //   pages,\n  //   refine,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPagination({\n    [ maxPages ]\n    [ padding ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html\n';
 
@@ -90,8 +78,8 @@ var usage = 'Usage:\nvar customPagination = connectPagination(function render(pa
  *   })
  * );
  */
-function connectPagination(renderFn, unmountFn) {
-  (0, _utils.checkRendering)(renderFn, usage);
+export default function connectPagination(renderFn, unmountFn) {
+  checkRendering(renderFn, usage);
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -99,7 +87,8 @@ function connectPagination(renderFn, unmountFn) {
         _widgetParams$padding = widgetParams.padding,
         padding = _widgetParams$padding === undefined ? 3 : _widgetParams$padding;
 
-    var pager = new _Paginator2.default({
+
+    var pager = new Paginator({
       currentPage: 0,
       total: 0,
       padding: padding
